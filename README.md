@@ -1,0 +1,169 @@
+# AI-Guard: A Robust AI-Generated Text Detection and Analysis System
+
+[![Vite](https://img.shields.io/badge/Vite-8.3-646CFF?logo=vite&logoColor=white)](https://vitejs.dev/)
+[![React](https://img.shields.io/badge/React-19-61DAFB?logo=react&logoColor=black)](https://react.dev/)
+[![FastAPI](https://img.shields.io/badge/FastAPI-0.110+-009688?logo=fastapi&logoColor=white)](https://fastapi.tiangolo.com/)
+[![scikit-learn](https://img.shields.io/badge/scikit--learn-1.4+-F7931E?logo=scikit-learn&logoColor=white)](https://scikit-learn.org/)
+[![Tailwind CSS](https://img.shields.io/badge/Tailwind_CSS-v4-38B2AC?logo=tailwind-css&logoColor=white)](https://tailwindcss.com/)
+
+**AI-Guard** is an academic research system designed to evaluate, benchmark, and analyze the capabilities, limitations, and vulnerabilities of AI-generated text detection algorithms.
+
+> [!IMPORTANT]
+> **Probabilistic Disclaimer:** All predictions provided by AI-Guard represent **statistical likelihood estimates** and cannot definitively prove authorship or origin. The baseline classifier is trained on the HC3 dataset using an L2-regularized logistic regression model over TF-IDF n-grams.
+
+---
+
+## System Architecture
+
+```text
+RobustAi/
+├── backend/                             # Python FastAPI Inference Backend
+│   ├── main.py                          # Endpoints: /health, /predict, CORS
+│   ├── requirements.txt                 # Backend dependencies
+│   └── models/
+│       └── ai_guard_baseline.joblib     # Trained model pipeline (TF-IDF + LogisticRegression)
+├── src/                                 # React + Vite Frontend
+│   ├── pages/
+│   │   ├── TextDetector.jsx             # Live text analysis calling /predict
+│   │   ├── ModelComparison.jsx          # Architecture trade-offs & reference comparisons
+│   │   ├── RobustnessTesting.jsx        # Adversarial evasion benchmark lab
+│   │   └── AboutResearch.jsx            # Research whitepaper, objectives & ethics
+│   ├── components/                      # Common & layout UI components
+│   └── data/                            # Standardized text corpora & reference data
+├── AI_Guard_Baseline_Training.ipynb     # Google Colab notebook for training on HC3
+└── ml/
+    └── README.md                        # Dataset troubleshooting & ML pipeline guide
+```
+
+---
+
+## Quickstart: Running AI-Guard
+
+### 1. Prerequisites
+- **Python**: 3.10+ with `pip`
+- **Node.js**: 18+ or 20+ with `npm`
+
+---
+
+### 2. Start the FastAPI Backend
+
+1. Navigate to the project root:
+   ```bash
+   cd RobustAi
+   ```
+
+2. (Optional) Create and activate a Python virtual environment:
+   ```bash
+   python -m venv venv
+   # On Windows:
+   .\venv\Scripts\activate
+   # On macOS/Linux:
+   source venv/bin/activate
+   ```
+
+3. Install backend dependencies:
+   ```bash
+   pip install -r backend/requirements.txt
+   ```
+
+4. Verify model presence:
+   Ensure `backend/models/ai_guard_baseline.joblib` exists (4.8 MB).
+
+5. Start the API server:
+   ```bash
+   uvicorn backend.main:app --reload --port 8000
+   ```
+   - **Health check:** `http://localhost:8000/health`
+   - **Interactive API Docs:** `http://localhost:8000/docs`
+
+---
+
+### 3. Start the React Frontend
+
+In a separate terminal window:
+
+1. Install frontend dependencies:
+   ```bash
+   npm install
+   ```
+
+2. Start the Vite development server:
+   ```bash
+   npm run dev
+   ```
+   Open your browser and navigate to: **`http://localhost:5173`**
+
+3. Build for production:
+   ```bash
+   npm run build
+   ```
+
+---
+
+## API Endpoints
+
+### `GET /health`
+Verifies that the serialized model pipeline is loaded and ready.
+```json
+{
+  "status": "healthy",
+  "model_loaded": true,
+  "model_type": "scikit-learn Pipeline (TfidfVectorizer + LogisticRegression)",
+  "pipeline_steps": ["tfidf", "classifier"],
+  "vocabulary_size": 100000,
+  "classes": [0, 1],
+  "label_mapping": {
+    "0": "Human-Written",
+    "1": "AI-Generated"
+  }
+}
+```
+
+### `POST /predict`
+Evaluates text and returns classification and calibrated probabilities.
+- **Request Body:**
+  ```json
+  {
+    "text": "Your natural language text passage here...",
+    "include_sentence_analysis": true
+  }
+  ```
+- **Response:**
+  ```json
+  {
+    "prediction": "Human-Written",
+    "label": 0,
+    "ai_probability": 0.0407,
+    "human_probability": 0.9593,
+    "confidence_score": 0.9186,
+    "metrics": {
+      "word_count": 16,
+      "character_count": 142,
+      "sentence_count": 1,
+      "avg_sentence_length": 16.0
+    },
+    "sentence_analysis": [
+      {
+        "sentence": "Recent investigations into distributed representations...",
+        "label": 0,
+        "ai_probability": 0.0407,
+        "is_experimental": true,
+        "note": "Experimental sentence-level inference via document-level TF-IDF model."
+      }
+    ],
+    "disclaimer": "Probabilistic estimate for academic research evaluation only. Does not prove authorship.",
+    "model_info": {
+      "architecture": "TfidfVectorizer + LogisticRegression",
+      "trained_dataset": "Hello-SimpleAI/HC3",
+      "vocabulary_size": 100000
+    }
+  }
+  ```
+
+---
+
+## Research & Ethical Limitations
+
+1. **Probabilistic Outputs:** Model outputs reflect statistical vocabulary distributions and are not proof of authorship.
+2. **ESL Writer Vulnerability:** Non-native English writing often displays standardized syntax and lower lexical diversity, which can trigger elevated false-positive AI probability scores.
+3. **Adversarial Susceptibility:** Paraphrasing tools and synonym substitutions can degrade linear n-gram features.
