@@ -18,7 +18,6 @@ import {
 } from 'lucide-react';
 import Badge from '../components/common/Badge';
 import DisclaimerBanner from '../components/layout/DisclaimerBanner';
-import FuzzyFurPillButton from '../components/common/FuzzyFurPillButton';
 import researchHutImg from '../assets/knitted-research-hut.jpg';
 
 export default function AboutResearch() {
@@ -314,15 +313,24 @@ export default function AboutResearch() {
                 BibTeX Citation
               </h3>
               
-              <FuzzyFurPillButton
-                variant="forest"
-                size="sm"
-                icon={copiedBibtex ? Check : Copy}
+              <button
+                type="button"
                 onClick={handleCopyBibtex}
+                className="plush-button plush-forest px-4 py-2 rounded-full text-xs font-black flex items-center gap-1.5 shadow-sm transition-all"
                 title="Copy BibTeX snippet"
               >
-                {copiedBibtex ? 'Copied!' : 'Copy'}
-              </FuzzyFurPillButton>
+                {copiedBibtex ? (
+                  <>
+                    <Check className="w-3.5 h-3.5 text-[#F7D487]" />
+                    <span>Copied!</span>
+                  </>
+                ) : (
+                  <>
+                    <Copy className="w-3.5 h-3.5 text-[#F7D487]" />
+                    <span>Copy</span>
+                  </>
+                )}
+              </button>
             </div>
 
             <pre className="p-4 bg-[#30312D] text-[#9BAE83] rounded-2xl text-[11px] font-mono leading-relaxed overflow-x-auto border-2 border-[#435744] shadow-inner">

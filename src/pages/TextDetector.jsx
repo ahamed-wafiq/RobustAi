@@ -34,8 +34,6 @@ import MetricCard from '../components/common/MetricCard';
 import Badge from '../components/common/Badge';
 import DisclaimerBanner from '../components/layout/DisclaimerBanner';
 import PlushAnalyzeButton from '../components/common/PlushAnalyzeButton';
-import FuzzyFurButton from '../components/common/FuzzyFurButton';
-import FuzzyFurPillButton from '../components/common/FuzzyFurPillButton';
 import heroLandscapeImg from '../assets/knitted-hero-landscape.jpg';
 
 const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || 'http://localhost:8000';
@@ -227,15 +225,17 @@ export default function TextDetector() {
                 )}
               </div>
 
-              {/* Circular Fluffy Refresh Fur Button */}
-              <FuzzyFurButton
-                color="cream"
-                size="xs"
-                icon={RefreshCw}
+              {/* Fluffy Fur Refresh Button */}
+              <button
                 onClick={checkBackendHealth}
+                type="button"
+                className="plush-button plush-cream px-3 py-1.5 rounded-full text-xs font-black shadow-xs flex items-center gap-1.5 transition-all"
                 title="Refresh backend status"
-                ariaLabel="Refresh backend health"
-              />
+                aria-label="Refresh backend health"
+              >
+                <RefreshCw className="w-3.5 h-3.5 embroidered-icon" />
+                <span>Refresh</span>
+              </button>
             </div>
           </div>
 
@@ -324,38 +324,36 @@ uvicorn backend.main:app --reload --port 8000
               </div>
             </div>
 
-            {/* Quick Sample Selector in Fluffy Fur Cushion Tray */}
-            <div className="fur-tray p-3.5 flex flex-col md:flex-row items-center justify-between gap-3 shadow-md">
-              <div className="flex items-center gap-2">
-                <span className="text-[#30312D] text-xs font-black uppercase tracking-wider">Quick Presets:</span>
-                <span className="text-[11px] text-[#30312D]/70 hidden lg:inline font-bold">Pick an evaluation sample</span>
-              </div>
-              <div className="flex flex-wrap items-center justify-center gap-3 sm:gap-4">
-                {SAMPLE_TEXTS.map((sample, idx) => {
-                  const isSelected = selectedPresetId === sample.id;
-                  const config = [
-                    { color: 'navy', icon: BookOpen, label: 'Academic' },
-                    { color: 'red', icon: Cpu, label: 'AI Essay' },
-                    { color: 'mustard', icon: Zap, label: 'Paraphrase' },
-                    { color: 'green', icon: Globe, label: 'ESL Student' },
-                    { color: 'cream', icon: Newspaper, label: 'Journalism' },
-                  ][idx % 5];
+            {/* Quick Sample Selector Pills with Fluffy Fur Material */}
+            <div className="flex flex-wrap items-center gap-2 text-xs pt-1">
+              <span className="text-[#30312D]/70 text-[11px] font-black mr-1 uppercase tracking-wider">Quick Select:</span>
+              {SAMPLE_TEXTS.map((sample, idx) => {
+                const isSelected = selectedPresetId === sample.id;
+                const palette = [
+                  { selected: 'plush-navy', icon: BookOpen },
+                  { selected: 'plush-orange', icon: Cpu },
+                  { selected: 'plush-mustard', icon: Zap },
+                  { selected: 'plush-forest', icon: Globe },
+                  { selected: 'plush-cream', icon: Newspaper }
+                ][idx % 5];
+                const Icon = palette.icon;
 
-                  return (
-                    <FuzzyFurButton
-                      key={sample.id}
-                      color={config.color}
-                      size="sm"
-                      icon={config.icon}
-                      iconColor={config.color === 'navy' ? 'cream' : 'dark'}
-                      label={config.label}
-                      active={isSelected}
-                      onClick={() => handleSelectSample(sample.id)}
-                      title={sample.title}
-                    />
-                  );
-                })}
-              </div>
+                return (
+                  <button
+                    key={sample.id}
+                    onClick={() => handleSelectSample(sample.id)}
+                    type="button"
+                    className={`plush-button px-4 py-2 rounded-full text-xs font-black transition-all flex items-center gap-2 ${
+                      isSelected
+                        ? `${palette.selected} shadow-md scale-103 ring-2 ring-white/60`
+                        : 'plush-cream text-[#30312D]'
+                    }`}
+                  >
+                    <Icon className="w-3.5 h-3.5 embroidered-icon shrink-0" />
+                    <span>{sample.title}</span>
+                  </button>
+                );
+              })}
             </div>
 
             {/* Padded Fabric Frame with Smooth Inner Textarea */}
@@ -394,16 +392,16 @@ uvicorn backend.main:app --reload --port 8000
 
               {/* Action Buttons: Fluffy Plush Action Controls */}
               <div className="flex items-center gap-3">
-                <FuzzyFurPillButton
-                  variant="cream"
-                  size="sm"
-                  icon={RotateCcw}
+                <button
+                  type="button"
                   onClick={handleClear}
                   disabled={!inputText && !results}
+                  className="plush-button plush-cream px-4 py-2.5 rounded-full text-xs font-black flex items-center gap-1.5 shadow-sm disabled:opacity-40 disabled:cursor-not-allowed transition-all"
                   title="Clear input text and results"
                 >
-                  Clear
-                </FuzzyFurPillButton>
+                  <RotateCcw className="w-3.5 h-3.5 embroidered-icon" />
+                  <span>Clear</span>
+                </button>
 
                 {/* Main Prominent Fluffy Action Button with Realistic 3D Fur Asset */}
                 <PlushAnalyzeButton

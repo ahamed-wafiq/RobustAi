@@ -11,7 +11,6 @@ import {
   Sparkles
 } from 'lucide-react';
 import Badge from '../common/Badge';
-import FuzzyFurButton from '../common/FuzzyFurButton';
 
 export default function Navbar() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
@@ -31,15 +30,11 @@ export default function Navbar() {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-20">
           
-          {/* Logo & title: Circular Fluffy Fur Cushion Emblem */}
+          {/* Logo & title: Soft Knitted Fur Cushion Emblem */}
           <NavLink to="/" className="flex items-center gap-3.5 group focus:outline-hidden">
-            <FuzzyFurButton
-              size="sm"
-              color="green"
-              icon={ShieldCheck}
-              iconColor="cream"
-              className="pointer-events-none"
-            />
+            <div className="w-11 h-11 rounded-2xl plush-button plush-forest shrink-0 shadow-md flex items-center justify-center">
+              <ShieldCheck className="w-6 h-6 embroidered-icon-light" />
+            </div>
             <div>
               <div className="flex items-center gap-2">
                 <span className="text-xl font-black tracking-tight text-[#30312D] group-hover:text-[#435744] transition-colors">
@@ -66,7 +61,7 @@ export default function Navbar() {
                   key={item.path}
                   to={item.path}
                   className={({ isActive }) =>
-                    `plush-button px-4 py-2 text-xs font-black transition-all ${
+                    `plush-button px-4 py-2 rounded-full text-xs font-black transition-all ${
                       isActive
                         ? 'plush-sage shadow-md'
                         : 'plush-cream hover:plush-sage text-[#30312D]'
@@ -82,7 +77,7 @@ export default function Navbar() {
 
           {/* Right Action / Plush Pipeline Indicator */}
           <div className="hidden lg:flex items-center gap-3">
-            <div className="plush-button plush-mustard px-4 py-1.5 text-xs font-black shadow-sm">
+            <div className="plush-button plush-mustard px-4 py-1.5 rounded-full text-xs font-black shadow-sm">
               <Sparkles className="w-3.5 h-3.5 embroidered-icon" />
               <span>Ensemble Pipeline</span>
             </div>
@@ -90,13 +85,14 @@ export default function Navbar() {
 
           {/* Mobile hamburger button */}
           <div className="flex md:hidden">
-            <FuzzyFurButton
-              size="sm"
-              color="cream"
-              icon={mobileMenuOpen ? X : Menu}
+            <button
               onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-              ariaLabel="Toggle navigation menu"
-            />
+              type="button"
+              className="w-11 h-11 rounded-2xl plush-button plush-cream flex items-center justify-center shadow-xs"
+              aria-label="Toggle navigation menu"
+            >
+              {mobileMenuOpen ? <X className="w-5 h-5 embroidered-icon" /> : <Menu className="w-5 h-5 embroidered-icon" />}
+            </button>
           </div>
         </div>
       </div>

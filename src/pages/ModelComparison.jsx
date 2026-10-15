@@ -39,8 +39,6 @@ import {
 import Badge from '../components/common/Badge';
 import MetricCard from '../components/common/MetricCard';
 import DisclaimerBanner from '../components/layout/DisclaimerBanner';
-import FuzzyFurButton from '../components/common/FuzzyFurButton';
-import FuzzyFurPillButton from '../components/common/FuzzyFurPillButton';
 
 export default function ModelComparison() {
   const [activeTab, setActiveTab] = useState('performance'); // 'performance' | 'roc' | 'domain' | 'matrix'
@@ -76,13 +74,9 @@ export default function ModelComparison() {
 
       {/* Research Integrity Clarification Alert */}
       <div className="knitted-card p-5 bg-[#FFFDF8] border-3 border-dashed border-[#343B59]/40 text-xs sm:text-sm text-[#30312D] flex items-start gap-3.5 shadow-xs">
-        <FuzzyFurButton
-          size="xs"
-          color="navy"
-          icon={Info}
-          iconColor="cream"
-          className="shrink-0 pointer-events-none"
-        />
+        <div className="w-9 h-9 rounded-2xl plush-button plush-navy shrink-0 shadow-2xs flex items-center justify-center">
+          <Info className="w-4 h-4 embroidered-icon-light" />
+        </div>
         <div className="space-y-1">
           <p className="font-black text-[#343B59] text-sm">
             Measured Baseline vs. Reference Transformer Notice
@@ -111,12 +105,9 @@ export default function ModelComparison() {
               </p>
             </div>
 
-            <FuzzyFurButton
-              size="sm"
-              color="mustard"
-              icon={Clock}
-              className="shrink-0 pointer-events-none shadow-md"
-            />
+            <div className="w-12 h-12 rounded-2xl plush-button plush-mustard shrink-0 shadow-md flex items-center justify-center">
+              <Clock className="w-6 h-6 embroidered-icon" />
+            </div>
           </div>
 
           {/* Specs grid */}
@@ -182,13 +173,9 @@ export default function ModelComparison() {
               </p>
             </div>
 
-            <FuzzyFurButton
-              size="sm"
-              color="navy"
-              icon={Cpu}
-              iconColor="cream"
-              className="shrink-0 pointer-events-none shadow-md"
-            />
+            <div className="w-12 h-12 rounded-2xl plush-button plush-navy shrink-0 shadow-md flex items-center justify-center">
+              <Cpu className="w-6 h-6 embroidered-icon-light" />
+            </div>
           </div>
 
           {/* Specs grid */}
@@ -247,38 +234,28 @@ export default function ModelComparison() {
         {/* Navigation Tabs as Plush Fur Buttons */}
         <div className="flex flex-wrap items-center justify-between gap-4 pb-4 border-b-2 border-dashed border-[#435744]/15">
           <div className="flex flex-wrap items-center gap-2.5">
-            <FuzzyFurPillButton
-              variant={activeTab === 'performance' ? 'forest' : 'cream'}
-              size="sm"
-              active={activeTab === 'performance'}
-              onClick={() => setActiveTab('performance')}
-            >
-              Core Accuracy & F1
-            </FuzzyFurPillButton>
-            <FuzzyFurPillButton
-              variant={activeTab === 'roc' ? 'forest' : 'cream'}
-              size="sm"
-              active={activeTab === 'roc'}
-              onClick={() => setActiveTab('roc')}
-            >
-              ROC Curves (TPR vs FPR)
-            </FuzzyFurPillButton>
-            <FuzzyFurPillButton
-              variant={activeTab === 'domain' ? 'forest' : 'cream'}
-              size="sm"
-              active={activeTab === 'domain'}
-              onClick={() => setActiveTab('domain')}
-            >
-              Domain Transfer Gap
-            </FuzzyFurPillButton>
-            <FuzzyFurPillButton
-              variant={activeTab === 'matrix' ? 'forest' : 'cream'}
-              size="sm"
-              active={activeTab === 'matrix'}
-              onClick={() => setActiveTab('matrix')}
-            >
-              Confusion Matrices
-            </FuzzyFurPillButton>
+            {[
+              { id: 'performance', label: 'Core Accuracy & F1' },
+              { id: 'roc', label: 'ROC Curves (TPR vs FPR)' },
+              { id: 'domain', label: 'Domain Transfer Gap' },
+              { id: 'matrix', label: 'Confusion Matrices' }
+            ].map((tab) => {
+              const isActive = activeTab === tab.id;
+              return (
+                <button
+                  key={tab.id}
+                  onClick={() => setActiveTab(tab.id)}
+                  type="button"
+                  className={`plush-button px-5 py-2.5 rounded-full text-xs font-black transition-all ${
+                    isActive
+                      ? 'plush-forest shadow-md scale-103 ring-2 ring-white/60'
+                      : 'plush-cream text-[#30312D]'
+                  }`}
+                >
+                  <span>{tab.label}</span>
+                </button>
+              );
+            })}
           </div>
 
           <div className="flex items-center gap-3 text-xs font-black">
