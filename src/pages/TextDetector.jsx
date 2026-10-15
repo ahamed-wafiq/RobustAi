@@ -225,11 +225,11 @@ export default function TextDetector() {
                 )}
               </div>
 
-              {/* Fluffy Fur Refresh Button */}
+              {/* Fluffy Fur Refresh Button in Vibrant Mustard */}
               <button
                 onClick={checkBackendHealth}
                 type="button"
-                className="plush-button plush-cream px-3 py-1.5 rounded-full text-xs font-black shadow-xs flex items-center gap-1.5 transition-all"
+                className="plush-button plush-mustard text-[#2D220A] px-3.5 py-1.5 rounded-full text-xs font-black shadow-xs flex items-center gap-1.5 transition-all hover:scale-103"
                 title="Refresh backend status"
                 aria-label="Refresh backend health"
               >
@@ -324,32 +324,57 @@ uvicorn backend.main:app --reload --port 8000
               </div>
             </div>
 
-            {/* Quick Sample Selector Pills with Fluffy Fur Material */}
-            <div className="flex flex-wrap items-center gap-2 text-xs pt-1">
-              <span className="text-[#30312D]/70 text-[11px] font-black mr-1 uppercase tracking-wider">Quick Select:</span>
+            {/* Quick Sample Selector Pills with Distinct Signature Fur Colors */}
+            <div className="flex flex-wrap items-center gap-2.5 text-xs pt-1">
+              <span className="text-[#30312D]/70 text-[11px] font-black mr-1 uppercase tracking-wider">Quick Presets:</span>
               {SAMPLE_TEXTS.map((sample, idx) => {
                 const isSelected = selectedPresetId === sample.id;
-                const palette = [
-                  { selected: 'plush-navy', icon: BookOpen },
-                  { selected: 'plush-orange', icon: Cpu },
-                  { selected: 'plush-mustard', icon: Zap },
-                  { selected: 'plush-forest', icon: Globe },
-                  { selected: 'plush-cream', icon: Newspaper }
+                const configs = [
+                  { 
+                    variant: 'plush-navy', 
+                    textColor: 'text-[#FFFDF9]', 
+                    iconColor: 'embroidered-icon-light',
+                    icon: BookOpen 
+                  },
+                  { 
+                    variant: 'plush-orange', 
+                    textColor: 'text-[#FFFDF9]', 
+                    iconColor: 'embroidered-icon-light',
+                    icon: Cpu 
+                  },
+                  { 
+                    variant: 'plush-mustard', 
+                    textColor: 'text-[#2D220A]', 
+                    iconColor: 'embroidered-icon',
+                    icon: Zap 
+                  },
+                  { 
+                    variant: 'plush-forest', 
+                    textColor: 'text-[#FFFDF9]', 
+                    iconColor: 'embroidered-icon-light',
+                    icon: Globe 
+                  },
+                  { 
+                    variant: 'plush-cream', 
+                    textColor: 'text-[#2A2C27]', 
+                    iconColor: 'embroidered-icon',
+                    icon: Newspaper 
+                  }
                 ][idx % 5];
-                const Icon = palette.icon;
+                const Icon = configs.icon;
 
                 return (
                   <button
                     key={sample.id}
                     onClick={() => handleSelectSample(sample.id)}
                     type="button"
-                    className={`plush-button px-4 py-2 rounded-full text-xs font-black transition-all flex items-center gap-2 ${
+                    className={`plush-button ${configs.variant} ${configs.textColor} px-4 py-2 rounded-full text-xs font-black transition-all flex items-center gap-2 shadow-sm ${
                       isSelected
-                        ? `${palette.selected} shadow-md scale-103 ring-2 ring-white/60`
-                        : 'plush-cream text-[#30312D]'
+                        ? 'scale-108 shadow-xl ring-3 ring-white ring-offset-2 ring-offset-[#435744] z-10'
+                        : 'opacity-90 hover:opacity-100 hover:scale-103'
                     }`}
                   >
-                    <Icon className="w-3.5 h-3.5 embroidered-icon shrink-0" />
+                    <Icon className={`w-3.5 h-3.5 ${configs.iconColor} shrink-0`} />
                     <span>{sample.title}</span>
                   </button>
                 );

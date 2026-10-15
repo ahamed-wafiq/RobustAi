@@ -316,7 +316,7 @@ export default function AboutResearch() {
               <button
                 type="button"
                 onClick={handleCopyBibtex}
-                className="plush-button plush-forest px-4 py-2 rounded-full text-xs font-black flex items-center gap-1.5 shadow-sm transition-all"
+                className="plush-button plush-navy text-[#FFFDF9] px-4 py-2 rounded-full text-xs font-black flex items-center gap-1.5 shadow-sm transition-all hover:scale-103"
                 title="Copy BibTeX snippet"
               >
                 {copiedBibtex ? (

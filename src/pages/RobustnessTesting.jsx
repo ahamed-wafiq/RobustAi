@@ -143,6 +143,11 @@ export default function RobustnessTesting() {
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-3.5">
           {ATTACK_SCENARIOS.map((attack) => {
             const isSelected = selectedAttackId === attack.id;
+            const themeVariant = attack.threatLevel.includes('Critical')
+              ? 'plush-orange text-[#FFFDF9]'
+              : attack.threatLevel.includes('High')
+              ? 'plush-mustard text-[#2D220A]'
+              : 'plush-forest text-[#FFFDF9]';
 
             return (
               <button
@@ -151,7 +156,7 @@ export default function RobustnessTesting() {
                 type="button"
                 className={`p-4 rounded-3xl border-3 text-left transition-all ${
                   isSelected
-                    ? 'plush-forest shadow-md scale-102 border-dashed border-[#9BAE83] text-[#FFFDF9]'
+                    ? `${themeVariant} shadow-md scale-102 border-dashed border-white/60`
                     : 'bg-[#FFFDF8] border-dashed border-[#435744]/25 hover:border-[#9BAE83] hover:bg-[#FFFCF5] text-[#30312D] shadow-2xs'
                 }`}
               >
@@ -321,7 +326,7 @@ export default function RobustnessTesting() {
           <button
             onClick={handleReset}
             type="button"
-            className="plush-button plush-cream px-5 py-2.5 rounded-full text-xs font-black flex items-center gap-2 shadow-xs transition-all"
+            className="plush-button plush-mustard text-[#2D220A] px-5 py-2.5 rounded-full text-xs font-black flex items-center gap-2 shadow-sm transition-all hover:scale-103"
             title="Reset adversarial scenario"
           >
             <RotateCcw className="w-3.5 h-3.5 embroidered-icon" />

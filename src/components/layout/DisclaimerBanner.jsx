@@ -49,7 +49,7 @@ export default function DisclaimerBanner({
         {dismissible && (
           <button
             onClick={() => setDismissed(true)}
-            className="w-8 h-8 rounded-full plush-cream flex items-center justify-center text-[#543A05] hover:scale-105 transition-transform shrink-0"
+            className="w-8 h-8 rounded-full plush-button plush-mustard flex items-center justify-center text-[#543A05] hover:scale-105 transition-transform shrink-0"
             title="Dismiss notification"
             aria-label="Dismiss notification"
           >

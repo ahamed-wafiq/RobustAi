@@ -52,23 +52,29 @@ export default function Navbar() {
 
           {/* Desktop Nav Links as Plush Textile Controls */}
           <nav className="hidden md:flex items-center space-x-2 lg:space-x-3">
-            {navItems.map((item) => {
+            {navItems.map((item, idx) => {
               const Icon = item.icon;
               const isActive = location.pathname === item.path;
+              const activeTheme = [
+                { variant: 'plush-forest', text: 'text-[#FFFDF9]', iconCls: 'embroidered-icon-light' },
+                { variant: 'plush-navy', text: 'text-[#FFFDF9]', iconCls: 'embroidered-icon-light' },
+                { variant: 'plush-orange', text: 'text-[#FFFDF9]', iconCls: 'embroidered-icon-light' },
+                { variant: 'plush-mustard', text: 'text-[#2D220A]', iconCls: 'embroidered-icon' },
+              ][idx % 4];
 
               return (
                 <NavLink
                   key={item.path}
                   to={item.path}
                   className={({ isActive }) =>
-                    `plush-button px-4 py-2 rounded-full text-xs font-black transition-all ${
+                    `plush-button px-4 py-2 rounded-full text-xs font-black transition-all shadow-sm ${
                       isActive
-                        ? 'plush-sage shadow-md'
-                        : 'plush-cream hover:plush-sage text-[#30312D]'
+                        ? `${activeTheme.variant} ${activeTheme.text} shadow-md scale-103 ring-2 ring-white/60`
+                        : 'plush-cream hover:scale-102 text-[#30312D]'
                     }`
                   }
                 >
-                  <Icon className="w-4 h-4 embroidered-icon" />
+                  <Icon className={`w-4 h-4 ${isActive ? activeTheme.iconCls : 'embroidered-icon'}`} />
                   <span>{item.name}</span>
                 </NavLink>
               );

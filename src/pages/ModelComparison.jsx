@@ -235,10 +235,10 @@ export default function ModelComparison() {
         <div className="flex flex-wrap items-center justify-between gap-4 pb-4 border-b-2 border-dashed border-[#435744]/15">
           <div className="flex flex-wrap items-center gap-2.5">
             {[
-              { id: 'performance', label: 'Core Accuracy & F1' },
-              { id: 'roc', label: 'ROC Curves (TPR vs FPR)' },
-              { id: 'domain', label: 'Domain Transfer Gap' },
-              { id: 'matrix', label: 'Confusion Matrices' }
+              { id: 'performance', label: 'Core Accuracy & F1', variant: 'plush-forest', text: 'text-[#FFFDF9]' },
+              { id: 'roc', label: 'ROC Curves (TPR vs FPR)', variant: 'plush-navy', text: 'text-[#FFFDF9]' },
+              { id: 'domain', label: 'Domain Transfer Gap', variant: 'plush-mustard', text: 'text-[#2D220A]' },
+              { id: 'matrix', label: 'Confusion Matrices', variant: 'plush-orange', text: 'text-[#FFFDF9]' }
             ].map((tab) => {
               const isActive = activeTab === tab.id;
               return (
@@ -246,10 +246,10 @@ export default function ModelComparison() {
                   key={tab.id}
                   onClick={() => setActiveTab(tab.id)}
                   type="button"
-                  className={`plush-button px-5 py-2.5 rounded-full text-xs font-black transition-all ${
+                  className={`plush-button ${tab.variant} ${tab.text} px-5 py-2.5 rounded-full text-xs font-black transition-all shadow-sm ${
                     isActive
-                      ? 'plush-forest shadow-md scale-103 ring-2 ring-white/60'
-                      : 'plush-cream text-[#30312D]'
+                      ? 'scale-106 shadow-lg ring-3 ring-white ring-offset-2 ring-offset-[#435744] z-10 opacity-100'
+                      : 'opacity-75 hover:opacity-100 hover:scale-102'
                   }`}
                 >
                   <span>{tab.label}</span>
