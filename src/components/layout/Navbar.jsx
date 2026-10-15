@@ -11,6 +11,7 @@ import {
   Sparkles
 } from 'lucide-react';
 import Badge from '../common/Badge';
+import FuzzyFurButton from '../common/FuzzyFurButton';
 
 export default function Navbar() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
@@ -32,9 +33,13 @@ export default function Navbar() {
           
           {/* Logo & title: Circular Fluffy Fur Cushion Emblem */}
           <NavLink to="/" className="flex items-center gap-3.5 group focus:outline-hidden">
-            <div className="plush-circle-btn plush-forest shadow-md">
-              <ShieldCheck className="w-6 h-6 embroidered-icon-light" />
-            </div>
+            <FuzzyFurButton
+              size="sm"
+              color="green"
+              icon={ShieldCheck}
+              iconColor="cream"
+              className="pointer-events-none"
+            />
             <div>
               <div className="flex items-center gap-2">
                 <span className="text-xl font-black tracking-tight text-[#30312D] group-hover:text-[#435744] transition-colors">
@@ -85,14 +90,13 @@ export default function Navbar() {
 
           {/* Mobile hamburger button */}
           <div className="flex md:hidden">
-            <button
+            <FuzzyFurButton
+              size="sm"
+              color="cream"
+              icon={mobileMenuOpen ? X : Menu}
               onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-              type="button"
-              className="plush-circle-btn plush-cream w-11 h-11"
-              aria-label="Toggle navigation menu"
-            >
-              {mobileMenuOpen ? <X className="w-5 h-5 embroidered-icon" /> : <Menu className="w-5 h-5 embroidered-icon" />}
-            </button>
+              ariaLabel="Toggle navigation menu"
+            />
           </div>
         </div>
       </div>

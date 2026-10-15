@@ -36,6 +36,8 @@ import {
 import Badge from '../components/common/Badge';
 import MetricCard from '../components/common/MetricCard';
 import DisclaimerBanner from '../components/layout/DisclaimerBanner';
+import FuzzyFurButton from '../components/common/FuzzyFurButton';
+import FuzzyFurPillButton from '../components/common/FuzzyFurPillButton';
 
 export default function RobustnessTesting() {
   const [selectedAttackId, setSelectedAttackId] = useState(ATTACK_SCENARIOS[0].id);
@@ -143,6 +145,12 @@ export default function RobustnessTesting() {
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-3.5">
           {ATTACK_SCENARIOS.map((attack) => {
             const isSelected = selectedAttackId === attack.id;
+            const furColor = attack.threatLevel.includes('Critical')
+              ? 'red'
+              : attack.threatLevel.includes('High')
+              ? 'mustard'
+              : 'green';
+
             return (
               <button
                 key={attack.id}
@@ -154,7 +162,13 @@ export default function RobustnessTesting() {
                     : 'bg-[#FFFDF8] border-dashed border-[#435744]/25 hover:border-[#9BAE83] hover:bg-[#FFFCF5] text-[#30312D] shadow-2xs'
                 }`}
               >
-                <div className="flex items-center justify-between mb-2">
+                <div className="flex items-center justify-between mb-3">
+                  <FuzzyFurButton
+                    size="xs"
+                    color={furColor}
+                    icon={ShieldAlert}
+                    className="pointer-events-none"
+                  />
                   <Badge 
                     variant={
                       attack.threatLevel.includes('Critical') 
@@ -167,9 +181,6 @@ export default function RobustnessTesting() {
                   >
                     {attack.threatLevel}
                   </Badge>
-                  {isSelected && (
-                    <span className="w-2.5 h-2.5 rounded-full bg-[#E7B44F] animate-pulse"></span>
-                  )}
                 </div>
 
                 <h3 className="font-black text-sm">
@@ -317,31 +328,33 @@ export default function RobustnessTesting() {
 
         {/* Action Controls as Plush Fur Buttons */}
         <div className="flex flex-wrap items-center justify-end gap-3 pt-2 border-t-2 border-dashed border-[#435744]/15">
-          <button
+          <FuzzyFurPillButton
+            variant="cream"
+            size="md"
+            icon={RotateCcw}
             onClick={handleReset}
-            className="plush-button plush-cream px-5 py-2.5 text-xs font-black flex items-center gap-1.5 shadow-xs"
+            title="Reset adversarial scenario"
           >
-            <RotateCcw className="w-3.5 h-3.5 embroidered-icon" />
-            <span>Reset Scenario</span>
-          </button>
+            Reset Scenario
+          </FuzzyFurPillButton>
           
-          <button
+          <FuzzyFurPillButton
+            variant="forest"
+            size="lg"
+            icon={isSimulating ? undefined : Play}
             onClick={handleApplyAttack}
             disabled={isSimulating}
-            className="plush-button plush-forest px-7 py-3 text-xs font-black flex items-center gap-2.5 shadow-lg"
+            title="Simulate adversarial attack perturbation"
           >
             {isSimulating ? (
-              <>
+              <span className="flex items-center gap-2">
                 <span className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin"></span>
                 <span>Simulating Perturbation...</span>
-              </>
+              </span>
             ) : (
-              <>
-                <Play className="w-4 h-4 text-[#F7D487]" />
-                <span>Simulate Adversarial Attack</span>
-              </>
+              'Simulate Adversarial Attack'
             )}
-          </button>
+          </FuzzyFurPillButton>
         </div>
 
       </div>
