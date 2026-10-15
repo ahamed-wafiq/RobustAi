@@ -17,10 +17,42 @@ export default function Navbar() {
   const location = useLocation();
 
   const navItems = [
-    { name: 'Text Detector', path: '/', icon: FileSearch, description: 'Analyze & inspect text' },
-    { name: 'Model Comparison', path: '/comparison', icon: GitCompare, description: 'Baseline vs Transformer' },
-    { name: 'Robustness Lab', path: '/robustness', icon: Flame, description: 'Adversarial evasion benchmarks' },
-    { name: 'About & Research', path: '/about', icon: BookOpen, description: 'Objectives & methodology' },
+    { 
+      name: 'Text Detector', 
+      path: '/', 
+      icon: FileSearch, 
+      description: 'Analyze & inspect text',
+      colorClass: 'plush-forest',
+      textClass: 'text-[#FFFDF9]',
+      iconClass: 'embroidered-icon-light'
+    },
+    { 
+      name: 'Model Comparison', 
+      path: '/comparison', 
+      icon: GitCompare, 
+      description: 'Baseline vs Transformer',
+      colorClass: 'plush-navy',
+      textClass: 'text-[#FFFDF9]',
+      iconClass: 'embroidered-icon-light'
+    },
+    { 
+      name: 'Robustness Lab', 
+      path: '/robustness', 
+      icon: Flame, 
+      description: 'Adversarial evasion benchmarks',
+      colorClass: 'plush-orange',
+      textClass: 'text-[#FFFDF9]',
+      iconClass: 'embroidered-icon-light'
+    },
+    { 
+      name: 'About & Research', 
+      path: '/about', 
+      icon: BookOpen, 
+      description: 'Objectives & methodology',
+      colorClass: 'plush-mustard',
+      textClass: 'text-[#2A1B04]',
+      iconClass: 'embroidered-icon'
+    },
   ];
 
   return (
@@ -50,40 +82,32 @@ export default function Navbar() {
             </div>
           </NavLink>
 
-          {/* Desktop Nav Links as Plush Textile Controls */}
+          {/* Desktop Nav Links as Plush Textile Controls — Each with its Distinct Color */}
           <nav className="hidden md:flex items-center space-x-2 lg:space-x-3">
-            {navItems.map((item, idx) => {
+            {navItems.map((item) => {
               const Icon = item.icon;
-              const isActive = location.pathname === item.path;
-              const activeTheme = [
-                { variant: 'plush-forest', text: 'text-[#FFFDF9]', iconCls: 'embroidered-icon-light' },
-                { variant: 'plush-navy', text: 'text-[#FFFDF9]', iconCls: 'embroidered-icon-light' },
-                { variant: 'plush-orange', text: 'text-[#FFFDF9]', iconCls: 'embroidered-icon-light' },
-                { variant: 'plush-mustard', text: 'text-[#2D220A]', iconCls: 'embroidered-icon' },
-              ][idx % 4];
-
               return (
                 <NavLink
                   key={item.path}
                   to={item.path}
                   className={({ isActive }) =>
-                    `plush-button px-4 py-2 rounded-full text-xs font-black transition-all shadow-sm ${
+                    `plush-button ${item.colorClass} ${item.textClass} px-4 py-2 rounded-full text-xs font-black transition-all ${
                       isActive
-                        ? `${activeTheme.variant} ${activeTheme.text} shadow-md scale-103 ring-2 ring-white/60`
-                        : 'plush-cream hover:scale-102 text-[#30312D]'
+                        ? 'scale-106 shadow-lg ring-3 ring-white ring-offset-2 ring-offset-[#435744]/20 opacity-100 z-10'
+                        : 'opacity-85 hover:opacity-100 hover:scale-103 shadow-xs'
                     }`
                   }
                 >
-                  <Icon className={`w-4 h-4 ${isActive ? activeTheme.iconCls : 'embroidered-icon'}`} />
+                  <Icon className={`w-4 h-4 ${item.iconClass}`} />
                   <span>{item.name}</span>
                 </NavLink>
               );
             })}
           </nav>
 
-          {/* Right Action / Plush Pipeline Indicator */}
+          {/* Right Action / Plush Pipeline Indicator (Cozy Wool Cream) */}
           <div className="hidden lg:flex items-center gap-3">
-            <div className="plush-button plush-mustard px-4 py-1.5 rounded-full text-xs font-black shadow-sm">
+            <div className="plush-button plush-cream text-[#2D2F28] px-4 py-1.5 rounded-full text-xs font-black shadow-sm flex items-center gap-1.5">
               <Sparkles className="w-3.5 h-3.5 embroidered-icon" />
               <span>Ensemble Pipeline</span>
             </div>
@@ -105,7 +129,7 @@ export default function Navbar() {
 
       {/* Mobile drawer */}
       {mobileMenuOpen && (
-        <div className="md:hidden border-t-2 border-dashed border-[#435744]/20 bg-[#FFFDF8] px-4 pt-4 pb-6 space-y-2 shadow-xl">
+        <div className="md:hidden border-t-2 border-dashed border-[#435744]/20 bg-[#FFFDF8] px-4 pt-4 pb-6 space-y-2.5 shadow-xl">
           {navItems.map((item) => {
             const Icon = item.icon;
             const isActive = location.pathname === item.path;
@@ -115,18 +139,18 @@ export default function Navbar() {
                 key={item.path}
                 to={item.path}
                 onClick={() => setMobileMenuOpen(false)}
-                className={`flex items-center gap-3.5 px-4 py-3 rounded-2xl text-sm font-black transition-all ${
+                className={`flex items-center gap-3.5 px-4 py-3 rounded-2xl text-sm font-black transition-all plush-button ${item.colorClass} ${item.textClass} ${
                   isActive
-                    ? 'plush-sage border-2 border-dashed border-[#9BAE83] shadow-sm'
-                    : 'bg-[#F5EEDB] text-[#30312D] hover:bg-[#9BAE83]/20'
+                    ? 'scale-102 ring-3 ring-white shadow-md'
+                    : 'opacity-90 hover:opacity-100'
                 }`}
               >
-                <div className={`w-9 h-9 rounded-full flex items-center justify-center shrink-0 ${isActive ? 'plush-forest' : 'plush-cream'}`}>
-                  <Icon className="w-4 h-4 embroidered-icon" />
+                <div className="w-8 h-8 rounded-full bg-black/15 flex items-center justify-center shrink-0">
+                  <Icon className={`w-4 h-4 ${item.iconClass}`} />
                 </div>
                 <div>
                   <div className="font-black text-sm">{item.name}</div>
-                  <div className="text-xs text-[#30312D]/70 font-medium">{item.description}</div>
+                  <div className="text-xs opacity-80 font-medium">{item.description}</div>
                 </div>
               </NavLink>
             );
