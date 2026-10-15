@@ -11,7 +11,12 @@ import {
   HelpCircle,
   CheckCircle2,
   Lock,
-  Compass
+  Compass,
+  Sliders,
+  Play,
+  RotateCcw,
+  Eye,
+  FileCheck
 } from 'lucide-react';
 import { 
   LineChart, 
@@ -34,92 +39,143 @@ import DisclaimerBanner from '../components/layout/DisclaimerBanner';
 
 export default function RobustnessTesting() {
   const [selectedAttackId, setSelectedAttackId] = useState(ATTACK_SCENARIOS[0].id);
-  const activeAttack = ATTACK_SCENARIOS.find(a => a.id === selectedAttackId) || ATTACK_SCENARIOS[0];
+  const [perturbationIntensity, setPerturbationIntensity] = useState(25); // 10% to 50%
   const [isSimulating, setIsSimulating] = useState(false);
+  const [appliedPerturbation, setAppliedPerturbation] = useState(false);
 
-  const deltaDrop = activeAttack.originalProbAI - activeAttack.perturbedProbAI;
+  const activeAttack = ATTACK_SCENARIOS.find(a => a.id === selectedAttackId) || ATTACK_SCENARIOS[0];
 
-  const handleSimulateAttack = (attackId) => {
+  // Dynamic calculated degradation based on intensity slider
+  const intensityFactor = perturbationIntensity / 25; // 1.0 at 25%
+  const baseDrop = activeAttack.originalProbAI - activeAttack.perturbedProbAI;
+  const dynamicDrop = Math.min(activeAttack.originalProbAI - 5, Math.round(baseDrop * intensityFactor));
+  const dynamicPerturbedProb = Math.max(5, activeAttack.originalProbAI - dynamicDrop);
+
+  const handleSelectAttack = (attackId) => {
     setSelectedAttackId(attackId);
+    setAppliedPerturbation(false);
     setIsSimulating(true);
     setTimeout(() => {
       setIsSimulating(false);
-    }, 400);
+    }, 300);
+  };
+
+  const handleApplyAttack = () => {
+    setIsSimulating(true);
+    setTimeout(() => {
+      setAppliedPerturbation(true);
+      setIsSimulating(false);
+    }, 350);
+  };
+
+  const handleReset = () => {
+    setAppliedPerturbation(false);
+  };
+
+  // Helper to highlight differences between original and perturbed text
+  const renderHighlightedDiff = () => {
+    const origWords = (activeAttack.originalText || '').split(/\s+/);
+    const pertWords = (activeAttack.perturbedText || '').split(/\s+/);
+
+    return (
+      <div className="text-xs text-[#30312D] leading-relaxed font-sans bg-[#FFFDF8] p-5 rounded-3xl border-2 border-dashed border-[#9BAE83]/50 min-h-[140px] space-y-2 shadow-inner">
+        <p>
+          {pertWords.map((word, i) => {
+            const isDifferent = !origWords.includes(word);
+            if (isDifferent) {
+              return (
+                <span
+                  key={i}
+                  className="bg-[#E58B36]/30 text-[#6B2E05] px-2 py-0.5 rounded-md font-black mx-0.5 border border-dashed border-[#E58B36] inline-block shadow-2xs"
+                  title="Perturbed token substitution"
+                >
+                  {word}
+                </span>
+              );
+            }
+            return <span key={i}> {word} </span>;
+          })}
+        </p>
+      </div>
+    );
   };
 
   return (
     <div className="space-y-8 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
       {/* Page Header */}
-      <div className="space-y-2 border-b border-slate-200 pb-6">
+      <div className="knitted-card p-6 sm:p-8 bg-gradient-to-br from-[#FFFDF8] via-[#FFFCF5] to-[#F5EEDB] border-3 border-dashed border-[#9BAE83]/60 shadow-lg">
         <div className="flex flex-wrap items-center justify-between gap-4">
-          <div>
+          <div className="space-y-2 max-w-3xl">
             <div className="flex items-center gap-2.5">
-              <h1 className="text-2xl sm:text-3xl font-extrabold text-slate-900 tracking-tight">
-                Adversarial Robustness & Evasion Stress-Lab
-              </h1>
-              <Badge variant="warning">Stress-Test Bench</Badge>
+              <span className="text-[11px] font-black uppercase tracking-widest text-[#435744] bg-[#9BAE83]/30 px-3.5 py-1 rounded-full border-2 border-dashed border-[#9BAE83] shadow-2xs">
+                ADVERSARIAL STRESS-LAB
+              </span>
+              <Badge variant="warning">Evasion Benchmarking</Badge>
             </div>
-            <p className="text-slate-600 text-sm mt-1 max-w-3xl">
-              Simulate deliberate evasion vectors including synonym substitution, homoglyph injection, and prompt-level paraphrasing to quantify detector degradation.
+            <h1 className="text-3xl sm:text-4xl font-black text-[#30312D] tracking-tight">
+              Adversarial Robustness & <span className="text-[#E58B36] underline decoration-wavy decoration-[#E58B36]">Evasion Lab</span>
+            </h1>
+            <p className="text-sm sm:text-base text-[#30312D]/85 leading-relaxed font-medium">
+              Quantify detector failure boundaries by simulating synonym substitutions, homoglyph injection, prompt injection, and whitespace manipulation.
             </p>
           </div>
 
-          <div className="flex items-center gap-2 text-xs bg-amber-50 border border-amber-200 text-amber-800 px-3 py-1.5 rounded-lg">
-            <AlertTriangle className="w-4 h-4 text-amber-600 shrink-0" />
-            <span>Synthetic Vulnerability Benchmark</span>
+          <div className="flex items-center gap-2 text-xs font-black bg-[#FFFDF8] border-2 border-dashed border-[#E7B44F] text-[#543A05] px-4 py-2 rounded-2xl shadow-xs">
+            <AlertTriangle className="w-4 h-4 text-[#B58422] shrink-0" />
+            <span>Synthetic Evasion Benchmark</span>
           </div>
         </div>
       </div>
 
       <DisclaimerBanner />
 
-      {/* Attack Vectors Selector */}
+      {/* Attack Scenario Selector Cards */}
       <div className="space-y-3">
         <div className="flex items-center justify-between">
-          <h2 className="text-sm font-bold uppercase tracking-wider text-slate-500">
-            Select Adversarial Attack Scenario
+          <h2 className="text-xs font-black uppercase tracking-wider text-[#435744]">
+            Select Adversarial Attack Scenario:
           </h2>
-          <span className="text-xs text-slate-400">
+          <span className="text-xs text-[#30312D]/70 font-bold">
             {ATTACK_SCENARIOS.length} stress-test vectors available
           </span>
         </div>
 
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-3.5">
           {ATTACK_SCENARIOS.map((attack) => {
             const isSelected = selectedAttackId === attack.id;
             return (
               <button
                 key={attack.id}
-                onClick={() => handleSimulateAttack(attack.id)}
+                onClick={() => handleSelectAttack(attack.id)}
                 type="button"
-                className={`p-4 rounded-xl border text-left transition-all ${
+                className={`p-4 rounded-3xl border-3 text-left transition-all ${
                   isSelected
-                    ? 'bg-blue-50/70 border-blue-500 shadow-xs ring-1 ring-blue-500'
-                    : 'bg-white border-slate-200 hover:border-slate-300 hover:shadow-xs'
+                    ? 'plush-forest shadow-md scale-102 border-dashed border-[#9BAE83] text-[#FFFDF9]'
+                    : 'bg-[#FFFDF8] border-dashed border-[#435744]/25 hover:border-[#9BAE83] hover:bg-[#FFFCF5] text-[#30312D] shadow-2xs'
                 }`}
               >
                 <div className="flex items-center justify-between mb-2">
                   <Badge 
                     variant={
                       attack.threatLevel.includes('Critical') 
-                        ? 'ai' 
+                        ? 'orange' 
                         : attack.threatLevel.includes('High') 
                         ? 'warning' 
-                        : 'indigo'
+                        : 'sage'
                     }
                     size="sm"
                   >
-                    {attack.threatLevel} Threat
+                    {attack.threatLevel}
                   </Badge>
                   {isSelected && (
-                    <span className="w-2 h-2 rounded-full bg-blue-600 animate-pulse"></span>
+                    <span className="w-2.5 h-2.5 rounded-full bg-[#E7B44F] animate-pulse"></span>
                   )}
                 </div>
 
-                <h3 className="font-bold text-slate-900 text-sm">
+                <h3 className="font-black text-sm">
                   {attack.name}
                 </h3>
-                <p className="text-xs text-slate-500 mt-1 line-clamp-2">
+                <p className={`text-[11px] mt-1 line-clamp-2 leading-tight ${isSelected ? 'text-[#FFFDF9]/80' : 'text-[#30312D]/70'}`}>
                   {attack.description}
                 </p>
               </button>
@@ -128,241 +184,298 @@ export default function RobustnessTesting() {
         </div>
       </div>
 
-      {/* Interactive Attack Comparison Workbench */}
-      <div className="bg-white rounded-2xl border border-slate-200 shadow-xs overflow-hidden">
-        {/* Workbench Header */}
-        <div className="bg-slate-50 px-6 py-4 border-b border-slate-200 flex flex-wrap items-center justify-between gap-4">
-          <div className="space-y-0.5">
-            <div className="flex items-center gap-2">
-              <Flame className="w-5 h-5 text-rose-500" />
-              <h3 className="font-bold text-slate-900 text-base">
+      {/* Interactive Workbench: Before and After Diff */}
+      <div className="knitted-card p-6 sm:p-8 space-y-6 border-3 border-dashed border-[#9BAE83]/60 shadow-lg">
+        
+        {/* Workbench Header & Dynamic Metrics */}
+        <div className="flex flex-wrap items-center justify-between gap-4 pb-4 border-b-2 border-dashed border-[#435744]/15">
+          <div className="space-y-1">
+            <div className="flex items-center gap-2.5">
+              <div className="plush-circle-btn plush-orange w-10 h-10 shrink-0 shadow-sm">
+                <Flame className="w-5 h-5 embroidered-icon" />
+              </div>
+              <h3 className="font-black text-[#30312D] text-base">
                 Active Scenario: {activeAttack.name}
               </h3>
             </div>
-            <p className="text-xs text-slate-500">
-              Technique: <span className="font-mono text-slate-700">{activeAttack.technique}</span>
+            <p className="text-xs text-[#30312D]/75 font-semibold">
+              Technique: <span className="font-mono text-[#435744] font-bold">{activeAttack.technique}</span>
             </p>
           </div>
 
-          {/* Degradation Score Summary Badge */}
-          <div className="flex items-center gap-3">
-            <div className="bg-white border border-slate-200 px-3 py-1.5 rounded-lg flex items-center gap-2">
-              <TrendingDown className="w-4 h-4 text-rose-500" />
+          {/* Quick Metrics Bar */}
+          <div className="flex flex-wrap items-center gap-3">
+            <div className="p-3 px-4 rounded-2xl bg-[#FFFDF8] border-2 border-dashed border-[#435744]/20 flex items-center gap-2.5 shadow-2xs">
+              <TrendingDown className="w-4 h-4 text-[#E58B36]" />
               <div className="text-xs">
-                <span className="text-slate-400 block text-[10px]">Confidence Drop</span>
-                <span className="font-bold font-mono text-rose-600">
-                  -{deltaDrop}% AI Confidence
+                <span className="text-[#30312D]/60 block text-[10px] font-black uppercase tracking-wider">Confidence Drop</span>
+                <span className="font-black font-mono text-[#9E4D09] text-sm">
+                  -{dynamicDrop}% AI Likelihood
+                </span>
+              </div>
+            </div>
+
+            <div className="p-3 px-4 rounded-2xl bg-[#FFFDF8] border-2 border-dashed border-[#435744]/20 flex items-center gap-2.5 shadow-2xs">
+              <Sliders className="w-4 h-4 text-[#435744]" />
+              <div className="text-xs">
+                <span className="text-[#30312D]/60 block text-[10px] font-black uppercase tracking-wider">Perturbation Intensity</span>
+                <span className="font-black font-mono text-[#435744] text-sm">
+                  {perturbationIntensity}% Token Swaps
                 </span>
               </div>
             </div>
           </div>
         </div>
 
-        {/* Side-by-Side Text Comparison */}
-        <div className="p-6 grid grid-cols-1 md:grid-cols-2 gap-6 items-stretch">
+        {/* Adjustable Perturbation Intensity Slider in Quilted Inset */}
+        <div className="p-5 rounded-3xl quilted-inset space-y-2.5 shadow-inner">
+          <div className="flex items-center justify-between text-xs font-black text-[#30312D]">
+            <span className="flex items-center gap-2 text-[#435744]">
+              <Sliders className="w-4 h-4 text-[#9BAE83]" />
+              Adjust Perturbation Intensity (Adversarial Budget):
+            </span>
+            <span className="font-mono text-sm font-black text-[#435744] bg-[#FFFDF8] px-3 py-1 rounded-full border-2 border-dashed border-[#9BAE83] shadow-2xs">
+              {perturbationIntensity}% Swaps
+            </span>
+          </div>
+          <input
+            type="range"
+            min="10"
+            max="50"
+            step="5"
+            value={perturbationIntensity}
+            onChange={(e) => setPerturbationIntensity(Number(e.target.value))}
+            className="w-full accent-[#435744] cursor-pointer h-2 bg-[#DED6C7] rounded-lg"
+          />
+          <div className="flex justify-between text-[10px] text-[#30312D]/70 font-bold">
+            <span>10% (Subtle Synonym replacement)</span>
+            <span>25% (Standard Evasion)</span>
+            <span>50% (Heavy Syntactic disruption)</span>
+          </div>
+        </div>
+
+        {/* Side-by-Side Comparison Workbench Panels */}
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 items-stretch">
           
-          {/* Left: Original AI Text */}
-          <div className="space-y-3 flex flex-col justify-between p-5 rounded-xl bg-slate-50/70 border border-slate-200">
-            <div className="space-y-2">
+          {/* Left Panel: Unperturbed Baseline AI Output */}
+          <div className="p-5 rounded-3xl quilted-inset flex flex-col justify-between space-y-3 shadow-sm">
+            <div className="space-y-2.5">
               <div className="flex items-center justify-between">
-                <span className="text-xs font-bold uppercase tracking-wider text-slate-500">
-                  Unmodified Baseline AI Output
+                <span className="text-xs font-black uppercase tracking-wider text-[#30312D]/70">
+                  Original AI Text (Unperturbed)
                 </span>
-                <span className="px-2 py-0.5 rounded font-mono text-xs font-bold bg-rose-100 text-rose-800">
+                <Badge variant="orange" size="sm">
                   {activeAttack.originalProbAI}% AI Confidence
-                </span>
+                </Badge>
               </div>
 
-              <div className="text-xs text-slate-700 leading-relaxed font-sans bg-white p-4 rounded-lg border border-slate-200 min-h-[120px]">
+              <div className="text-xs text-[#30312D] leading-relaxed font-sans bg-[#FFFDF8] p-5 rounded-3xl border-2 border-dashed border-[#435744]/20 min-h-[140px] shadow-inner">
                 {activeAttack.originalText}
               </div>
             </div>
 
-            <div className="text-[11px] text-slate-500 flex items-center gap-1.5 pt-2">
-              <span className="w-2 h-2 rounded-full bg-rose-500"></span>
-              <span>Easily flagged by perplexity and n-gram classifiers.</span>
+            <div className="text-[11px] text-[#30312D]/80 flex items-center gap-2 pt-1 font-bold">
+              <span className="w-2.5 h-2.5 rounded-full bg-[#E58B36]"></span>
+              <span>Easily flagged by n-gram frequency and perplexity baselines.</span>
             </div>
           </div>
 
-          {/* Right: Perturbed / Evasion Text */}
-          <div className="space-y-3 flex flex-col justify-between p-5 rounded-xl bg-blue-50/40 border border-blue-200">
-            <div className="space-y-2">
+          {/* Right Panel: Adversarially Perturbed Variant with Highlights */}
+          <div className="p-5 rounded-3xl bg-[#9BAE83]/20 border-3 border-dashed border-[#9BAE83] flex flex-col justify-between space-y-3 shadow-sm">
+            <div className="space-y-2.5">
               <div className="flex items-center justify-between">
-                <span className="text-xs font-bold uppercase tracking-wider text-blue-800">
-                  Adversarially Perturbed Variant
+                <span className="text-xs font-black uppercase tracking-wider text-[#435744]">
+                  Perturbed Text (Evasion Highlighted)
                 </span>
-                <span className={`px-2 py-0.5 rounded font-mono text-xs font-bold ${
-                  activeAttack.perturbedProbAI < 50
-                    ? 'bg-emerald-100 text-emerald-800'
-                    : 'bg-amber-100 text-amber-800'
-                }`}>
-                  {activeAttack.perturbedProbAI}% AI Confidence
-                </span>
+                <Badge variant={dynamicPerturbedProb < 50 ? 'sage' : 'warning'} size="sm">
+                  {dynamicPerturbedProb}% AI Confidence (Evasion)
+                </Badge>
               </div>
 
-              <div className="text-xs text-slate-800 leading-relaxed font-sans bg-white p-4 rounded-lg border border-blue-100 min-h-[120px]">
-                {activeAttack.perturbedText}
-              </div>
+              {/* Render Diff Highlighter */}
+              {renderHighlightedDiff()}
             </div>
 
-            <div className="text-[11px] text-blue-700 flex items-center gap-1.5 pt-2">
-              <span className="w-2 h-2 rounded-full bg-amber-500"></span>
-              <span>Detector tricked into classifying text as ambiguous or human.</span>
+            <div className="text-[11px] text-[#435744] flex items-center gap-2 pt-1 font-black">
+              <span className="w-2.5 h-2.5 rounded-full bg-[#9BAE83]"></span>
+              <span>Highlighted tokens degrade statistical likelihood and evade detector.</span>
             </div>
           </div>
 
         </div>
 
-        {/* Vulnerability Analysis Footer */}
-        <div className="bg-slate-50 px-6 py-4 border-t border-slate-200 text-xs">
-          <div className="flex items-start gap-2.5">
-            <ShieldAlert className="w-4 h-4 text-blue-600 shrink-0 mt-0.5" />
-            <div className="space-y-0.5">
-              <span className="font-semibold text-slate-800">
-                Vulnerability Breakdown & Mechanics:
-              </span>
-              <p className="text-slate-600 leading-relaxed">
-                {activeAttack.vulnerabilityAnalysis}
-              </p>
-            </div>
-          </div>
+        {/* Forensic Vulnerability Explanation */}
+        <div className="p-5 rounded-3xl bg-[#FFFDF8] border-2 border-dashed border-[#435744]/25 text-xs space-y-1.5 shadow-2xs">
+          <h4 className="font-black text-[#435744] flex items-center gap-2 text-sm">
+            <ShieldAlert className="w-4 h-4 text-[#B58422]" />
+            Forensic Vulnerability Diagnosis:
+          </h4>
+          <p className="text-[#30312D]/85 leading-relaxed text-xs font-medium">
+            {activeAttack.vulnerabilityAnalysis}
+          </p>
         </div>
+
+        {/* Action Controls as Plush Fur Buttons */}
+        <div className="flex flex-wrap items-center justify-end gap-3 pt-2 border-t-2 border-dashed border-[#435744]/15">
+          <button
+            onClick={handleReset}
+            className="plush-button plush-cream px-5 py-2.5 text-xs font-black flex items-center gap-1.5 shadow-xs"
+          >
+            <RotateCcw className="w-3.5 h-3.5 embroidered-icon" />
+            <span>Reset Scenario</span>
+          </button>
+          
+          <button
+            onClick={handleApplyAttack}
+            disabled={isSimulating}
+            className="plush-button plush-forest px-7 py-3 text-xs font-black flex items-center gap-2.5 shadow-lg"
+          >
+            {isSimulating ? (
+              <>
+                <span className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin"></span>
+                <span>Simulating Perturbation...</span>
+              </>
+            ) : (
+              <>
+                <Play className="w-4 h-4 text-[#F7D487]" />
+                <span>Simulate Adversarial Attack</span>
+              </>
+            )}
+          </button>
+        </div>
+
       </div>
 
-      {/* Degradation Curve Chart */}
-      <div className="bg-white rounded-2xl border border-slate-200 shadow-xs p-6 space-y-5">
+      {/* Perturbation Decay Curve Visualization */}
+      <div className="knitted-card p-6 sm:p-8 space-y-5 border-3 border-dashed border-[#9BAE83]/60 shadow-lg">
         <div className="flex flex-wrap items-center justify-between gap-4">
-          <div>
-            <div className="flex items-center gap-2">
-              <TrendingDown className="w-5 h-5 text-blue-600" />
-              <h3 className="text-base font-bold text-slate-900">
-                Adversarial Degradation Curve Across Perturbation Intensity
-              </h3>
-            </div>
-            <p className="text-xs text-slate-500 mt-0.5">
-              Tracking model classification retention as perturbation swap rate escalates from 0% to 50%.
+          <div className="space-y-1">
+            <h3 className="text-base font-black text-[#30312D]">
+              Perturbation Decay Curve (Model Robustness under Adversarial Pressure)
+            </h3>
+            <p className="text-xs text-[#30312D]/75 font-medium">
+              Detector accuracy decays rapidly as perturbation swaps increase from 0% to 50%. The ensemble architecture retains higher resilience.
             </p>
           </div>
 
-          <div className="flex items-center gap-3 text-xs">
+          <div className="flex items-center gap-3 text-xs font-black">
             <div className="flex items-center gap-1.5">
-              <span className="w-2.5 h-2.5 rounded-full bg-slate-400"></span>
-              <span className="text-slate-600">Baseline Detector</span>
+              <span className="w-3 h-3 rounded-full bg-[#E58B36]"></span>
+              <span className="text-[#9E4D09]">Baseline (Logistic)</span>
             </div>
             <div className="flex items-center gap-1.5">
-              <span className="w-2.5 h-2.5 rounded-full bg-blue-600"></span>
-              <span className="text-blue-700 font-semibold">Standard Transformer</span>
+              <span className="w-3 h-3 rounded-full bg-[#343B59]"></span>
+              <span className="text-[#343B59]">RoBERTa-Large</span>
             </div>
             <div className="flex items-center gap-1.5">
-              <span className="w-2.5 h-2.5 rounded-full bg-emerald-600"></span>
-              <span className="text-emerald-700 font-bold">AI-Guard Ensemble</span>
+              <span className="w-3 h-3 rounded-full bg-[#435744]"></span>
+              <span className="text-[#435744]">AI-Guard Ensemble</span>
             </div>
           </div>
         </div>
 
-        {/* Recharts LineChart */}
-        <div className="h-72 w-full pt-2">
+        <div className="h-80 w-full pt-4">
           <ResponsiveContainer width="100%" height="100%">
             <LineChart
               data={PERTURBATION_DECAY_CURVE}
-              margin={{ top: 10, right: 30, left: 0, bottom: 10 }}
+              margin={{ top: 10, right: 30, left: 0, bottom: 20 }}
             >
-              <CartesianGrid strokeDasharray="3 3" stroke="#f1f5f9" />
+              <CartesianGrid strokeDasharray="3 3" stroke="#E6DFD3" />
               <XAxis 
                 dataKey="perturbationRate" 
-                tick={{ fill: '#64748b', fontSize: 11 }} 
+                tick={{ fill: '#30312D', fontSize: 12, fontWeight: 700 }} 
+                axisLine={{ stroke: '#C8BEAE' }}
               />
               <YAxis 
-                unit="%" 
-                domain={[0, 100]} 
-                tick={{ fill: '#64748b', fontSize: 11 }} 
+                unit="%"
+                domain={[0, 100]}
+                tick={{ fill: '#30312D', fontSize: 12, fontWeight: 600 }} 
+                axisLine={{ stroke: '#C8BEAE' }}
               />
               <Tooltip 
-                formatter={(val, name) => [
-                  `${val}% Detection Accuracy`, 
-                  name === 'baselineDetector' 
-                    ? 'Baseline' 
-                    : name === 'transformerDetector' 
-                    ? 'Standard Transformer' 
-                    : 'AI-Guard Ensemble'
-                ]}
                 contentStyle={{ 
-                  backgroundColor: '#ffffff', 
-                  borderRadius: '10px', 
-                  borderColor: '#e2e8f0', 
-                  fontSize: '12px' 
-                }}
+                  backgroundColor: '#FFFDF8', 
+                  borderColor: '#9BAE83', 
+                  borderRadius: '1.25rem',
+                  borderWidth: '2px',
+                  borderStyle: 'dashed',
+                  fontFamily: 'Outfit, sans-serif',
+                  fontWeight: 700
+                }} 
               />
-              <Legend wrapperStyle={{ fontSize: '11px' }} />
               <Line 
                 type="monotone" 
                 dataKey="baselineDetector" 
-                name="Baseline Detector" 
-                stroke="#94a3b8" 
-                strokeWidth={2}
-                dot={{ r: 3 }}
+                name="Baseline (TF-IDF)" 
+                stroke="#E58B36" 
+                strokeWidth={3} 
+                dot={{ r: 4, fill: '#E58B36' }} 
               />
               <Line 
                 type="monotone" 
                 dataKey="transformerDetector" 
-                name="Standard Transformer" 
-                stroke="#2563eb" 
-                strokeWidth={2}
-                dot={{ r: 3 }}
+                name="RoBERTa-Large" 
+                stroke="#343B59" 
+                strokeWidth={3} 
+                dot={{ r: 4, fill: '#343B59' }} 
               />
               <Line 
                 type="monotone" 
                 dataKey="aiGuardEnsemble" 
-                name="AI-Guard Ensemble (Proposed)" 
-                stroke="#059669" 
-                strokeWidth={2.5}
-                strokeDasharray="4 4"
-                dot={{ r: 4 }}
+                name="AI-Guard Ensemble" 
+                stroke="#435744" 
+                strokeWidth={3.5} 
+                dot={{ r: 5, fill: '#435744' }} 
               />
             </LineChart>
           </ResponsiveContainer>
         </div>
       </div>
 
-      {/* Cross-Domain Benchmarks Grid */}
-      <div className="bg-white rounded-2xl border border-slate-200 shadow-xs p-6 space-y-4">
-        <div className="flex items-center justify-between">
-          <div className="flex items-center gap-2">
-            <Compass className="w-5 h-5 text-blue-600" />
-            <h3 className="text-base font-bold text-slate-900">
-              Cross-Domain Generalization Benchmarks
-            </h3>
-          </div>
-          <span className="text-xs text-slate-400">
-            Simulated In-Distribution vs Out-of-Distribution Data
-          </span>
+      {/* Cross-Domain Shift Benchmarks Table */}
+      <div className="knitted-card p-6 sm:p-8 space-y-4 border-3 border-dashed border-[#9BAE83]/60 shadow-lg">
+        <div className="space-y-1">
+          <h3 className="text-base font-black text-[#30312D]">
+            Cross-Domain Evasion Benchmarks
+          </h3>
+          <p className="text-xs text-[#30312D]/75 font-medium">
+            Evasion rate measures the percentage of synthetic text that successfully bypasses the detection boundary across domains.
+          </p>
         </div>
 
-        <p className="text-xs text-slate-500">
-          How evasion success rates fluctuate across varied literary styles and target demographic domains.
-        </p>
-
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-3 pt-2">
-          {DOMAIN_SHIFT_BENCHMARKS.map((benchmark, idx) => (
-            <div 
-              key={idx}
-              className="p-4 rounded-xl bg-slate-50 border border-slate-100 space-y-2 hover:bg-slate-100/60 transition-colors"
-            >
-              <h4 className="text-xs font-bold text-slate-900 leading-snug">
-                {benchmark.domain}
-              </h4>
-              <div className="space-y-1 text-xs">
-                <div className="flex justify-between text-slate-500">
-                  <span>F1 Score:</span>
-                  <span className="font-mono font-semibold text-slate-800">{benchmark.f1}%</span>
-                </div>
-                <div className="flex justify-between text-slate-500">
-                  <span>Evasion Rate:</span>
-                  <span className="font-mono font-semibold text-rose-600">{benchmark.evasionRate}%</span>
-                </div>
-              </div>
-            </div>
-          ))}
+        <div className="overflow-x-auto">
+          <table className="w-full text-left text-xs">
+            <thead>
+              <tr className="border-b-2 border-dashed border-[#435744]/20 text-[#435744] font-black uppercase text-[10px] tracking-wider">
+                <th className="py-3 px-3">Evaluation Domain</th>
+                <th className="py-3 px-3">Precision</th>
+                <th className="py-3 px-3">Recall</th>
+                <th className="py-3 px-3">F1 Score</th>
+                <th className="py-3 px-3">Evasion Rate</th>
+              </tr>
+            </thead>
+            <tbody className="divide-y divide-dashed divide-[#435744]/15 text-[#30312D]">
+              {DOMAIN_SHIFT_BENCHMARKS.map((benchmark, idx) => (
+                <tr key={idx} className="hover:bg-[#9BAE83]/15 transition-colors">
+                  <td className="py-3.5 px-3 font-bold text-[#435744]">
+                    {benchmark.domain}
+                  </td>
+                  <td className="py-3.5 px-3 font-mono font-bold">{benchmark.precision}%</td>
+                  <td className="py-3.5 px-3 font-mono font-bold">{benchmark.recall}%</td>
+                  <td className="py-3.5 px-3 font-mono font-black text-[#435744]">{benchmark.f1}%</td>
+                  <td className="py-3.5 px-3 font-mono">
+                    <span className={`px-3 py-1 rounded-full font-black text-[11px] ${
+                      benchmark.evasionRate > 20
+                        ? 'bg-[#E58B36]/30 text-[#6B2E05] border border-dashed border-[#E58B36]'
+                        : 'bg-[#9BAE83]/30 text-[#1F2C18] border border-dashed border-[#9BAE83]'
+                    }`}>
+                      {benchmark.evasionRate}% Evasion
+                    </span>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
         </div>
       </div>
 

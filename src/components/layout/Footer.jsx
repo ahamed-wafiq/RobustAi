@@ -1,80 +1,90 @@
 import React from 'react';
-import { ShieldCheck, BookOpen, AlertCircle, Heart } from 'lucide-react';
+import { ShieldCheck, AlertCircle, Heart, Sparkles, Layers } from 'lucide-react';
 import { Link } from 'react-router-dom';
 
 export default function Footer() {
   return (
-    <footer className="mt-20 bg-white border-t border-slate-200">
+    <footer className="mt-20 bg-[#FFFDF8] border-t-3 border-dashed border-[#435744]/25 shadow-lg">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
         <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
-          {/* Column 1: Info */}
+          {/* Column 1: Info & Research Mission */}
           <div className="md:col-span-2 space-y-4">
-            <div className="flex items-center gap-2.5">
-              <div className="w-8 h-8 rounded-lg bg-blue-600 flex items-center justify-center text-white">
-                <ShieldCheck className="w-5 h-5" />
+            <div className="flex items-center gap-3.5">
+              <div className="plush-circle-btn plush-forest w-11 h-11 shrink-0 shadow-md">
+                <ShieldCheck className="w-6 h-6 embroidered-icon-light" />
               </div>
-              <span className="text-lg font-bold text-slate-900">AI-Guard Research</span>
+              <div>
+                <span className="text-xl font-black text-[#30312D] tracking-tight">AI-Guard Research</span>
+                <span className="ml-2 text-[10px] font-black uppercase tracking-wider px-2.5 py-0.5 rounded-full bg-[#9BAE83]/30 text-[#1F2C18] border-2 border-dashed border-[#9BAE83]">
+                  Soft Forensics Lab
+                </span>
+              </div>
             </div>
-            <p className="text-sm text-slate-600 leading-relaxed max-w-md">
-              A robust research initiative focused on evaluating the vulnerabilities, ethical limitations, and domain-shift behaviors of AI-generated text detection algorithms.
+            <p className="text-sm text-[#30312D]/85 leading-relaxed max-w-md font-medium">
+              An open academic research initiative focused on evaluating the vulnerabilities, ethical limitations, and domain-shift behaviors of AI-generated text detection algorithms.
             </p>
-            <div className="flex items-start gap-2 p-3 rounded-lg bg-slate-50 border border-slate-200 text-xs text-slate-600 max-w-lg">
-              <AlertCircle className="w-4 h-4 text-amber-600 shrink-0 mt-0.5" />
-              <p>
-                <strong>Academic Integrity Notice:</strong> Statistical AI detectors produce false positives on non-native English writing and can be bypassed by paraphrasing. This prototype must never be utilized as definitive evidence in disciplinary matters.
+            <div className="flex items-start gap-3 p-4 rounded-3xl quilted-inset text-xs text-[#543A05] max-w-lg shadow-sm">
+              <AlertCircle className="w-4 h-4 text-[#B58422] shrink-0 mt-0.5" />
+              <p className="leading-relaxed font-medium">
+                <strong className="font-black text-[#483307]">Academic Integrity Notice:</strong> Statistical AI detectors produce false positives on non-native English writing and can be bypassed by paraphrasing. This prototype must never be utilized as definitive evidence in disciplinary matters.
               </p>
             </div>
           </div>
 
           {/* Column 2: Navigation */}
           <div className="space-y-3">
-            <h4 className="text-xs font-bold uppercase tracking-wider text-slate-900">
+            <h4 className="text-xs font-black uppercase tracking-wider text-[#435744]">
               Evaluation Suite
             </h4>
-            <ul className="space-y-2 text-sm text-slate-600">
+            <ul className="space-y-2 text-sm text-[#30312D]/85 font-bold">
               <li>
-                <Link to="/" className="hover:text-blue-600 transition-colors">
+                <Link to="/" className="hover:text-[#435744] hover:underline transition-colors flex items-center gap-2">
+                  <span className="w-2 h-2 rounded-full bg-[#9BAE83]"></span>
                   Text Detector
                 </Link>
               </li>
               <li>
-                <Link to="/comparison" className="hover:text-blue-600 transition-colors">
+                <Link to="/comparison" className="hover:text-[#435744] hover:underline transition-colors flex items-center gap-2">
+                  <span className="w-2 h-2 rounded-full bg-[#9BAE83]"></span>
                   Model Comparison
                 </Link>
               </li>
               <li>
-                <Link to="/robustness" className="hover:text-blue-600 transition-colors">
-                  Robustness Testing
+                <Link to="/robustness" className="hover:text-[#435744] hover:underline transition-colors flex items-center gap-2">
+                  <span className="w-2 h-2 rounded-full bg-[#E58B36]"></span>
+                  Robustness Lab
                 </Link>
               </li>
               <li>
-                <Link to="/about" className="hover:text-blue-600 transition-colors">
-                  Methodology & Objectives
+                <Link to="/about" className="hover:text-[#435744] hover:underline transition-colors flex items-center gap-2">
+                  <span className="w-2 h-2 rounded-full bg-[#343B59]"></span>
+                  About & Methodology
                 </Link>
               </li>
             </ul>
           </div>
 
-          {/* Column 3: Research Notes */}
+          {/* Column 3: Research Focus */}
           <div className="space-y-3">
-            <h4 className="text-xs font-bold uppercase tracking-wider text-slate-900">
-              Research Focus
+            <h4 className="text-xs font-black uppercase tracking-wider text-[#435744]">
+              Methodology & Benchmarks
             </h4>
-            <ul className="space-y-2 text-xs text-slate-500">
-              <li>• Stylometric burstiness & perplexity analysis</li>
-              <li>• Adversarial evasion stress-testing</li>
-              <li>• ESL & non-native author bias reduction</li>
-              <li>• Cross-domain generalization decay</li>
-              <li>• Explainable ensemble decision bounds</li>
+            <ul className="space-y-2 text-xs text-[#30312D]/80 font-medium">
+              <li className="flex items-center gap-1.5">• Stylometric burstiness & entropy analysis</li>
+              <li className="flex items-center gap-1.5">• Adversarial evasion stress-testing</li>
+              <li className="flex items-center gap-1.5">• ESL & non-native author bias reduction</li>
+              <li className="flex items-center gap-1.5">• Cross-domain generalization decay</li>
+              <li className="flex items-center gap-1.5">• Trained on Hello-SimpleAI/HC3 corpus</li>
             </ul>
           </div>
         </div>
 
-        <div className="mt-12 pt-8 border-t border-slate-100 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-slate-500">
-          <p>© {new Date().getFullYear()} AI-Guard Project. Prototype Demonstration Environment.</p>
+        <div className="mt-12 pt-8 border-t-2 border-dashed border-[#435744]/15 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-[#30312D]/70 font-semibold">
+          <p>© {new Date().getFullYear()} AI-Guard Project. Handcrafted with care for robust AI evaluation.</p>
           <div className="flex items-center gap-4">
-            <span className="inline-flex items-center gap-1">
-              All benchmark metrics are synthetic demonstration data.
+            <span className="plush-button plush-mustard px-4 py-1 text-[11px] font-black shadow-2xs">
+              <Sparkles className="w-3.5 h-3.5 embroidered-icon" />
+              Probabilistic Research Benchmarks
             </span>
           </div>
         </div>

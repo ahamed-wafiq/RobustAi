@@ -1,34 +1,401 @@
 @import "tailwindcss";
 
+@theme {
+  --color-warm-cream: #F5F0E6;
+  --color-soft-ivory: #FFFCF5;
+  --color-sage: #9BAE83;
+  --color-sage-light: #B8C7A5;
+  --color-sage-dark: #6E8357;
+  --color-forest: #435744;
+  --color-forest-dark: #2A382B;
+  --color-mustard: #E7B44F;
+  --color-mustard-light: #F7D487;
+  --color-mustard-dark: #B58422;
+  --color-orange-soft: #E58B36;
+  --color-orange-light: #F3A863;
+  --color-muted-navy: #343B59;
+  --color-muted-navy-light: #4A537A;
+  --color-warm-charcoal: #30312D;
+  --font-sans: 'Outfit', 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
+  --font-mono: 'JetBrains Mono', ui-monospace, monospace;
+}
+
 @layer base {
   body {
-    font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
-    color: #0f172a;
-    background-color: #f8fafc;
+    font-family: var(--font-sans);
+    color: #30312D;
+    background-color: #F5F0E6;
+    /* Realistic Cozy Knitted Blanket Background */
+    background-image: 
+      radial-gradient(circle at 12% 15%, rgba(155, 174, 131, 0.16) 0%, transparent 35%),
+      radial-gradient(circle at 88% 85%, rgba(231, 180, 79, 0.14) 0%, transparent 40%),
+      radial-gradient(circle at 50% 50%, rgba(229, 139, 54, 0.08) 0%, transparent 45%),
+      linear-gradient(rgba(245, 240, 230, 0.88), rgba(245, 240, 230, 0.88)),
+      url('/src/assets/knitted-yarn-texture.jpg');
+    background-size: auto, auto, auto, auto, 280px;
+    background-repeat: no-repeat, no-repeat, no-repeat, no-repeat, repeat;
+    background-attachment: fixed;
+    min-height: 100vh;
   }
   
   code, pre, .font-mono {
-    font-family: 'JetBrains Mono', ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+    font-family: var(--font-mono);
   }
 }
 
-/* Smooth transitions */
 * {
   box-sizing: border-box;
 }
 
-/* Custom delicate research dashboard scrollbar */
+/* Custom Soft Felt Scrollbar */
 ::-webkit-scrollbar {
-  width: 6px;
-  height: 6px;
+  width: 9px;
+  height: 9px;
 }
 ::-webkit-scrollbar-track {
-  background: #f8fafc;
+  background: #EFE7D8;
 }
 ::-webkit-scrollbar-thumb {
-  background: #cbd5e1;
+  background: #B8C7A5;
   border-radius: 9999px;
+  border: 2px solid #EFE7D8;
+  box-shadow: inset 0 1px 2px rgba(0,0,0,0.1);
 }
 ::-webkit-scrollbar-thumb:hover {
-  background: #94a3b8;
+  background: #9BAE83;
+}
+
+/* ==========================================================================
+   MATERIAL A: PLUSH FUR CONTROLS & BUTTONS
+   Fluffy fur-covered buttons, padded textile shapes, visible fuzzy fiber rim,
+   inset cushion center, and embroidered dark symbols.
+   ========================================================================== */
+
+/* Base Plush Fur Button */
+.plush-button {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  font-weight: 700;
+  border-radius: 9999px;
+  cursor: pointer;
+  user-select: none;
+  isolation: isolate;
+  background-repeat: repeat;
+  background-size: 140px;
+  transition: transform 0.18s cubic-bezier(0.2, 0.9, 0.3, 1.2), box-shadow 0.18s ease;
+}
+
+/* Soft Fuzzy Edge & Fiber Ring (Simulated Organic Fuzz) */
+.plush-button::before {
+  content: '';
+  position: absolute;
+  inset: -3px;
+  border-radius: inherit;
+  z-index: -1;
+  filter: url(#fuzzy-rim);
+  opacity: 0.9;
+  transition: opacity 0.2s ease, transform 0.2s ease;
+}
+
+/* Padded center cushion with soft inset bevel */
+.plush-button::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  z-index: -1;
+  box-shadow: 
+    inset 0 3px 6px rgba(255, 255, 255, 0.65),
+    inset 0 -3px 6px rgba(0, 0, 0, 0.22);
+  pointer-events: none;
+}
+
+/* Hover & Active Cushion Physics */
+.plush-button:hover:not(:disabled) {
+  transform: translateY(-2px) scale(1.02);
+}
+.plush-button:active:not(:disabled) {
+  transform: translateY(2px) scale(0.97);
+}
+
+/* --- Plush Color Variants with Genuine Fur Texture Overlays --- */
+
+/* Forest Green Plush Button (Featured Primary) */
+.plush-forest {
+  background-color: #3B4E3C;
+  background-image: 
+    linear-gradient(rgba(59, 78, 60, 0.82), rgba(42, 56, 43, 0.88)),
+    url('/src/assets/plush-fur-texture.jpg');
+  color: #FFFDF9;
+  box-shadow: 
+    0 0 0 2px rgba(155, 174, 131, 0.5),
+    0 0 10px 3px rgba(67, 87, 68, 0.4),
+    0 8px 20px -2px rgba(42, 56, 43, 0.45);
+}
+.plush-forest::before {
+  background-color: #4A634C;
+}
+.plush-forest:hover:not(:disabled) {
+  box-shadow: 
+    0 0 0 3px rgba(155, 174, 131, 0.7),
+    0 0 14px 5px rgba(67, 87, 68, 0.55),
+    0 12px 26px -3px rgba(42, 56, 43, 0.55);
+}
+
+/* Sage Green Plush Button */
+.plush-sage {
+  background-color: #8E9F76;
+  background-image: 
+    linear-gradient(rgba(155, 174, 131, 0.85), rgba(127, 147, 103, 0.88)),
+    url('/src/assets/plush-fur-texture.jpg');
+  color: #1F281E;
+  box-shadow: 
+    0 0 0 2px rgba(184, 199, 165, 0.6),
+    0 0 8px 3px rgba(155, 174, 131, 0.45),
+    0 6px 16px -2px rgba(67, 87, 68, 0.25);
+}
+.plush-sage::before {
+  background-color: #9BAE83;
+}
+.plush-sage:hover:not(:disabled) {
+  box-shadow: 
+    0 0 0 3px rgba(184, 199, 165, 0.8),
+    0 0 12px 4px rgba(155, 174, 131, 0.6),
+    0 9px 20px -2px rgba(67, 87, 68, 0.35);
+}
+
+/* Mustard Yellow Plush Button */
+.plush-mustard {
+  background-color: #D9A53F;
+  background-image: 
+    linear-gradient(rgba(231, 180, 79, 0.85), rgba(198, 148, 48, 0.88)),
+    url('/src/assets/plush-fur-texture.jpg');
+  color: #2D220A;
+  box-shadow: 
+    0 0 0 2px rgba(247, 212, 135, 0.6),
+    0 0 8px 3px rgba(231, 180, 79, 0.45),
+    0 6px 16px -2px rgba(181, 132, 34, 0.3);
+}
+.plush-mustard::before {
+  background-color: #E7B44F;
+}
+.plush-mustard:hover:not(:disabled) {
+  box-shadow: 
+    0 0 0 3px rgba(247, 212, 135, 0.8),
+    0 0 12px 4px rgba(231, 180, 79, 0.6),
+    0 9px 20px -2px rgba(181, 132, 34, 0.4);
+}
+
+/* Soft Orange Plush Button */
+.plush-orange {
+  background-color: #D67C29;
+  background-image: 
+    linear-gradient(rgba(229, 139, 54, 0.85), rgba(196, 107, 24, 0.88)),
+    url('/src/assets/plush-fur-texture.jpg');
+  color: #281605;
+  box-shadow: 
+    0 0 0 2px rgba(243, 168, 99, 0.6),
+    0 0 8px 3px rgba(229, 139, 54, 0.45),
+    0 6px 16px -2px rgba(196, 107, 24, 0.3);
+}
+.plush-orange::before {
+  background-color: #E58B36;
+}
+.plush-orange:hover:not(:disabled) {
+  box-shadow: 
+    0 0 0 3px rgba(243, 168, 99, 0.8),
+    0 0 12px 4px rgba(229, 139, 54, 0.6),
+    0 9px 20px -2px rgba(196, 107, 24, 0.4);
+}
+
+/* Soft Cream Fur Button */
+.plush-cream {
+  background-color: #FFFDF8;
+  background-image: 
+    linear-gradient(rgba(255, 253, 248, 0.85), rgba(245, 240, 230, 0.9)),
+    url('/src/assets/plush-fur-texture.jpg');
+  color: #2A2C27;
+  border: 1px solid rgba(155, 174, 131, 0.35);
+  box-shadow: 
+    0 0 0 2px rgba(235, 227, 210, 0.6),
+    0 0 8px 3px rgba(210, 200, 180, 0.4),
+    0 6px 14px -2px rgba(48, 49, 45, 0.12);
+}
+.plush-cream::before {
+  background-color: #F5EEDB;
+}
+.plush-cream:hover:not(:disabled) {
+  box-shadow: 
+    0 0 0 3px rgba(235, 227, 210, 0.8),
+    0 0 12px 4px rgba(210, 200, 180, 0.55),
+    0 8px 18px -2px rgba(48, 49, 45, 0.16);
+}
+
+/* Muted Navy Plush Button */
+.plush-navy {
+  background-color: #2E354F;
+  background-image: 
+    linear-gradient(rgba(52, 59, 89, 0.88), rgba(38, 43, 66, 0.9)),
+    url('/src/assets/plush-fur-texture.jpg');
+  color: #FFFDF9;
+  box-shadow: 
+    0 0 0 2px rgba(74, 83, 122, 0.6),
+    0 0 8px 3px rgba(52, 59, 89, 0.45),
+    0 6px 16px -2px rgba(30, 35, 54, 0.35);
+}
+.plush-navy::before {
+  background-color: #343B59;
+}
+
+/* Circular Fluffy Icon Button (Direct Reference 1 Recreation) */
+.plush-circle-btn {
+  position: relative;
+  width: 3rem;
+  height: 3rem;
+  border-radius: 9999px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  user-select: none;
+  isolation: isolate;
+  background-repeat: repeat;
+  background-size: 110px;
+  transition: transform 0.18s cubic-bezier(0.2, 0.9, 0.3, 1.2), box-shadow 0.18s ease;
+}
+.plush-circle-btn::before {
+  content: '';
+  position: absolute;
+  inset: -4px;
+  border-radius: 9999px;
+  z-index: -1;
+  filter: url(#fuzzy-rim);
+  opacity: 0.95;
+}
+.plush-circle-btn::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: 9999px;
+  z-index: -1;
+  box-shadow: 
+    inset 0 3px 5px rgba(255, 255, 255, 0.7),
+    inset 0 -3px 5px rgba(0, 0, 0, 0.25);
+  pointer-events: none;
+}
+.plush-circle-btn:hover {
+  transform: translateY(-2px) scale(1.06);
+}
+.plush-circle-btn:active {
+  transform: translateY(2px) scale(0.95);
+}
+
+/* Embroidered Dark Icon Effect (Textile Stitched Thread) */
+.embroidered-icon {
+  color: #1E201B;
+  filter: 
+    drop-shadow(0 1px 0 rgba(255, 255, 255, 0.65)) 
+    drop-shadow(0 -1px 0 rgba(0, 0, 0, 0.45));
+  stroke-width: 2.3px;
+}
+.embroidered-icon-light {
+  color: #FFFDF9;
+  filter: 
+    drop-shadow(0 1px 0 rgba(0, 0, 0, 0.5)) 
+    drop-shadow(0 -1px 0 rgba(255, 255, 255, 0.25));
+  stroke-width: 2.3px;
+}
+
+
+/* ==========================================================================
+   MATERIAL B: KNITTED YARN CARDS & FABRIC SURFACES
+   Padded quilted fabric panels, visible cable knit loop patterns,
+   embroidered stitched yarn borders, and soft raised contact shadows.
+   ========================================================================== */
+
+.knitted-card {
+  position: relative;
+  background-color: #FFFCF5;
+  background-image: 
+    linear-gradient(rgba(255, 252, 245, 0.94), rgba(255, 252, 245, 0.94)),
+    url('/src/assets/knitted-yarn-texture.jpg');
+  background-size: auto, 240px;
+  background-repeat: no-repeat, repeat;
+  border-radius: 1.75rem;
+  border: 3px dashed rgba(155, 174, 131, 0.55);
+  box-shadow: 
+    0 16px 36px -6px rgba(48, 49, 45, 0.11),
+    0 6px 14px -3px rgba(48, 49, 45, 0.06),
+    inset 0 2px 0 rgba(255, 255, 255, 0.95),
+    inset 0 0 24px rgba(155, 174, 131, 0.06);
+  transition: transform 0.22s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.22s cubic-bezier(0.16, 1, 0.3, 1), border-color 0.2s ease;
+}
+
+.knitted-card-interactive:hover {
+  transform: translateY(-3px);
+  box-shadow: 
+    0 22px 42px -6px rgba(48, 49, 45, 0.14),
+    0 8px 18px -3px rgba(48, 49, 45, 0.08),
+    inset 0 2px 0 rgba(255, 255, 255, 1),
+    inset 0 0 28px rgba(155, 174, 131, 0.08);
+  border-color: rgba(67, 87, 68, 0.6);
+}
+
+/* Stitched Quilted Textile Insets */
+.quilted-inset {
+  background-color: #F5EEDB;
+  background-image: 
+    linear-gradient(rgba(245, 238, 219, 0.88), rgba(245, 238, 219, 0.88)),
+    url('/src/assets/knitted-yarn-texture.jpg');
+  background-size: auto, 180px;
+  border: 2px dashed rgba(67, 87, 68, 0.3);
+  border-radius: 1.25rem;
+  box-shadow: 
+    inset 0 2px 6px rgba(48, 49, 45, 0.08),
+    0 1px 0 rgba(255, 255, 255, 0.8);
+}
+
+/* Textile Padded Badges */
+.textile-badge {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  padding: 0.35rem 0.85rem;
+  border-radius: 9999px;
+  font-weight: 700;
+  font-size: 0.75rem;
+  background-size: 120px;
+  border: 1.5px dashed currentColor;
+  box-shadow: 
+    0 2px 6px rgba(0, 0, 0, 0.06),
+    inset 0 1px 2px rgba(255, 255, 255, 0.7);
+}
+
+/* Gentle floating miniature diorama movement */
+@keyframes knitted-float {
+  0%, 100% {
+    transform: translateY(0px) rotate(0deg);
+  }
+  50% {
+    transform: translateY(-6px) rotate(0.4deg);
+  }
+}
+
+.animate-knitted-float {
+  animation: knitted-float 6s ease-in-out infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .animate-knitted-float,
+  .knitted-card,
+  .plush-button,
+  .plush-circle-btn {
+    animation: none !important;
+    transition: none !important;
+    transform: none !important;
+  }
 }

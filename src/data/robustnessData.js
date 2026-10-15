@@ -42,15 +42,27 @@ export const ATTACK_SCENARIOS = [
   },
   {
     id: "stylistic-marker",
-    name: "Human Stylistic Marker Injection",
-    technique: "Injecting rhetorical questions, colloquial contractions, and minor punctuation quirks",
+    name: "Formalization / Prompt Injection",
+    technique: "Injecting rhetorical conversational framing and persona prompts",
     threatLevel: "Medium-High",
-    description: "Appends conversational flourishes and non-standard sentence breaks to simulate authentic human burstiness.",
+    description: "Appends authentic human conversational flourishes, rhetorical queries, and persona cues to elevate burstiness.",
     originalText: "Moreover, it is crucial to recognize that the ethical implications surrounding academic integrity must be addressed through comprehensive policy frameworks.",
     perturbedText: "Honestly, who can overlook the ethics here? When it comes to academic integrity, we definitely need airtight policies—and we needed them yesterday.",
     originalProbAI: 93,
     perturbedProbAI: 48,
     vulnerabilityAnalysis: "Injected contractions ('who can', 'we definitely') trigger human-favoring stylistic priors in linear baselines, masking the synthetic origin of the core arguments."
+  },
+  {
+    id: "whitespace",
+    name: "Whitespace Manipulation",
+    technique: "Non-breaking spaces, zero-width spaces, and soft linebreaks",
+    threatLevel: "High",
+    description: "Inserts invisible zero-width spaces (U+200B) and irregular whitespace to disrupt subword tokenization boundaries.",
+    originalText: "Deep learning models require extensive computational resources to train on large-scale datasets.",
+    perturbedText: "Deep\u200B learning\u200B models\u200B require\u200B extensive\u200B computational\u200B resources\u200B to\u200B train\u200B on\u200B large-scale\u200B datasets.",
+    originalProbAI: 94,
+    perturbedProbAI: 36,
+    vulnerabilityAnalysis: "Without NFKC normalization, zero-width characters cause tokenizers to split standard words into multiple unknown/rare fragments, causing the model to lose n-gram context."
   }
 ];
 

@@ -10,7 +10,7 @@ import AboutResearch from './pages/AboutResearch';
 export default function App() {
   return (
     <BrowserRouter>
-      <div className="min-h-screen flex flex-col bg-slate-50 text-slate-900">
+      <div className="min-h-screen flex flex-col bg-[#F5F0E6] text-[#30312D]">
         <Navbar />
         
         <main className="flex-1">

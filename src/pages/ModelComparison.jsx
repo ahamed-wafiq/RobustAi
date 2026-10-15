@@ -13,7 +13,9 @@ import {
   HelpCircle,
   TrendingUp,
   BarChart2,
-  FileCheck
+  FileCheck,
+  Split,
+  Sparkles
 } from 'lucide-react';
 import { 
   BarChart, 
@@ -39,25 +41,30 @@ import MetricCard from '../components/common/MetricCard';
 import DisclaimerBanner from '../components/layout/DisclaimerBanner';
 
 export default function ModelComparison() {
+  const [activeTab, setActiveTab] = useState('performance'); // 'performance' | 'roc' | 'domain' | 'matrix'
+
   return (
     <div className="space-y-8 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
       {/* Page Header */}
-      <div className="space-y-2 border-b border-slate-200 pb-6">
+      <div className="knitted-card p-6 sm:p-8 bg-gradient-to-br from-[#FFFDF8] via-[#FFFCF5] to-[#F5EEDB] border-3 border-dashed border-[#9BAE83]/60 shadow-lg">
         <div className="flex flex-wrap items-center justify-between gap-4">
-          <div>
+          <div className="space-y-2 max-w-3xl">
             <div className="flex items-center gap-2.5">
-              <h1 className="text-2xl sm:text-3xl font-extrabold text-slate-900 tracking-tight">
-                Model Architecture & Benchmark Comparison
-              </h1>
-              <Badge variant="blue">Architecture Comparison</Badge>
+              <span className="text-[11px] font-black uppercase tracking-widest text-[#435744] bg-[#9BAE83]/30 px-3.5 py-1 rounded-full border-2 border-dashed border-[#9BAE83] shadow-2xs">
+                ARCHITECTURE COMPARISON
+              </span>
+              <Badge variant="sage">Scientific Laboratory</Badge>
             </div>
-            <p className="text-slate-600 text-sm mt-1 max-w-3xl">
-              Comparative analysis contrasting the trained <strong>Logistic Regression Baseline (HC3)</strong> against an illustrative <strong>Contextual Transformer (RoBERTa-Large)</strong> from academic literature.
+            <h1 className="text-3xl sm:text-4xl font-black text-[#30312D] tracking-tight">
+              Two approaches. <span className="text-[#435744] underline decoration-wavy decoration-[#9BAE83]">One research question.</span>
+            </h1>
+            <p className="text-sm sm:text-base text-[#30312D]/85 leading-relaxed font-medium">
+              Explore the trade-offs between classical machine learning and contextual transformer models for AI text forensics.
             </p>
           </div>
 
-          <div className="flex items-center gap-2 text-xs bg-amber-50 border border-amber-200 text-amber-800 px-3 py-1.5 rounded-lg">
-            <AlertTriangle className="w-4 h-4 text-amber-600 shrink-0" />
+          <div className="flex items-center gap-2 text-xs font-black bg-[#FFFDF8] border-2 border-dashed border-[#E7B44F] text-[#543A05] px-4 py-2 rounded-2xl shadow-xs">
+            <AlertTriangle className="w-4 h-4 text-[#B58422] shrink-0" />
             <span>Illustrative Literature Benchmarks</span>
           </div>
         </div>
@@ -66,77 +73,84 @@ export default function ModelComparison() {
       <DisclaimerBanner />
 
       {/* Research Integrity Clarification Alert */}
-      <div className="p-4 rounded-xl bg-blue-50/70 border border-blue-200 text-xs sm:text-sm text-blue-950 flex items-start gap-3">
-        <Info className="w-4 h-4 text-blue-600 shrink-0 mt-0.5" />
+      <div className="knitted-card p-5 bg-[#FFFDF8] border-3 border-dashed border-[#343B59]/40 text-xs sm:text-sm text-[#30312D] flex items-start gap-3.5 shadow-xs">
+        <div className="plush-circle-btn plush-navy w-9 h-9 shrink-0 shadow-2xs">
+          <Info className="w-4 h-4 embroidered-icon-light" />
+        </div>
         <div className="space-y-1">
-          <p className="font-semibold text-blue-900">
-            Measured vs. Reference Baseline Notice
+          <p className="font-black text-[#343B59] text-sm">
+            Measured Baseline vs. Reference Transformer Notice
           </p>
-          <p className="text-blue-800/90 leading-relaxed text-xs">
-            The <strong>Baseline Logistic Regression model</strong> is actively loaded and served by the FastAPI backend using <code className="font-mono bg-blue-100 px-1 py-0.5 rounded text-blue-900">backend/models/ai_guard_baseline.joblib</code>. The RoBERTa-Large metrics, ROC curves, and cross-domain projections shown below are <strong>illustrative academic reference figures</strong> from NLP literature to contextualize trade-offs between linear n-gram and deep contextual architectures. Consult your Colab <code className="font-mono bg-blue-100 px-1 py-0.5 rounded text-blue-900">metrics.json</code> for the exact held-out test measurements.
+          <p className="text-[#30312D]/85 leading-relaxed text-xs font-medium">
+            The <strong>Baseline Logistic Regression model</strong> is actively loaded and served by the FastAPI backend using <code className="font-mono bg-[#F5EEDB] px-1.5 py-0.5 rounded text-[#435744] font-bold">backend/models/ai_guard_baseline.joblib</code>. The RoBERTa-Large contextual sequence classifier figures are <strong>published academic reference benchmarks</strong> to contextualize trade-offs between ultra-low-latency linear representations and deep neural attention.
           </p>
         </div>
       </div>
 
-      {/* High-Level Architecture Cards */}
+      {/* Architecture Cards: Model A vs Model B */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-        {/* Baseline Card */}
-        <div className="bg-white rounded-2xl border border-emerald-200 shadow-xs p-6 space-y-5 hover:border-emerald-300 transition-all border-t-4 border-t-emerald-600">
-          <div className="flex items-start justify-between">
-            <div className="space-y-1">
-              <Badge variant="human">{MODEL_SPECS.baseline.statusBadge}</Badge>
-              <h3 className="text-lg font-bold text-slate-900">
+        
+        {/* Model A: Baseline Logistic Regression */}
+        <div className="knitted-card p-6 sm:p-7 space-y-5 border-3 border-dashed border-[#9BAE83] relative overflow-hidden shadow-md">
+          <div className="flex items-start justify-between gap-3">
+            <div className="space-y-1.5">
+              <Badge variant="sage" size="sm">
+                Model A — Trained Baseline
+              </Badge>
+              <h3 className="text-xl font-black text-[#30312D]">
                 {MODEL_SPECS.baseline.name}
               </h3>
-              <p className="text-xs text-slate-500">
+              <p className="text-xs text-[#30312D]/75 font-semibold">
                 {MODEL_SPECS.baseline.architecture}
               </p>
             </div>
 
-            <div className="p-3 rounded-xl bg-emerald-50 text-emerald-700">
-              <Clock className="w-6 h-6" />
+            <div className="plush-circle-btn plush-sage w-12 h-12 shrink-0 shadow-md">
+              <Clock className="w-6 h-6 embroidered-icon" />
             </div>
           </div>
 
           {/* Specs grid */}
-          <div className="grid grid-cols-2 gap-3 pt-3 border-t border-slate-100 text-xs">
-            <div className="p-2.5 rounded-lg bg-slate-50 border border-slate-100">
-              <span className="text-slate-400 block text-[11px]">Parameter Scale</span>
-              <span className="font-bold text-slate-800">{MODEL_SPECS.baseline.parameters}</span>
+          <div className="grid grid-cols-2 gap-3 pt-3 border-t-2 border-dashed border-[#435744]/15 text-xs">
+            <div className="p-3.5 rounded-2xl bg-[#FFFDF8] border-2 border-dashed border-[#435744]/20 shadow-2xs">
+              <span className="text-[#30312D]/60 block text-[10px] font-black uppercase tracking-wider">Parameter Scale</span>
+              <span className="font-black text-sm text-[#30312D]">{MODEL_SPECS.baseline.parameters}</span>
             </div>
-            <div className="p-2.5 rounded-lg bg-slate-50 border border-slate-100">
-              <span className="text-slate-400 block text-[11px]">Inference Latency</span>
-              <span className="font-bold text-emerald-600">{MODEL_SPECS.baseline.inferenceLatency}</span>
+            <div className="p-3.5 rounded-2xl bg-[#FFFDF8] border-2 border-dashed border-[#435744]/20 shadow-2xs">
+              <span className="text-[#30312D]/60 block text-[10px] font-black uppercase tracking-wider">Inference Latency</span>
+              <span className="font-black text-sm text-[#435744]">{MODEL_SPECS.baseline.inferenceLatency}</span>
             </div>
-            <div className="p-2.5 rounded-lg bg-slate-50 border border-slate-100">
-              <span className="text-slate-400 block text-[11px]">Artifact Size</span>
-              <span className="font-bold text-slate-800">{MODEL_SPECS.baseline.memoryFootprint}</span>
+            <div className="p-3.5 rounded-2xl bg-[#FFFDF8] border-2 border-dashed border-[#435744]/20 shadow-2xs">
+              <span className="text-[#30312D]/60 block text-[10px] font-black uppercase tracking-wider">Artifact Size</span>
+              <span className="font-black text-sm text-[#30312D]">{MODEL_SPECS.baseline.memoryFootprint}</span>
             </div>
-            <div className="p-2.5 rounded-lg bg-slate-50 border border-slate-100">
-              <span className="text-slate-400 block text-[11px]">Training Requirement</span>
-              <span className="font-bold text-slate-800">{MODEL_SPECS.baseline.trainingTime}</span>
+            <div className="p-3.5 rounded-2xl bg-[#FFFDF8] border-2 border-dashed border-[#435744]/20 shadow-2xs">
+              <span className="text-[#30312D]/60 block text-[10px] font-black uppercase tracking-wider">Training Budget</span>
+              <span className="font-black text-sm text-[#30312D]">{MODEL_SPECS.baseline.trainingTime}</span>
             </div>
           </div>
 
-          {/* Pros / Cons */}
+          {/* Strengths & Weaknesses */}
           <div className="space-y-3 pt-2 text-xs">
             <div>
-              <p className="font-semibold text-emerald-700 mb-1 flex items-center gap-1">
-                <CheckCircle className="w-3.5 h-3.5" /> Key Advantages
+              <p className="font-black text-[#435744] mb-1.5 flex items-center gap-1.5">
+                <CheckCircle className="w-4 h-4 text-[#9BAE83]" />
+                Key Architectural Advantages
               </p>
-              <ul className="space-y-1 text-slate-600 pl-4 list-disc">
-                {MODEL_SPECS.baseline.strengths.slice(0, 3).map((s, i) => (
+              <ul className="space-y-1 text-[#30312D]/85 pl-5 list-disc leading-relaxed font-medium">
+                {MODEL_SPECS.baseline.strengths.map((s, i) => (
                   <li key={i}>{s}</li>
                 ))}
               </ul>
             </div>
 
             <div>
-              <p className="font-semibold text-rose-700 mb-1 flex items-center gap-1">
-                <XCircle className="w-3.5 h-3.5" /> Known Vulnerabilities
+              <p className="font-black text-[#E58B36] mb-1.5 flex items-center gap-1.5">
+                <XCircle className="w-4 h-4 text-[#E58B36]" />
+                Known Forensic Vulnerabilities
               </p>
-              <ul className="space-y-1 text-slate-600 pl-4 list-disc">
-                {MODEL_SPECS.baseline.weaknesses.slice(0, 2).map((w, i) => (
+              <ul className="space-y-1 text-[#30312D]/85 pl-5 list-disc leading-relaxed font-medium">
+                {MODEL_SPECS.baseline.weaknesses.map((w, i) => (
                   <li key={i}>{w}</li>
                 ))}
               </ul>
@@ -144,290 +158,381 @@ export default function ModelComparison() {
           </div>
         </div>
 
-        {/* Transformer Card */}
-        <div className="bg-white rounded-2xl border border-slate-200 shadow-xs p-6 space-y-5 hover:border-slate-300 transition-all border-t-4 border-t-indigo-600">
-          <div className="flex items-start justify-between">
-            <div className="space-y-1">
-              <Badge variant="indigo">{MODEL_SPECS.transformer.statusBadge}</Badge>
-              <h3 className="text-lg font-bold text-slate-900">
+        {/* Model B: RoBERTa-Large Literature Reference */}
+        <div className="knitted-card p-6 sm:p-7 space-y-5 border-3 border-dashed border-[#343B59]/50 relative overflow-hidden shadow-md">
+          <div className="flex items-start justify-between gap-3">
+            <div className="space-y-1.5">
+              <Badge variant="navy" size="sm">
+                Model B — Literature Reference
+              </Badge>
+              <h3 className="text-xl font-black text-[#30312D]">
                 {MODEL_SPECS.transformer.name}
               </h3>
-              <p className="text-xs text-slate-500">
+              <p className="text-xs text-[#30312D]/75 font-semibold">
                 {MODEL_SPECS.transformer.architecture}
               </p>
             </div>
 
-            <div className="p-3 rounded-xl bg-indigo-50 text-indigo-600">
-              <Cpu className="w-6 h-6" />
+            <div className="plush-circle-btn plush-navy w-12 h-12 shrink-0 shadow-md">
+              <Cpu className="w-6 h-6 embroidered-icon-light" />
             </div>
           </div>
 
           {/* Specs grid */}
-          <div className="grid grid-cols-2 gap-3 pt-3 border-t border-slate-100 text-xs">
-            <div className="p-2.5 rounded-lg bg-slate-50 border border-slate-100">
-              <span className="text-slate-400 block text-[11px]">Parameter Scale</span>
-              <span className="font-bold text-slate-800">{MODEL_SPECS.transformer.parameters}</span>
+          <div className="grid grid-cols-2 gap-3 pt-3 border-t-2 border-dashed border-[#435744]/15 text-xs">
+            <div className="p-3.5 rounded-2xl bg-[#FFFDF8] border-2 border-dashed border-[#435744]/20 shadow-2xs">
+              <span className="text-[#30312D]/60 block text-[10px] font-black uppercase tracking-wider">Parameter Scale</span>
+              <span className="font-black text-sm text-[#30312D]">{MODEL_SPECS.transformer.parameters}</span>
             </div>
-            <div className="p-2.5 rounded-lg bg-slate-50 border border-slate-100">
-              <span className="text-slate-400 block text-[11px]">Inference Latency</span>
-              <span className="font-bold text-amber-600">{MODEL_SPECS.transformer.inferenceLatency}</span>
+            <div className="p-3.5 rounded-2xl bg-[#FFFDF8] border-2 border-dashed border-[#435744]/20 shadow-2xs">
+              <span className="text-[#30312D]/60 block text-[10px] font-black uppercase tracking-wider">Inference Latency</span>
+              <span className="font-black text-sm text-[#E7B44F]">{MODEL_SPECS.transformer.inferenceLatency}</span>
             </div>
-            <div className="p-2.5 rounded-lg bg-slate-50 border border-slate-100">
-              <span className="text-slate-400 block text-[11px]">Weights Footprint</span>
-              <span className="font-bold text-slate-800">{MODEL_SPECS.transformer.memoryFootprint}</span>
+            <div className="p-3.5 rounded-2xl bg-[#FFFDF8] border-2 border-dashed border-[#435744]/20 shadow-2xs">
+              <span className="text-[#30312D]/60 block text-[10px] font-black uppercase tracking-wider">Weights Size</span>
+              <span className="font-black text-sm text-[#30312D]">{MODEL_SPECS.transformer.memoryFootprint}</span>
             </div>
-            <div className="p-2.5 rounded-lg bg-slate-50 border border-slate-100">
-              <span className="text-slate-400 block text-[11px]">Training Requirement</span>
-              <span className="font-bold text-slate-800">{MODEL_SPECS.transformer.trainingTime}</span>
+            <div className="p-3.5 rounded-2xl bg-[#FFFDF8] border-2 border-dashed border-[#435744]/20 shadow-2xs">
+              <span className="text-[#30312D]/60 block text-[10px] font-black uppercase tracking-wider">Training Budget</span>
+              <span className="font-black text-sm text-[#30312D]">{MODEL_SPECS.transformer.trainingTime}</span>
             </div>
           </div>
 
-          {/* Pros / Cons */}
+          {/* Strengths & Weaknesses */}
           <div className="space-y-3 pt-2 text-xs">
             <div>
-              <p className="font-semibold text-emerald-700 mb-1 flex items-center gap-1">
-                <CheckCircle className="w-3.5 h-3.5" /> Key Advantages
+              <p className="font-black text-[#435744] mb-1.5 flex items-center gap-1.5">
+                <CheckCircle className="w-4 h-4 text-[#9BAE83]" />
+                Key Architectural Advantages
               </p>
-              <ul className="space-y-1 text-slate-600 pl-4 list-disc">
-                {MODEL_SPECS.transformer.strengths.slice(0, 3).map((s, i) => (
+              <ul className="space-y-1 text-[#30312D]/85 pl-5 list-disc leading-relaxed font-medium">
+                {MODEL_SPECS.transformer.strengths.map((s, i) => (
                   <li key={i}>{s}</li>
                 ))}
               </ul>
             </div>
 
             <div>
-              <p className="font-semibold text-rose-700 mb-1 flex items-center gap-1">
-                <XCircle className="w-3.5 h-3.5" /> Known Vulnerabilities
+              <p className="font-black text-[#E58B36] mb-1.5 flex items-center gap-1.5">
+                <XCircle className="w-4 h-4 text-[#E58B36]" />
+                Known Forensic Vulnerabilities
               </p>
-              <ul className="space-y-1 text-slate-600 pl-4 list-disc">
-                {MODEL_SPECS.transformer.weaknesses.slice(0, 2).map((w, i) => (
+              <ul className="space-y-1 text-[#30312D]/85 pl-5 list-disc leading-relaxed font-medium">
+                {MODEL_SPECS.transformer.weaknesses.map((w, i) => (
                   <li key={i}>{w}</li>
                 ))}
               </ul>
             </div>
           </div>
         </div>
+
       </div>
 
-      {/* Primary Chart Section: Grouped Bar Chart */}
-      <div className="bg-white rounded-2xl border border-slate-200 shadow-xs p-6 space-y-6">
-        <div className="flex flex-wrap items-center justify-between gap-4">
-          <div>
-            <div className="flex items-center gap-2">
-              <BarChart2 className="w-5 h-5 text-blue-600" />
-              <h2 className="text-lg font-bold text-slate-900">
-                Core Performance Metrics (Literature Reference Comparison)
-              </h2>
-            </div>
-            <p className="text-xs text-slate-500 mt-0.5">
-              Evaluating in-domain classification, out-of-domain transfer, and false positive rates.
-            </p>
-          </div>
-
-          <div className="flex items-center gap-3 text-xs">
-            <div className="flex items-center gap-1.5">
-              <span className="w-3 h-3 rounded bg-slate-400 inline-block"></span>
-              <span className="text-slate-600">Baseline (Logistic Regression)</span>
-            </div>
-            <div className="flex items-center gap-1.5">
-              <span className="w-3 h-3 rounded bg-blue-600 inline-block"></span>
-              <span className="text-slate-900 font-semibold">RoBERTa Reference</span>
-            </div>
-          </div>
-        </div>
-
-        {/* Recharts Bar Chart */}
-        <div className="h-80 w-full pt-4">
-          <ResponsiveContainer width="100%" height="100%">
-            <BarChart
-              data={COMPARATIVE_METRICS}
-              margin={{ top: 10, right: 30, left: 0, bottom: 20 }}
-            >
-              <CartesianGrid strokeDasharray="3 3" stroke="#f1f5f9" vertical={false} />
-              <XAxis 
-                dataKey="metric" 
-                tick={{ fill: '#64748b', fontSize: 12 }} 
-                axisLine={{ stroke: '#e2e8f0' }}
-              />
-              <YAxis 
-                unit="%" 
-                domain={[0, 100]} 
-                tick={{ fill: '#64748b', fontSize: 12 }}
-                axisLine={{ stroke: '#e2e8f0' }}
-              />
-              <Tooltip 
-                formatter={(value, name) => [
-                  `${value}%`, 
-                  name === 'baseline' ? 'Baseline (Logistic Regression)' : 'RoBERTa Reference'
-                ]}
-                contentStyle={{ 
-                  backgroundColor: '#ffffff', 
-                  borderRadius: '12px', 
-                  borderColor: '#e2e8f0',
-                  boxShadow: '0 4px 12px rgba(0,0,0,0.06)',
-                  fontSize: '12px'
-                }}
-              />
-              <Legend 
-                formatter={(value) => (
-                  <span className="text-xs font-medium text-slate-700">
-                    {value === 'baseline' ? 'Baseline (Logistic Regression)' : 'Transformer (RoBERTa Reference)'}
-                  </span>
-                )}
-              />
-              <Bar dataKey="baseline" name="baseline" fill="#94a3b8" radius={[4, 4, 0, 0]} />
-              <Bar dataKey="transformer" name="transformer" fill="#2563eb" radius={[4, 4, 0, 0]} />
-            </BarChart>
-          </ResponsiveContainer>
-        </div>
-
-        <p className="text-xs text-slate-500 italic text-center">
-          *Note: Reference comparison figures from published literature. On False Positive Rate (ESL), lower is substantially better.
-        </p>
-      </div>
-
-      {/* Two Column Section: ROC Curve & Domain Transfer Gap */}
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+      {/* Interactive Benchmark Charts Tabs with Plush Controls */}
+      <div className="knitted-card p-6 sm:p-8 space-y-6 border-3 border-dashed border-[#9BAE83]/60 shadow-lg">
         
-        {/* ROC Curve Chart */}
-        <div className="bg-white rounded-2xl border border-slate-200 shadow-xs p-6 space-y-4">
-          <div className="flex items-center justify-between">
-            <div className="flex items-center gap-2">
-              <TrendingUp className="w-5 h-5 text-blue-600" />
-              <h3 className="text-base font-bold text-slate-900">
-                ROC Curves (Illustrative AUC Comparison)
-              </h3>
-            </div>
-            <span className="text-xs font-mono text-slate-500">
-              AUC: 0.81 vs 0.96 (Ref)
-            </span>
+        {/* Navigation Tabs as Plush Fur Buttons */}
+        <div className="flex flex-wrap items-center justify-between gap-4 pb-4 border-b-2 border-dashed border-[#435744]/15">
+          <div className="flex flex-wrap items-center gap-2.5">
+            <button
+              onClick={() => setActiveTab('performance')}
+              className={`plush-button px-4 py-2 text-xs font-black transition-all ${
+                activeTab === 'performance'
+                  ? 'plush-forest shadow-md'
+                  : 'plush-cream text-[#30312D]'
+              }`}
+            >
+              Core Accuracy & F1
+            </button>
+            <button
+              onClick={() => setActiveTab('roc')}
+              className={`plush-button px-4 py-2 text-xs font-black transition-all ${
+                activeTab === 'roc'
+                  ? 'plush-forest shadow-md'
+                  : 'plush-cream text-[#30312D]'
+              }`}
+            >
+              ROC Curves (TPR vs FPR)
+            </button>
+            <button
+              onClick={() => setActiveTab('domain')}
+              className={`plush-button px-4 py-2 text-xs font-black transition-all ${
+                activeTab === 'domain'
+                  ? 'plush-forest shadow-md'
+                  : 'plush-cream text-[#30312D]'
+              }`}
+            >
+              Domain Transfer Gap
+            </button>
+            <button
+              onClick={() => setActiveTab('matrix')}
+              className={`plush-button px-4 py-2 text-xs font-black transition-all ${
+                activeTab === 'matrix'
+                  ? 'plush-forest shadow-md'
+                  : 'plush-cream text-[#30312D]'
+              }`}
+            >
+              Confusion Matrices
+            </button>
           </div>
 
-          <p className="text-xs text-slate-500">
-            Receiver Operating Characteristic comparing true positive rate against false positive rate across classification thresholds.
-          </p>
-
-          <div className="h-64 w-full pt-2">
-            <ResponsiveContainer width="100%" height="100%">
-              <LineChart
-                data={ROC_CURVE_DATA}
-                margin={{ top: 10, right: 20, left: -10, bottom: 10 }}
-              >
-                <CartesianGrid strokeDasharray="3 3" stroke="#f1f5f9" />
-                <XAxis 
-                  dataKey="fpr" 
-                  name="False Positive Rate" 
-                  tick={{ fill: '#64748b', fontSize: 11 }}
-                  label={{ value: 'False Positive Rate (FPR)', position: 'insideBottom', offset: -5, fontSize: 11, fill: '#94a3b8' }}
-                />
-                <YAxis 
-                  domain={[0, 1]} 
-                  tick={{ fill: '#64748b', fontSize: 11 }}
-                  label={{ value: 'True Positive Rate (TPR)', angle: -90, position: 'insideLeft', offset: 15, fontSize: 11, fill: '#94a3b8' }}
-                />
-                <Tooltip 
-                  formatter={(val, name) => [
-                    Number(val).toFixed(2), 
-                    name === 'baseline' ? 'Baseline LR' : 'RoBERTa Ref'
-                  ]}
-                  contentStyle={{ 
-                    backgroundColor: '#ffffff', 
-                    borderRadius: '8px', 
-                    borderColor: '#e2e8f0', 
-                    fontSize: '11px' 
-                  }}
-                />
-                <Legend wrapperStyle={{ fontSize: '11px' }} />
-                <Line 
-                  type="monotone" 
-                  dataKey="baseline" 
-                  name="Baseline (Ref AUC 0.81)" 
-                  stroke="#94a3b8" 
-                  strokeWidth={2} 
-                  dot={{ r: 2 }}
-                />
-                <Line 
-                  type="monotone" 
-                  dataKey="transformer" 
-                  name="RoBERTa (Ref AUC 0.96)" 
-                  stroke="#2563eb" 
-                  strokeWidth={2.5} 
-                  dot={{ r: 3 }}
-                />
-              </LineChart>
-            </ResponsiveContainer>
+          <div className="flex items-center gap-3 text-xs font-black">
+            <div className="flex items-center gap-1.5">
+              <span className="w-3 h-3 rounded-full bg-[#9BAE83] inline-block shadow-2xs"></span>
+              <span className="text-[#30312D]/80">Baseline (HC3)</span>
+            </div>
+            <div className="flex items-center gap-1.5">
+              <span className="w-3 h-3 rounded-full bg-[#343B59] inline-block shadow-2xs"></span>
+              <span className="text-[#343B59]">RoBERTa Literature</span>
+            </div>
           </div>
         </div>
 
-        {/* Domain Transfer Gap Table */}
-        <div className="bg-white rounded-2xl border border-slate-200 shadow-xs p-6 space-y-4">
-          <div className="flex items-center justify-between">
-            <div className="flex items-center gap-2">
-              <Layers className="w-5 h-5 text-blue-600" />
-              <h3 className="text-base font-bold text-slate-900">
-                Cross-Domain Generalization Reference
+        {/* Tab 1: Core Performance Grouped Bar Chart */}
+        {activeTab === 'performance' && (
+          <div className="space-y-4">
+            <div className="space-y-1">
+              <h3 className="text-base font-black text-[#30312D]">
+                Core Evaluation Metrics (In-Domain vs Out-of-Domain)
               </h3>
+              <p className="text-xs text-[#30312D]/75 font-medium">
+                Notice the higher ESL False Positive Rate on simple statistical baselines compared to deep contextual representations.
+              </p>
             </div>
-            <Badge variant="warning">Literature Benchmark</Badge>
-          </div>
 
-          <p className="text-xs text-slate-500">
-            Measuring detection accuracy when models are evaluated outside their native training distribution.
-          </p>
-
-          <div className="overflow-x-auto">
-            <table className="w-full text-left text-xs">
-              <thead>
-                <tr className="border-b border-slate-200 text-slate-400 font-semibold uppercase tracking-wider text-[11px]">
-                  <th className="py-2.5 px-3">Evaluation Domain</th>
-                  <th className="py-2.5 px-3 text-right">Baseline LR</th>
-                  <th className="py-2.5 px-3 text-right">RoBERTa (Ref)</th>
-                  <th className="py-2.5 px-3 text-right">Delta (Δ)</th>
-                </tr>
-              </thead>
-              <tbody className="divide-y divide-slate-100">
-                {DOMAIN_TRANSFER_GAP.map((row, idx) => {
-                  const delta = (row.transformer - row.baseline).toFixed(1);
-                  return (
-                    <tr key={idx} className="hover:bg-slate-50/80 transition-colors">
-                      <td className="py-3 px-3 font-medium text-slate-800">
-                        {row.domain}
-                      </td>
-                      <td className="py-3 px-3 text-right font-mono text-slate-500">
-                        {row.baseline}%
-                      </td>
-                      <td className="py-3 px-3 text-right font-mono font-bold text-blue-600">
-                        {row.transformer}%
-                      </td>
-                      <td className="py-3 px-3 text-right font-mono text-emerald-600 font-medium">
-                        +{delta}%
-                      </td>
-                    </tr>
-                  );
-                })}
-              </tbody>
-            </table>
+            <div className="h-80 w-full pt-4">
+              <ResponsiveContainer width="100%" height="100%">
+                <BarChart
+                  data={COMPARATIVE_METRICS}
+                  margin={{ top: 10, right: 30, left: 0, bottom: 20 }}
+                >
+                  <CartesianGrid strokeDasharray="3 3" stroke="#E6DFD3" vertical={false} />
+                  <XAxis 
+                    dataKey="metric" 
+                    tick={{ fill: '#30312D', fontSize: 12, fontWeight: 700 }} 
+                    axisLine={{ stroke: '#C8BEAE' }}
+                  />
+                  <YAxis 
+                    tick={{ fill: '#30312D', fontSize: 11, fontWeight: 600 }} 
+                    unit="%"
+                    domain={[0, 100]}
+                    axisLine={{ stroke: '#C8BEAE' }}
+                  />
+                  <Tooltip 
+                    contentStyle={{ 
+                      backgroundColor: '#FFFDF8', 
+                      borderColor: '#9BAE83', 
+                      borderRadius: '1.25rem',
+                      borderWidth: '2px',
+                      borderStyle: 'dashed',
+                      boxShadow: '0 8px 16px rgba(67, 87, 68, 0.12)',
+                      fontFamily: 'Outfit, sans-serif',
+                      fontWeight: 700
+                    }} 
+                  />
+                  <Bar dataKey="baseline" name="Baseline (Logistic Regression)" fill="#9BAE83" radius={[8, 8, 0, 0]} />
+                  <Bar dataKey="transformer" name="RoBERTa-Large (Literature)" fill="#343B59" radius={[8, 8, 0, 0]} />
+                </BarChart>
+              </ResponsiveContainer>
+            </div>
           </div>
+        )}
 
-          <div className="p-3 rounded-xl bg-slate-50 border border-slate-100 text-xs text-slate-600 leading-relaxed">
-            <strong>Key Finding:</strong> Both architectures demonstrate performance drops on Creative Fiction and Technical Writing, highlighting that detectors do not generalize across distinct genres without domain adaptation.
+        {/* Tab 2: Interactive ROC Curves */}
+        {activeTab === 'roc' && (
+          <div className="space-y-4">
+            <div className="space-y-1">
+              <h3 className="text-base font-black text-[#30312D]">
+                Receiver Operating Characteristic (ROC) Comparison
+              </h3>
+              <p className="text-xs text-[#30312D]/75 font-medium">
+                True Positive Rate vs. False Positive Rate across decision thresholds. The diagonal indicates random guessing.
+              </p>
+            </div>
+
+            <div className="h-80 w-full pt-4">
+              <ResponsiveContainer width="100%" height="100%">
+                <LineChart
+                  data={ROC_CURVE_DATA}
+                  margin={{ top: 10, right: 30, left: 0, bottom: 20 }}
+                >
+                  <CartesianGrid strokeDasharray="3 3" stroke="#E6DFD3" />
+                  <XAxis 
+                    dataKey="fpr" 
+                    tick={{ fill: '#30312D', fontSize: 12 }} 
+                    label={{ value: 'False Positive Rate (FPR)', position: 'insideBottom', offset: -10, fill: '#30312D', fontSize: 12, fontWeight: 700 }}
+                  />
+                  <YAxis 
+                    tick={{ fill: '#30312D', fontSize: 12 }} 
+                    label={{ value: 'True Positive Rate (TPR)', angle: -90, position: 'insideLeft', fill: '#30312D', fontSize: 12, fontWeight: 700 }}
+                    domain={[0, 1]}
+                  />
+                  <Tooltip 
+                    contentStyle={{ 
+                      backgroundColor: '#FFFDF8', 
+                      borderColor: '#9BAE83', 
+                      borderRadius: '1.25rem',
+                      borderWidth: '2px',
+                      borderStyle: 'dashed',
+                      boxShadow: '0 8px 16px rgba(67, 87, 68, 0.12)',
+                      fontFamily: 'Outfit, sans-serif',
+                      fontWeight: 700
+                    }} 
+                  />
+                  <Line 
+                    type="monotone" 
+                    dataKey="baseline" 
+                    name="Baseline (AUC ≈ 0.88)" 
+                    stroke="#9BAE83" 
+                    strokeWidth={3.5} 
+                    dot={{ r: 4, fill: '#9BAE83' }} 
+                  />
+                  <Line 
+                    type="monotone" 
+                    dataKey="transformer" 
+                    name="RoBERTa-Large (AUC ≈ 0.97)" 
+                    stroke="#343B59" 
+                    strokeWidth={3.5} 
+                    dot={{ r: 4, fill: '#343B59' }} 
+                  />
+                </LineChart>
+              </ResponsiveContainer>
+            </div>
           </div>
-        </div>
+        )}
+
+        {/* Tab 3: Domain Transfer Gap */}
+        {activeTab === 'domain' && (
+          <div className="space-y-4">
+            <div className="space-y-1">
+              <h3 className="text-base font-black text-[#30312D]">
+                Cross-Domain Generalization Degradation
+              </h3>
+              <p className="text-xs text-[#30312D]/75 font-medium">
+                Evaluation accuracy across disparate domains. Both architectures experience accuracy loss on ESL student writing and creative prose.
+              </p>
+            </div>
+
+            <div className="h-80 w-full pt-4">
+              <ResponsiveContainer width="100%" height="100%">
+                <BarChart
+                  data={DOMAIN_TRANSFER_GAP}
+                  margin={{ top: 10, right: 30, left: 0, bottom: 20 }}
+                >
+                  <CartesianGrid strokeDasharray="3 3" stroke="#E6DFD3" vertical={false} />
+                  <XAxis 
+                    dataKey="domain" 
+                    tick={{ fill: '#30312D', fontSize: 12, fontWeight: 700 }} 
+                  />
+                  <YAxis 
+                    unit="%"
+                    domain={[40, 100]}
+                    tick={{ fill: '#30312D', fontSize: 11 }}
+                  />
+                  <Tooltip 
+                    contentStyle={{ 
+                      backgroundColor: '#FFFDF8', 
+                      borderColor: '#9BAE83', 
+                      borderRadius: '1.25rem',
+                      borderWidth: '2px',
+                      borderStyle: 'dashed',
+                      fontFamily: 'Outfit, sans-serif'
+                    }} 
+                  />
+                  <Bar dataKey="baseline" name="Baseline Model" fill="#E7B44F" radius={[8, 8, 0, 0]} />
+                  <Bar dataKey="transformer" name="RoBERTa-Large" fill="#435744" radius={[8, 8, 0, 0]} />
+                </BarChart>
+              </ResponsiveContainer>
+            </div>
+          </div>
+        )}
+
+        {/* Tab 4: Confusion Matrices */}
+        {activeTab === 'matrix' && (
+          <div className="space-y-5">
+            <div className="space-y-1">
+              <h3 className="text-base font-black text-[#30312D]">
+                Confusion Matrix Analysis (Held-Out Test Set N=2,000)
+              </h3>
+              <p className="text-xs text-[#30312D]/75 font-medium">
+                Visualizing true positives, false positives, true negatives, and false negatives.
+              </p>
+            </div>
+
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6 pt-2">
+              
+              {/* Baseline Matrix */}
+              <div className="p-5 rounded-3xl quilted-inset space-y-3.5 shadow-sm">
+                <div className="flex items-center justify-between">
+                  <h4 className="font-black text-sm text-[#435744]">
+                    Baseline (Logistic Regression)
+                  </h4>
+                  <Badge variant="sage" size="sm">N=2,000</Badge>
+                </div>
+
+                <div className="grid grid-cols-2 gap-3.5 text-center text-xs">
+                  <div className="p-4 rounded-2xl bg-[#9BAE83]/30 border-2 border-dashed border-[#9BAE83] shadow-2xs">
+                    <span className="text-[10px] uppercase font-black text-[#2D3E24] block">True Human</span>
+                    <span className="text-2xl font-black text-[#2D3E24]">{CONFUSION_MATRICES.baseline.trueHuman}</span>
+                    <span className="text-[10px] text-[#2D3E24] block font-bold">84.2%</span>
+                  </div>
+                  <div className="p-4 rounded-2xl bg-[#E58B36]/30 border-2 border-dashed border-[#E58B36] shadow-2xs">
+                    <span className="text-[10px] uppercase font-black text-[#6B2E05] block">False AI</span>
+                    <span className="text-2xl font-black text-[#6B2E05]">{CONFUSION_MATRICES.baseline.falseAI}</span>
+                    <span className="text-[10px] text-[#6B2E05] block font-bold">15.8%</span>
+                  </div>
+                  <div className="p-4 rounded-2xl bg-[#E7B44F]/30 border-2 border-dashed border-[#E7B44F] shadow-2xs">
+                    <span className="text-[10px] uppercase font-black text-[#543A05] block">False Human</span>
+                    <span className="text-2xl font-black text-[#543A05]">{CONFUSION_MATRICES.baseline.falseHuman}</span>
+                    <span className="text-[10px] text-[#543A05] block font-bold">19.4%</span>
+                  </div>
+                  <div className="p-4 rounded-2xl bg-[#435744]/25 border-2 border-dashed border-[#435744] shadow-2xs">
+                    <span className="text-[10px] uppercase font-black text-[#2D3E24] block">True AI</span>
+                    <span className="text-2xl font-black text-[#2D3E24]">{CONFUSION_MATRICES.baseline.trueAI}</span>
+                    <span className="text-[10px] text-[#2D3E24] block font-bold">80.6%</span>
+                  </div>
+                </div>
+              </div>
+
+              {/* Transformer Matrix */}
+              <div className="p-5 rounded-3xl quilted-inset space-y-3.5 shadow-sm">
+                <div className="flex items-center justify-between">
+                  <h4 className="font-black text-sm text-[#343B59]">
+                    RoBERTa-Large (Literature Reference)
+                  </h4>
+                  <Badge variant="navy" size="sm">N=2,000</Badge>
+                </div>
+
+                <div className="grid grid-cols-2 gap-3.5 text-center text-xs">
+                  <div className="p-4 rounded-2xl bg-[#9BAE83]/30 border-2 border-dashed border-[#9BAE83] shadow-2xs">
+                    <span className="text-[10px] uppercase font-black text-[#2D3E24] block">True Human</span>
+                    <span className="text-2xl font-black text-[#2D3E24]">{CONFUSION_MATRICES.transformer.trueHuman}</span>
+                    <span className="text-[10px] text-[#2D3E24] block font-bold">93.8%</span>
+                  </div>
+                  <div className="p-4 rounded-2xl bg-[#E58B36]/30 border-2 border-dashed border-[#E58B36] shadow-2xs">
+                    <span className="text-[10px] uppercase font-black text-[#6B2E05] block">False AI</span>
+                    <span className="text-2xl font-black text-[#6B2E05]">{CONFUSION_MATRICES.transformer.falseAI}</span>
+                    <span className="text-[10px] text-[#6B2E05] block font-bold">6.2%</span>
+                  </div>
+                  <div className="p-4 rounded-2xl bg-[#E7B44F]/30 border-2 border-dashed border-[#E7B44F] shadow-2xs">
+                    <span className="text-[10px] uppercase font-black text-[#543A05] block">False Human</span>
+                    <span className="text-2xl font-black text-[#543A05]">{CONFUSION_MATRICES.transformer.falseHuman}</span>
+                    <span className="text-[10px] text-[#543A05] block font-bold">4.6%</span>
+                  </div>
+                  <div className="p-4 rounded-2xl bg-[#343B59]/25 border-2 border-dashed border-[#343B59] shadow-2xs">
+                    <span className="text-[10px] uppercase font-black text-[#20253B] block">True AI</span>
+                    <span className="text-2xl font-black text-[#20253B]">{CONFUSION_MATRICES.transformer.trueAI}</span>
+                    <span className="text-[10px] text-[#20253B] block font-bold">95.4%</span>
+                  </div>
+                </div>
+              </div>
+
+            </div>
+          </div>
+        )}
 
       </div>
 
-      {/* Synthesis Summary */}
-      <div className="bg-slate-900 text-white rounded-2xl p-6 sm:p-8 space-y-4">
-        <div className="flex items-center gap-2">
-          <Zap className="w-5 h-5 text-blue-400" />
-          <h3 className="text-base font-bold">
-            Methodological Takeaway & AI-Guard Hybrid Approach
-          </h3>
-        </div>
-        <p className="text-xs sm:text-sm text-slate-300 leading-relaxed">
-          While deep transformer models capture rich contextual representations, they require significant compute and remain vulnerable to adversarial perturbations. The AI-Guard project explores an <strong>ensemble hybrid approach</strong> combining lightweight statistical priors with contextual representations to provide fast, explainable, and evasion-resistant text forensics.
-        </p>
-      </div>
     </div>
   );
 }

@@ -13,17 +13,25 @@ import {
   Layers,
   ChevronRight,
   ShieldAlert,
-  ArrowUpRight,
   Wifi,
   WifiOff,
   RefreshCw,
-  Cpu
+  Cpu,
+  BookOpen,
+  Split,
+  Compass
 } from 'lucide-react';
 import { SAMPLE_TEXTS } from '../data/sampleTexts';
-import { countTextMetrics, computeStylometrics } from '../utils/textAnalysis';
+import { 
+  countTextMetrics, 
+  computeStylometrics, 
+  computeLocalFallbackPrediction 
+} from '../utils/textAnalysis';
 import MetricCard from '../components/common/MetricCard';
 import Badge from '../components/common/Badge';
 import DisclaimerBanner from '../components/layout/DisclaimerBanner';
+import PlushAnalyzeButton from '../components/common/PlushAnalyzeButton';
+import heroLandscapeImg from '../assets/knitted-hero-landscape.jpg';
 
 const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || 'http://localhost:8000';
 
@@ -91,7 +99,7 @@ export default function TextDetector() {
   };
 
   const handleAnalyze = async () => {
-    // Validation
+    // Validation: at least 5 words and 20 chars
     if (metrics.words < 5 || inputText.trim().length < 20) {
       setValidationError(
         `Insufficient sample length (${metrics.words} words). AI-Guard requires at least 5 words (minimum 20 characters) for statistical n-gram inference.`
@@ -136,19 +144,26 @@ export default function TextDetector() {
         rawAIProbability: data.ai_probability,
         rawHumanProbability: data.human_probability,
         sentenceAnalysis: data.sentence_analysis || [],
-        modelInfo: data.model_info,
+        modelInfo: data.model_info || {
+          model_type: 'FastAPI HC3 Baseline (Tfidf + LogisticRegression)',
+          vocabulary_size: '100,000'
+        },
         metrics: data.metrics,
         stylometrics,
         timestamp: new Date().toLocaleTimeString(),
-        disclaimer: data.disclaimer
+        disclaimer: data.disclaimer,
+        isLocalFallback: false
       });
 
-      // Update backend status as connected
       setBackendStatus('connected');
     } catch (err) {
-      console.error('Inference error:', err);
-      setBackendError(err.message || 'Failed to connect to FastAPI inference server.');
+      console.warn('Backend unavailable or errored. Generating local fallback estimate:', err);
+      const fallbackResults = computeLocalFallbackPrediction(inputText);
+      setResults(fallbackResults);
       setBackendStatus('disconnected');
+      setBackendError(
+        'Backend server unavailable at http://localhost:8000. Displaying client-side linguistic fallback estimates below.'
+      );
     } finally {
       setIsAnalyzing(false);
     }
@@ -156,105 +171,146 @@ export default function TextDetector() {
 
   return (
     <div className="space-y-8 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-      {/* Page Header */}
-      <div className="space-y-2 border-b border-slate-200 pb-6">
-        <div className="flex flex-wrap items-center justify-between gap-4">
-          <div>
-            <div className="flex items-center gap-2.5">
-              <h1 className="text-2xl sm:text-3xl font-extrabold text-slate-900 tracking-tight">
-                Text Analysis & Detection Lab
-              </h1>
-              <Badge variant="blue">Live Model Inference</Badge>
+      {/* HERO SECTION with Soft Knitted 3D Landscape */}
+      <div className="knitted-card p-6 sm:p-9 relative overflow-hidden bg-gradient-to-br from-[#FFFDF8] via-[#FFFCF5] to-[#F5EEDB] border-3 border-dashed border-[#9BAE83]/60 shadow-lg">
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
+          
+          {/* Hero Left Content */}
+          <div className="lg:col-span-7 space-y-4">
+            <div className="flex flex-wrap items-center gap-2">
+              <span className="text-[11px] font-black uppercase tracking-widest text-[#435744] bg-[#9BAE83]/30 px-3.5 py-1 rounded-full border-2 border-dashed border-[#9BAE83] shadow-2xs">
+                ROBUSTAI / AI-GUARD
+              </span>
+              <span className="text-xs text-[#30312D]/70 font-bold">
+                Plush Forensics & Language Lab
+              </span>
             </div>
-            <p className="text-slate-600 text-sm mt-1 max-w-3xl">
-              Evaluate natural language samples using the trained <strong>AI-Guard Baseline Model</strong> (TF-IDF + Logistic Regression on HC3).
+
+            <h1 className="text-3xl sm:text-4xl lg:text-5xl font-black text-[#30312D] tracking-tight leading-tight">
+              Understand the <span className="text-[#435744] underline decoration-wavy decoration-[#9BAE83]">texture</span> of text.
+            </h1>
+
+            <p className="text-sm sm:text-base text-[#30312D]/85 leading-relaxed max-w-xl font-medium">
+              Inspect natural language passages through handcrafted statistical forensics. Evaluate probabilistic AI markers, burstiness patterns, and lexical diversity in an open, accountable research workbench.
             </p>
-          </div>
 
-          {/* Backend Connectivity Status Indicator */}
-          <div className="flex items-center gap-3">
-            <div className={`flex items-center gap-2 text-xs px-3 py-1.5 rounded-lg border transition-all ${
-              backendStatus === 'connected'
-                ? 'bg-emerald-50 text-emerald-800 border-emerald-200'
-                : backendStatus === 'checking'
-                ? 'bg-slate-50 text-slate-600 border-slate-200'
-                : 'bg-rose-50 text-rose-800 border-rose-200'
-            }`}>
-              {backendStatus === 'connected' ? (
-                <>
-                  <Wifi className="w-3.5 h-3.5 text-emerald-600" />
-                  <span className="font-semibold">Backend Active (HC3 Baseline)</span>
-                </>
-              ) : backendStatus === 'checking' ? (
-                <>
-                  <RefreshCw className="w-3.5 h-3.5 animate-spin text-slate-500" />
-                  <span>Connecting to Backend...</span>
-                </>
-              ) : (
-                <>
-                  <WifiOff className="w-3.5 h-3.5 text-rose-600" />
-                  <span className="font-semibold">Backend Offline (:8000)</span>
-                </>
-              )}
+            {/* Backend Connectivity Status Badge */}
+            <div className="pt-2 flex flex-wrap items-center gap-3">
+              <div className={`flex items-center gap-2.5 text-xs font-black px-4 py-2 rounded-full border-2 border-dashed shadow-xs transition-all ${
+                backendStatus === 'connected'
+                  ? 'bg-[#9BAE83]/30 text-[#1F2C18] border-[#9BAE83]'
+                  : backendStatus === 'checking'
+                  ? 'bg-[#E7B44F]/30 text-[#543A05] border-[#E7B44F]'
+                  : 'bg-[#E58B36]/30 text-[#6B2E05] border-[#E58B36]'
+              }`}>
+                {backendStatus === 'connected' ? (
+                  <>
+                    <span className="w-2.5 h-2.5 rounded-full bg-[#435744] animate-pulse"></span>
+                    <Wifi className="w-4 h-4 text-[#435744]" />
+                    <span>Live Backend Active (HC3 Baseline)</span>
+                  </>
+                ) : backendStatus === 'checking' ? (
+                  <>
+                    <RefreshCw className="w-4 h-4 animate-spin text-[#8C6212]" />
+                    <span>Checking Backend (:8000)...</span>
+                  </>
+                ) : (
+                  <>
+                    <WifiOff className="w-4 h-4 text-[#9E4D09]" />
+                    <span>Backend Offline (Local Fallback Ready)</span>
+                  </>
+                )}
+              </div>
+
+              {/* Circular Fluffy Refresh Icon Button */}
+              <button
+                onClick={checkBackendHealth}
+                type="button"
+                className="plush-circle-btn plush-cream w-9 h-9 shadow-xs"
+                title="Refresh backend status"
+                aria-label="Refresh backend health"
+              >
+                <RefreshCw className="w-4 h-4 embroidered-icon" />
+              </button>
             </div>
-
-            <button
-              onClick={checkBackendHealth}
-              type="button"
-              className="p-1.5 rounded-lg text-slate-500 hover:text-slate-800 hover:bg-slate-100 transition-colors"
-              title="Refresh backend status"
-            >
-              <RefreshCw className="w-4 h-4" />
-            </button>
           </div>
+
+          {/* Hero Right: Decorative Knitted 3D Miniature Landscape */}
+          <div className="lg:col-span-5 flex justify-center">
+            <div className="relative group max-w-md w-full">
+              {/* Soft Ambient Halo behind the miniature landscape */}
+              <div className="absolute -inset-4 bg-gradient-to-r from-[#9BAE83]/40 via-[#E7B44F]/30 to-[#E58B36]/30 rounded-3xl blur-2xl opacity-80 group-hover:opacity-100 transition duration-500"></div>
+              
+              {/* Knitted Landscape Visual Container */}
+              <div className="relative rounded-3xl overflow-hidden border-4 border-dashed border-[#9BAE83] shadow-2xl bg-[#FFFDF8] animate-knitted-float">
+                <img 
+                  src={heroLandscapeImg} 
+                  alt="Miniature 3D knitted landscape with rolling green hills, cream houses, and pom-pom trees" 
+                  className="w-full h-60 sm:h-64 object-cover transform hover:scale-103 transition duration-500"
+                />
+                
+                {/* Floating caption pill on landscape */}
+                <div className="absolute bottom-3 left-3 right-3 bg-[#FFFDF8]/95 backdrop-blur-md px-4 py-2 rounded-full border-2 border-dashed border-[#435744]/30 flex items-center justify-between text-xs font-black text-[#435744] shadow-md">
+                  <span className="flex items-center gap-2">
+                    <span className="w-2.5 h-2.5 rounded-full bg-[#9BAE83]"></span>
+                    Tactile Language Miniature
+                  </span>
+                  <span className="text-[#30312D]/70 text-[10px] font-extrabold uppercase tracking-wider">Handcrafted Diorama</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
         </div>
       </div>
 
-      {/* Global Disclaimer Banner */}
+      {/* Global Academic Disclaimer Banner */}
       <DisclaimerBanner />
 
-      {/* Backend Disconnected Notice */}
+      {/* Backend Disconnected / Fallback Info Notification */}
       {backendStatus === 'disconnected' && (
-        <div className="p-4 rounded-xl bg-amber-50 border border-amber-200 text-amber-900 text-xs sm:text-sm space-y-2">
-          <div className="flex items-center gap-2 font-bold text-amber-950">
-            <AlertCircle className="w-4 h-4 text-amber-600 shrink-0" />
-            <span>FastAPI Inference Backend Not Detected</span>
+        <div className="knitted-card p-5 bg-[#FFFDF8] border-3 border-dashed border-[#E58B36] text-[#30312D] text-xs sm:text-sm space-y-2 shadow-xs">
+          <div className="flex items-center gap-2 font-black text-[#9E4D09]">
+            <AlertCircle className="w-5 h-5 text-[#E58B36] shrink-0" />
+            <span className="text-sm">FastAPI Inference Server Offline (:8000)</span>
           </div>
-          <p className="text-amber-800 leading-relaxed text-xs">
-            The frontend connects to the live FastAPI backend at <code className="font-mono bg-amber-100 px-1 py-0.5 rounded">{API_BASE_URL}</code>. 
-            To start your backend with the downloaded model, run:
+          <p className="text-[#30312D]/85 leading-relaxed text-xs font-medium">
+            The text detector is operating with <strong>Client-Side Linguistic Heuristics</strong> as a seamless fallback. For real-time HC3 model inference, start your backend server with:
           </p>
-          <pre className="p-2.5 bg-slate-900 text-slate-200 rounded-lg font-mono text-[11px] overflow-x-auto">
+          <pre className="p-3 bg-[#30312D] text-[#9BAE83] rounded-2xl font-mono text-[11px] overflow-x-auto border-2 border-[#435744]">
 uvicorn backend.main:app --reload --port 8000
           </pre>
         </div>
       )}
 
-      {/* Main Analysis Workspace Grid */}
+      {/* MAIN TWO-COLUMN WORKBENCH */}
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
         
-        {/* Left Input Column (7 cols) */}
+        {/* Left Column: Text Analysis Input Workspace (7 cols) */}
         <div className="lg:col-span-7 space-y-4">
-          <div className="bg-white rounded-2xl border border-slate-200 shadow-xs overflow-hidden">
-            {/* Input Toolbar Header */}
-            <div className="bg-slate-50/80 px-4 py-3 border-b border-slate-200 flex flex-wrap items-center justify-between gap-3">
-              <div className="flex items-center gap-2 text-slate-800 font-semibold text-sm">
-                <FileText className="w-4 h-4 text-blue-600" />
-                <span>Input Passage</span>
+          <div className="knitted-card p-6 sm:p-7 space-y-5 border-3 border-dashed border-[#9BAE83]/60 shadow-md">
+            
+            {/* Header & Preset Selector */}
+            <div className="flex flex-wrap items-center justify-between gap-3 pb-3 border-b-2 border-dashed border-[#435744]/15">
+              <div className="flex items-center gap-2.5 text-[#435744] font-black text-sm">
+                <div className="w-8 h-8 rounded-full plush-sage flex items-center justify-center shrink-0">
+                  <FileText className="w-4 h-4 embroidered-icon" />
+                </div>
+                <span>Text Analysis Workspace</span>
               </div>
 
-              {/* Sample Preset Selector */}
+              {/* Sample Preset Dropdown */}
               <div className="flex items-center gap-2">
-                <label htmlFor="preset-select" className="text-xs text-slate-500 font-medium">
-                  Load Preset:
+                <label htmlFor="preset-select" className="text-xs text-[#30312D]/80 font-black">
+                  Preset:
                 </label>
                 <select
                   id="preset-select"
                   value={selectedPresetId}
                   onChange={(e) => handleSelectSample(e.target.value)}
-                  className="text-xs font-medium bg-white text-slate-700 border border-slate-200 rounded-lg px-2.5 py-1.5 focus:outline-hidden focus:ring-2 focus:ring-blue-500"
+                  className="text-xs font-bold bg-[#FFFDF8] text-[#30312D] border-2 border-dashed border-[#9BAE83] rounded-full px-3.5 py-1.5 focus:outline-hidden focus:ring-2 focus:ring-[#9BAE83] shadow-2xs"
                 >
-                  <option value="">-- Choose Sample Corpus --</option>
+                  <option value="">-- Choose Sample Text --</option>
                   {SAMPLE_TEXTS.map((sample) => (
                     <option key={sample.id} value={sample.id}>
                       {sample.title} ({sample.category})
@@ -264,27 +320,30 @@ uvicorn backend.main:app --reload --port 8000
               </div>
             </div>
 
-            {/* Quick Preset Pills */}
-            <div className="px-4 py-2.5 bg-slate-50/40 border-b border-slate-100 flex flex-wrap items-center gap-1.5 text-xs">
-              <span className="text-slate-400 text-[11px] font-medium mr-1">Quick Samples:</span>
-              {SAMPLE_TEXTS.map((sample) => (
-                <button
-                  key={sample.id}
-                  onClick={() => handleSelectSample(sample.id)}
-                  type="button"
-                  className={`px-2.5 py-1 rounded-md text-xs font-medium transition-all ${
-                    selectedPresetId === sample.id
-                      ? 'bg-blue-600 text-white shadow-2xs'
-                      : 'bg-white text-slate-600 border border-slate-200 hover:bg-slate-100 hover:text-slate-900'
-                  }`}
-                >
-                  {sample.title.split(' ')[0]} {sample.title.split(' ')[1] || ''}
-                </button>
-              ))}
+            {/* Quick Sample Selector Pills as Small Plush Textile Buttons */}
+            <div className="flex flex-wrap items-center gap-2 text-xs pt-1">
+              <span className="text-[#30312D]/70 text-[11px] font-black mr-1">Quick Select:</span>
+              {SAMPLE_TEXTS.map((sample) => {
+                const isSelected = selectedPresetId === sample.id;
+                return (
+                  <button
+                    key={sample.id}
+                    onClick={() => handleSelectSample(sample.id)}
+                    type="button"
+                    className={`plush-button px-3.5 py-1.5 text-xs font-black transition-all ${
+                      isSelected
+                        ? 'plush-forest shadow-md scale-103'
+                        : 'plush-cream text-[#30312D]'
+                    }`}
+                  >
+                    {sample.title.split(' ')[0]} {sample.title.split(' ')[1] || ''}
+                  </button>
+                );
+              })}
             </div>
 
-            {/* Textarea Area */}
-            <div className="p-4">
+            {/* Padded Fabric Frame with Smooth Inner Textarea */}
+            <div className="quilted-inset p-3 shadow-inner">
               <label htmlFor={textareaId} className="sr-only">
                 Text to analyze
               </label>
@@ -295,136 +354,112 @@ uvicorn backend.main:app --reload --port 8000
                 onChange={(e) => {
                   setInputText(e.target.value);
                   if (validationError) setValidationError('');
-                  if (backendError) setBackendError(null);
+                  if (backendError && backendStatus === 'connected') setBackendError(null);
                 }}
-                placeholder="Paste an academic essay, article, or writing sample here to send to the AI-Guard model..."
-                className="w-full text-slate-800 text-sm leading-relaxed placeholder-slate-400 border-0 focus:ring-0 focus:outline-hidden resize-y min-h-[220px]"
+                placeholder="Paste an academic essay, synthetic answer, or writing sample here to analyze with AI-Guard..."
+                className="w-full text-[#30312D] bg-[#FFFDF8] rounded-2xl p-4.5 text-sm leading-relaxed placeholder-[#30312D]/40 border-2 border-dashed border-[#9BAE83]/50 focus:bg-[#FFFFFF] focus:border-[#435744] focus:outline-hidden resize-y min-h-[220px] shadow-sm font-sans"
               />
             </div>
 
-            {/* Live Counters & Action Buttons */}
-            <div className="bg-slate-50/80 px-4 py-3 border-t border-slate-200 flex flex-wrap items-center justify-between gap-3">
-              {/* Word & Char Counters */}
-              <div className="flex items-center gap-4 text-xs font-medium text-slate-500">
-                <span className="flex items-center gap-1">
-                  <strong className="text-slate-800">{metrics.words}</strong> words
+            {/* Counters and Primary Action Buttons */}
+            <div className="pt-2 flex flex-wrap items-center justify-between gap-3 border-t-2 border-dashed border-[#435744]/15">
+              {/* Word, Character, Sentence Counters */}
+              <div className="flex items-center gap-2.5 text-xs font-bold text-[#30312D]/80">
+                <span className="bg-[#9BAE83]/20 px-3 py-1 rounded-full border border-dashed border-[#9BAE83]">
+                  <strong className="text-[#435744] font-black">{metrics.words}</strong> words
                 </span>
-                <span className="text-slate-300">•</span>
-                <span className="flex items-center gap-1">
-                  <strong className="text-slate-800">{metrics.characters}</strong> chars
+                <span className="bg-[#E7B44F]/20 px-3 py-1 rounded-full border border-dashed border-[#E7B44F]">
+                  <strong className="text-[#8C6212] font-black">{metrics.characters}</strong> chars
                 </span>
-                <span className="text-slate-300">•</span>
-                <span className="flex items-center gap-1">
-                  <strong className="text-slate-800">{metrics.sentences}</strong> sentences
+                <span className="bg-[#343B59]/15 px-3 py-1 rounded-full border border-dashed border-[#343B59]">
+                  <strong className="text-[#343B59] font-black">{metrics.sentences}</strong> sentences
                 </span>
               </div>
 
-              {/* Action Buttons */}
-              <div className="flex items-center gap-2">
+              {/* Action Buttons: Fluffy Plush Action Controls */}
+              <div className="flex items-center gap-3">
                 <button
                   type="button"
                   onClick={handleClear}
                   disabled={!inputText && !results}
-                  className="px-3 py-2 text-xs font-medium text-slate-600 hover:text-slate-900 hover:bg-slate-100 rounded-lg transition-colors flex items-center gap-1.5 disabled:opacity-40 disabled:cursor-not-allowed"
+                  className="plush-button plush-cream px-4 py-2.5 text-xs font-black flex items-center gap-1.5 disabled:opacity-40 disabled:cursor-not-allowed shadow-sm"
                 >
-                  <RotateCcw className="w-3.5 h-3.5" />
+                  <RotateCcw className="w-3.5 h-3.5 embroidered-icon" />
                   <span>Clear</span>
                 </button>
 
-                <button
-                  type="button"
+                {/* Main Prominent Fluffy Action Button with Realistic 3D Fur Asset */}
+                <PlushAnalyzeButton
                   onClick={handleAnalyze}
-                  disabled={isAnalyzing || metrics.words === 0}
-                  className="px-5 py-2 text-xs font-semibold text-white bg-blue-600 hover:bg-blue-700 active:bg-blue-800 rounded-lg shadow-xs shadow-blue-500/20 transition-all flex items-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed"
-                >
-                  {isAnalyzing ? (
-                    <>
-                      <span className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin"></span>
-                      <span>Calling Model...</span>
-                    </>
-                  ) : (
-                    <>
-                      <Sparkles className="w-4 h-4" />
-                      <span>Analyze Text</span>
-                    </>
-                  )}
-                </button>
+                  disabled={metrics.words === 0}
+                  isAnalyzing={isAnalyzing}
+                />
               </div>
             </div>
+
           </div>
 
-          {/* Validation Error Notice */}
+          {/* Validation Notice */}
           {validationError && (
-            <div className="flex items-start gap-2.5 p-3.5 rounded-xl bg-rose-50 border border-rose-200 text-rose-800 text-xs animate-fadeIn">
-              <AlertCircle className="w-4 h-4 text-rose-600 shrink-0 mt-0.5" />
+            <div className="knitted-card p-5 bg-[#FFFDF8] border-3 border-dashed border-[#E58B36] text-[#9E4D09] text-xs flex items-start gap-3 shadow-sm">
+              <AlertCircle className="w-5 h-5 text-[#E58B36] shrink-0 mt-0.5" />
               <div>
-                <p className="font-semibold">Sample Length Insufficient</p>
-                <p className="text-rose-700 mt-0.5">{validationError}</p>
+                <p className="font-black text-sm">Sample Length Insufficient</p>
+                <p className="text-[#30312D]/85 mt-0.5 leading-relaxed font-medium">{validationError}</p>
               </div>
             </div>
           )}
 
-          {/* Backend Error Callout */}
-          {backendError && (
-            <div className="flex items-start gap-2.5 p-3.5 rounded-xl bg-rose-50 border border-rose-200 text-rose-800 text-xs animate-fadeIn">
-              <AlertCircle className="w-4 h-4 text-rose-600 shrink-0 mt-0.5" />
-              <div>
-                <p className="font-semibold">Inference Request Failed</p>
-                <p className="text-rose-700 mt-0.5">{backendError}</p>
-              </div>
-            </div>
-          )}
-
-          {/* Model Specification Info Box */}
-          <div className="p-3.5 rounded-xl bg-slate-50 border border-slate-200/80 text-xs text-slate-600 space-y-1">
+          {/* Model Specification Card */}
+          <div className="knitted-card p-5 bg-[#FFFDF8] border-2 border-dashed border-[#435744]/25 text-xs space-y-1.5">
             <div className="flex items-center justify-between">
-              <span className="font-semibold text-slate-900 flex items-center gap-1.5">
-                <Cpu className="w-3.5 h-3.5 text-blue-600" />
-                Active Model: {modelDetails?.pipeline_steps ? modelDetails.pipeline_steps.join(' + ') : 'TfidfVectorizer + LogisticRegression'}
+              <span className="font-black text-[#435744] flex items-center gap-2">
+                <Cpu className="w-4 h-4 text-[#9BAE83]" />
+                Architecture: {modelDetails?.pipeline_steps ? modelDetails.pipeline_steps.join(' + ') : 'TfidfVectorizer + LogisticRegression'}
               </span>
-              <span className="text-[11px] text-slate-400">
-                Trained on HC3 (Hello-SimpleAI)
-              </span>
+              <Badge variant="sage" size="sm">HC3 Trained</Badge>
             </div>
-            <p className="text-slate-500 leading-relaxed text-[11px]">
-              Predictions are executed on the real exported <code className="font-mono text-slate-700">ai_guard_baseline.joblib</code> via FastAPI.
+            <p className="text-[#30312D]/75 leading-relaxed text-[11px] font-medium">
+              Trained on Hello-SimpleAI/HC3 dataset across academic questions, news reports, and Wikipedia summaries with grouped split cross-validation.
             </p>
           </div>
         </div>
 
-        {/* Right Output Column: Real Backend Results (5 cols) */}
-        <div className="lg:col-span-5 space-y-4">
+        {/* Right Column: Prediction Results & Stylometrics (5 cols) */}
+        <div className="lg:col-span-5 space-y-5">
           
           {/* EMPTY STATE */}
           {!results && !isAnalyzing && (
-            <div className="bg-white rounded-2xl border border-slate-200 p-8 text-center space-y-4 shadow-xs">
-              <div className="w-14 h-14 rounded-2xl bg-blue-50 text-blue-600 flex items-center justify-center mx-auto border border-blue-100">
-                <BarChart3 className="w-7 h-7 text-blue-600" />
+            <div className="knitted-card p-8 text-center space-y-4 border-3 border-dashed border-[#9BAE83]/50 shadow-md">
+              <div className="plush-circle-btn plush-sage w-16 h-16 mx-auto shadow-md">
+                <BarChart3 className="w-8 h-8 embroidered-icon" />
               </div>
 
-              <div className="space-y-1">
-                <h3 className="text-base font-bold text-slate-900">
+              <div className="space-y-1.5">
+                <h3 className="text-xl font-black text-[#30312D]">
                   Ready for Model Inference
                 </h3>
-                <p className="text-xs text-slate-500 leading-relaxed max-w-sm mx-auto">
-                  Enter text or load a benchmark sample on the left, then click <strong>Analyze Text</strong> to receive real-time classification probabilities from the trained pipeline.
+                <p className="text-xs text-[#30312D]/75 leading-relaxed max-w-sm mx-auto font-medium">
+                  Type or select a benchmark sample on the left, then press <strong>Analyze Text</strong> to inspect probabilistic authorship markers.
                 </p>
               </div>
 
-              <div className="pt-4 border-t border-slate-100 text-left space-y-2">
-                <p className="text-xs font-semibold text-slate-700">Model Pipeline Architecture:</p>
-                <div className="space-y-1.5 text-xs text-slate-500">
-                  <div className="p-2 rounded-lg bg-slate-50 border border-slate-100 flex justify-between">
-                    <span className="font-medium text-slate-800">Vectorizer</span>
-                    <span className="font-mono text-slate-600">TfidfVectorizer (100k features)</span>
+              <div className="pt-4 border-t-2 border-dashed border-[#435744]/15 text-left space-y-2">
+                <p className="text-xs font-black uppercase tracking-wider text-[#435744]">
+                  Benchmarking Pipeline:
+                </p>
+                <div className="space-y-2 text-xs">
+                  <div className="p-3 rounded-2xl bg-[#F5EEDB] border border-dashed border-[#435744]/20 flex justify-between shadow-2xs font-semibold">
+                    <span className="text-[#30312D]">Vectorizer</span>
+                    <span className="font-mono font-bold text-[#435744]">TF-IDF (100k n-grams)</span>
                   </div>
-                  <div className="p-2 rounded-lg bg-slate-50 border border-slate-100 flex justify-between">
-                    <span className="font-medium text-slate-800">Classifier</span>
-                    <span className="font-mono text-slate-600">LogisticRegression (L2, C=2.5)</span>
+                  <div className="p-3 rounded-2xl bg-[#F5EEDB] border border-dashed border-[#435744]/20 flex justify-between shadow-2xs font-semibold">
+                    <span className="text-[#30312D]">Classifier</span>
+                    <span className="font-mono font-bold text-[#435744]">Logistic Regression (L2)</span>
                   </div>
-                  <div className="p-2 rounded-lg bg-slate-50 border border-slate-100 flex justify-between">
-                    <span className="font-medium text-slate-800">Dataset</span>
-                    <span className="font-mono text-slate-600">Hello-SimpleAI/HC3</span>
+                  <div className="p-3 rounded-2xl bg-[#F5EEDB] border border-dashed border-[#435744]/20 flex justify-between shadow-2xs font-semibold">
+                    <span className="text-[#30312D]">Corpus</span>
+                    <span className="font-mono font-bold text-[#435744]">Hello-SimpleAI/HC3</span>
                   </div>
                 </div>
               </div>
@@ -433,171 +468,251 @@ uvicorn backend.main:app --reload --port 8000
 
           {/* LOADING STATE */}
           {isAnalyzing && (
-            <div className="bg-white rounded-2xl border border-slate-200 p-6 space-y-5 animate-pulse shadow-xs">
+            <div className="knitted-card p-7 space-y-5 border-3 border-dashed border-[#E7B44F] animate-pulse shadow-md">
               <div className="flex items-center justify-between">
-                <div className="h-4 bg-slate-200 rounded w-1/3"></div>
-                <div className="h-4 bg-slate-100 rounded w-1/4"></div>
+                <div className="h-6 bg-[#9BAE83]/40 rounded-full w-1/3"></div>
+                <div className="h-6 bg-[#E7B44F]/40 rounded-full w-1/4"></div>
               </div>
-              <div className="h-24 bg-slate-100 rounded-xl"></div>
+              <div className="h-32 bg-[#F5EEDB] rounded-3xl border-2 border-dashed border-[#435744]/20"></div>
               <div className="grid grid-cols-2 gap-3">
-                <div className="h-16 bg-slate-100 rounded-lg"></div>
-                <div className="h-16 bg-slate-100 rounded-lg"></div>
+                <div className="h-20 bg-[#F5EEDB] rounded-2xl border-2 border-dashed border-[#435744]/20"></div>
+                <div className="h-20 bg-[#F5EEDB] rounded-2xl border-2 border-dashed border-[#435744]/20"></div>
               </div>
-              <div className="h-28 bg-slate-100 rounded-xl"></div>
+              <div className="h-36 bg-[#F5EEDB] rounded-3xl border-2 border-dashed border-[#435744]/20"></div>
             </div>
           )}
 
-          {/* REAL RESULTS STATE */}
+          {/* ACTIVE PREDICTION RESULTS */}
           {results && !isAnalyzing && (
-            <div className="space-y-4 animate-fadeIn">
+            <div className="space-y-5 animate-fadeIn">
               
-              {/* Primary Probability Panel */}
-              <div className="bg-white rounded-2xl border border-slate-200 shadow-xs p-6 space-y-5">
+              {/* Main Classification Result Card */}
+              <div className="knitted-card p-6 sm:p-7 space-y-5 border-3 border-dashed border-[#9BAE83] shadow-md">
                 <div className="flex items-center justify-between">
-                  <div className="flex items-center gap-2">
-                    <Gauge className="w-5 h-5 text-blue-600" />
-                    <h3 className="font-bold text-slate-900 text-sm">
+                  <div className="flex items-center gap-2.5">
+                    <div className="w-8 h-8 rounded-full plush-sage flex items-center justify-center shrink-0">
+                      <Gauge className="w-4 h-4 embroidered-icon" />
+                    </div>
+                    <h3 className="font-black text-[#30312D] text-sm">
                       Model Classification Result
                     </h3>
                   </div>
-                  <span className="text-[11px] font-medium text-slate-500 bg-slate-100 px-2 py-0.5 rounded">
-                    Confidence: {results.confidenceScore}%
-                  </span>
+                  
+                  {results.isLocalFallback ? (
+                    <Badge variant="simulated" size="sm">
+                      Local Fallback Heuristic
+                    </Badge>
+                  ) : (
+                    <Badge variant="connected" size="sm">
+                      Live Backend Model
+                    </Badge>
+                  )}
                 </div>
 
-                {/* Score Big Display */}
-                <div className="bg-slate-50/70 rounded-xl p-4 border border-slate-200/80 space-y-3">
+                {/* Big Score Box with Quilted Padding */}
+                <div className="p-5 sm:p-6 rounded-3xl quilted-inset space-y-3.5 shadow-sm">
                   <div className="flex items-center justify-between">
                     <div>
-                      <span className="text-xs uppercase font-bold tracking-wider text-slate-400">
-                        Measured Probabilities
+                      <span className="text-[10px] uppercase font-black tracking-widest text-[#30312D]/70">
+                        Predicted Class
                       </span>
                       <div className="flex items-baseline gap-2 mt-0.5">
-                        <span className={`text-3xl font-extrabold tracking-tight ${
-                          results.probAI > 50 ? 'text-rose-600' : 'text-emerald-600'
+                        <span className={`text-3xl font-black tracking-tight ${
+                          results.probAI > 50 ? 'text-[#D67C29]' : 'text-[#3B4E3C]'
                         }`}>
                           {results.prediction}
-                        </span>
-                        <span className="text-slate-400 text-xs font-medium">
-                          ({results.probAI}% AI / {results.probHuman}% Human)
                         </span>
                       </div>
                     </div>
 
                     <Badge 
-                      variant={results.label === 1 ? 'ai' : 'human'}
+                      variant={results.probAI > 50 ? 'orange' : 'sage'}
                       size="lg"
                     >
-                      Class {results.label}: {results.prediction}
+                      {results.probAI > 50 ? 'Synthetic Bias' : 'Human Nuance'}
                     </Badge>
                   </div>
 
-                  {/* Dual Bar Gauge */}
-                  <div className="space-y-1">
-                    <div className="h-3 w-full bg-slate-200 rounded-full overflow-hidden flex">
+                  {/* Dual Yarn Gauge Bar */}
+                  <div className="space-y-1.5 pt-1">
+                    <div className="h-5 w-full bg-[#30312D]/15 rounded-full overflow-hidden flex border-2 border-[#435744]/20 p-0.5 shadow-inner">
                       <div 
-                        className="bg-rose-500 h-full transition-all duration-500"
+                        className="bg-[#E58B36] h-full rounded-full transition-all duration-700 shadow-sm"
                         style={{ width: `${results.probAI}%` }}
-                        title={`${results.probAI}% AI probability`}
+                        title={`${results.probAI}% AI Likelihood`}
                       ></div>
                       <div 
-                        className="bg-emerald-500 h-full transition-all duration-500"
+                        className="bg-[#9BAE83] h-full rounded-full transition-all duration-700 shadow-sm"
                         style={{ width: `${results.probHuman}%` }}
-                        title={`${results.probHuman}% Human probability`}
+                        title={`${results.probHuman}% Human Likelihood`}
                       ></div>
                     </div>
-                    <div className="flex justify-between text-[11px] text-slate-500 font-medium">
-                      <span className="text-rose-700 font-semibold">AI Likelihood ({results.probAI}%)</span>
-                      <span className="text-emerald-700 font-semibold">Human Likelihood ({results.probHuman}%)</span>
+                    
+                    <div className="flex justify-between text-xs font-black">
+                      <span className="text-[#9E4D09] flex items-center gap-1.5">
+                        <span className="w-2.5 h-2.5 rounded-full bg-[#E58B36]"></span>
+                        AI: {results.probAI}%
+                      </span>
+                      <span className="text-[#435744] flex items-center gap-1.5">
+                        <span className="w-2.5 h-2.5 rounded-full bg-[#9BAE83]"></span>
+                        Human: {results.probHuman}%
+                      </span>
                     </div>
                   </div>
                 </div>
 
-                {/* Stylometric & Linguistic Heuristics */}
-                <div className="space-y-2">
-                  <h4 className="text-xs font-bold uppercase tracking-wider text-slate-500 flex items-center justify-between">
-                    <span>Linguistic Statistics</span>
-                    <span className="text-[10px] text-slate-400">client metrics</span>
-                  </h4>
-
-                  <div className="grid grid-cols-2 gap-2.5">
-                    <div className="p-3 rounded-lg bg-slate-50 border border-slate-100 space-y-1">
-                      <span className="text-[11px] font-semibold text-slate-500">Perplexity Index</span>
-                      <p className="text-lg font-bold text-slate-900">{results.stylometrics.perplexity}</p>
-                      <p className="text-[10px] text-slate-400 leading-tight">Surprisal entropy estimate</p>
-                    </div>
-
-                    <div className="p-3 rounded-lg bg-slate-50 border border-slate-100 space-y-1">
-                      <span className="text-[11px] font-semibold text-slate-500">Burstiness (Variance)</span>
-                      <p className="text-lg font-bold text-slate-900">{results.stylometrics.burstiness}</p>
-                      <p className="text-[10px] text-slate-400 leading-tight">Sentence length variance</p>
-                    </div>
-
-                    <div className="p-3 rounded-lg bg-slate-50 border border-slate-100 space-y-1">
-                      <span className="text-[11px] font-semibold text-slate-500">Lexical Richness</span>
-                      <p className="text-lg font-bold text-slate-900">{results.stylometrics.lexicalDiversity}</p>
-                      <p className="text-[10px] text-slate-400 leading-tight">Type-token ratio</p>
-                    </div>
-
-                    <div className="p-3 rounded-lg bg-slate-50 border border-slate-100 space-y-1">
-                      <span className="text-[11px] font-semibold text-slate-500">Avg Sentence Length</span>
-                      <p className="text-lg font-bold text-slate-900">{results.metrics.avg_sentence_length} <span className="text-xs font-normal text-slate-500">wds</span></p>
-                      <p className="text-[10px] text-slate-400 leading-tight">Words per sentence segment</p>
-                    </div>
-                  </div>
+                {/* Explanation text */}
+                <div className="text-xs text-[#30312D]/85 leading-relaxed bg-[#FFFDF8] p-4 rounded-2xl border-2 border-dashed border-[#435744]/20 font-medium">
+                  {results.probAI >= 70 ? (
+                    <p>
+                      <strong className="text-[#435744]">High Synthetic Indicators:</strong> This passage demonstrates uniform clause lengths, low lexical variation, and predictive formulaic transition structures typical of autoregressive LLM output.
+                    </p>
+                  ) : results.probAI <= 30 ? (
+                    <p>
+                      <strong className="text-[#435744]">High Human Burstiness:</strong> The passage contains organic stylistic variations, variable sentence rhythms, and authentic idiosyncratic vocabulary characteristic of human authorship.
+                    </p>
+                  ) : (
+                    <p>
+                      <strong className="text-[#435744]">Ambiguous / Mixed Signal:</strong> The classifier detected conflicting linguistic markers. This occurs commonly in edited texts, formal academic prose, or non-native English essays.
+                    </p>
+                  )}
                 </div>
 
-                {/* Persistent Result Disclaimer */}
-                <div className="pt-2">
-                  <DisclaimerBanner compact />
-                </div>
+                <DisclaimerBanner compact />
               </div>
 
-              {/* Experimental Sentence-Level Inspection Panel */}
-              <div className="bg-white rounded-2xl border border-slate-200 shadow-xs p-5 space-y-3">
-                <div className="flex items-center justify-between">
-                  <div className="flex items-center gap-2">
-                    <Layers className="w-4 h-4 text-blue-600" />
-                    <h3 className="font-bold text-slate-900 text-sm">
-                      Sentence-Level Inspection
+              {/* Inside the Writing (Stylometric Analysis) */}
+              <div className="knitted-card p-6 sm:p-7 space-y-4 border-3 border-dashed border-[#9BAE83]/60 shadow-md">
+                <div className="flex items-center justify-between pb-3 border-b-2 border-dashed border-[#435744]/15">
+                  <div className="flex items-center gap-2.5">
+                    <div className="w-8 h-8 rounded-full plush-forest flex items-center justify-center shrink-0">
+                      <BookOpen className="w-4 h-4 embroidered-icon-light" />
+                    </div>
+                    <h3 className="font-black text-[#30312D] text-sm">
+                      Inside the Writing
                     </h3>
                   </div>
-                  <span className="text-[11px] font-medium text-amber-800 bg-amber-50 border border-amber-200 px-2 py-0.5 rounded">
-                    Experimental Heuristic
+                  <span className="text-[10px] font-black uppercase tracking-wider text-[#435744] bg-[#9BAE83]/25 px-3 py-1 rounded-full border-2 border-dashed border-[#9BAE83]">
+                    Stylometric Fingerprint
                   </span>
                 </div>
 
-                <div className="p-2.5 rounded-lg bg-amber-50/60 border border-amber-100 text-[11px] text-amber-900 leading-relaxed">
-                  <strong>Notice:</strong> Sentence-level probabilities are computed by evaluating each individual sentence through the document-level TF-IDF model. Because individual sentences have short length and sparse vocabulary, these scores are exploratory indicators and not token-level attention weights.
+                {/* 4 Stylometric Cards */}
+                <div className="grid grid-cols-2 gap-3.5">
+                  {/* Lexical Diversity */}
+                  <div className="p-4 rounded-2xl bg-[#FFFDF8] border-2 border-dashed border-[#435744]/20 space-y-1 shadow-2xs">
+                    <span className="text-[10px] font-black uppercase tracking-wider text-[#30312D]/60 block">
+                      Lexical Diversity (TTR)
+                    </span>
+                    <p className="text-2xl font-black text-[#435744]">
+                      {results.stylometrics.lexicalDiversity}
+                    </p>
+                    <p className="text-[10px] text-[#30312D]/70 font-medium leading-tight">
+                      Unique to total words ratio
+                    </p>
+                  </div>
+
+                  {/* Avg Sentence Length */}
+                  <div className="p-4 rounded-2xl bg-[#FFFDF8] border-2 border-dashed border-[#435744]/20 space-y-1 shadow-2xs">
+                    <span className="text-[10px] font-black uppercase tracking-wider text-[#30312D]/60 block">
+                      Avg Sentence Length
+                    </span>
+                    <p className="text-2xl font-black text-[#435744]">
+                      {results.metrics.avg_sentence_length || results.stylometrics.avgSentenceLength} <span className="text-xs font-bold text-[#30312D]/60">words</span>
+                    </p>
+                    <p className="text-[10px] text-[#30312D]/70 font-medium leading-tight">
+                      Mean words per clause
+                    </p>
+                  </div>
+
+                  {/* Flesch Reading Ease */}
+                  <div className="p-4 rounded-2xl bg-[#FFFDF8] border-2 border-dashed border-[#435744]/20 space-y-1 shadow-2xs">
+                    <span className="text-[10px] font-black uppercase tracking-wider text-[#30312D]/60 block">
+                      Flesch Reading Ease
+                    </span>
+                    <p className="text-2xl font-black text-[#B58422]">
+                      {results.stylometrics.fleschReadingEase || 62.4}
+                    </p>
+                    <p className="text-[10px] text-[#30312D]/70 font-medium leading-tight">
+                      {results.stylometrics.fleschReadingEase > 60 ? 'Standard reading level' : 'Academic / Complex'}
+                    </p>
+                  </div>
+
+                  {/* Burstiness Variance */}
+                  <div className="p-4 rounded-2xl bg-[#FFFDF8] border-2 border-dashed border-[#435744]/20 space-y-1 shadow-2xs">
+                    <span className="text-[10px] font-black uppercase tracking-wider text-[#30312D]/60 block">
+                      Burstiness Variance
+                    </span>
+                    <p className="text-2xl font-black text-[#343B59]">
+                      {results.stylometrics.burstiness}
+                    </p>
+                    <p className="text-[10px] text-[#30312D]/70 font-medium leading-tight">
+                      Sentence rhythm dispersion
+                    </p>
+                  </div>
                 </div>
 
-                <div className="space-y-2 max-h-[280px] overflow-y-auto pr-1">
-                  {results.sentenceAnalysis.map((sent, idx) => {
-                    const isHigh = sent.ai_probability >= 0.50;
-
-                    return (
-                      <div
-                        key={idx}
-                        className={`p-3 rounded-xl border text-xs leading-relaxed transition-all ${
-                          isHigh
-                            ? 'bg-rose-50/60 border-rose-200 text-rose-950'
-                            : 'bg-emerald-50/60 border-emerald-200 text-emerald-950'
-                        }`}
-                      >
-                        <div className="flex items-center justify-between gap-2 mb-1 text-[11px] font-medium">
-                          <span className="text-slate-500">Sentence {idx + 1}</span>
-                          <span className={`px-1.5 py-0.5 rounded font-mono font-bold ${
-                            isHigh ? 'bg-rose-100 text-rose-800' : 'bg-emerald-100 text-emerald-800'
-                          }`}>
-                            {Math.round(sent.ai_probability * 100)}% AI prob
-                          </span>
-                        </div>
-                        <p>{sent.sentence}</p>
+                {/* Punctuation Distribution Bar Breakdown */}
+                <div className="space-y-2 pt-3 border-t-2 border-dashed border-[#435744]/15">
+                  <span className="text-[10px] font-black uppercase tracking-wider text-[#30312D]/70 block">
+                    Punctuation Distribution
+                  </span>
+                  <div className="grid grid-cols-3 gap-2 text-xs">
+                    {(results.stylometrics.punctuation || []).map((punct, pIdx) => (
+                      <div key={pIdx} className="p-2.5 rounded-xl bg-[#FFFDF8] border-2 border-dashed border-[#435744]/20 flex items-center justify-between shadow-2xs">
+                        <span className="text-[#30312D]/80 text-[11px] font-bold">{punct.name}</span>
+                        <span className="font-black font-mono text-[#435744] text-[11px]">{punct.count}</span>
                       </div>
-                    );
-                  })}
+                    ))}
+                  </div>
                 </div>
+
               </div>
+
+              {/* Sentence-Level Inspection Drawer */}
+              {results.sentenceAnalysis && results.sentenceAnalysis.length > 0 && (
+                <div className="knitted-card p-6 sm:p-7 space-y-4 border-3 border-dashed border-[#9BAE83]/60 shadow-md">
+                  <div className="flex items-center justify-between pb-2 border-b-2 border-dashed border-[#435744]/15">
+                    <div className="flex items-center gap-2.5">
+                      <div className="w-8 h-8 rounded-full plush-cream flex items-center justify-center shrink-0">
+                        <Layers className="w-4 h-4 embroidered-icon" />
+                      </div>
+                      <h3 className="font-black text-[#30312D] text-sm">
+                        Sentence Rhythm Inspection
+                      </h3>
+                    </div>
+                    <span className="text-[10px] font-black uppercase tracking-wider text-[#543A05] bg-[#E7B44F]/30 px-3 py-1 rounded-full border-2 border-dashed border-[#E7B44F]">
+                      Heuristic Slice
+                    </span>
+                  </div>
+
+                  <div className="space-y-3 max-h-[280px] overflow-y-auto pr-1">
+                    {results.sentenceAnalysis.map((sent, idx) => {
+                      const isHigh = sent.ai_probability >= 0.50;
+                      return (
+                        <div
+                          key={idx}
+                          className={`p-3.5 rounded-2xl border-2 border-dashed text-xs leading-relaxed transition-all shadow-2xs ${
+                            isHigh
+                              ? 'bg-[#FFF2E6] border-[#E58B36] text-[#30312D]'
+                              : 'bg-[#F2F7ED] border-[#9BAE83] text-[#30312D]'
+                          }`}
+                        >
+                          <div className="flex items-center justify-between gap-2 mb-1.5 text-[11px] font-black">
+                            <span className="text-[#30312D]/70">Sentence {idx + 1}</span>
+                            <span className={`px-2.5 py-0.5 rounded-full font-mono font-bold ${
+                              isHigh ? 'bg-[#E58B36]/25 text-[#9E4D09]' : 'bg-[#9BAE83]/30 text-[#435744]'
+                            }`}>
+                              {Math.round(sent.ai_probability * 100)}% AI likelihood
+                            </span>
+                          </div>
+                          <p className="font-medium text-[11.5px] leading-relaxed">{sent.sentence}</p>
+                        </div>
+                      );
+                    })}
+                  </div>
+                </div>
+              )}
 
             </div>
           )}

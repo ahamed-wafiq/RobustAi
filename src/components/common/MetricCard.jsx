@@ -7,32 +7,49 @@ export default function MetricCard({
   subtitle, 
   icon: Icon, 
   badgeText, 
-  badgeVariant = 'neutral',
-  accentColor = 'blue',
+  badgeVariant = 'sage',
+  accentColor = 'sage',
   className = ''
 }) {
-  const accentBorder = {
-    blue: 'border-l-blue-600',
-    indigo: 'border-l-indigo-600',
-    emerald: 'border-l-emerald-600',
-    rose: 'border-l-rose-500',
-    amber: 'border-l-amber-500',
-    slate: 'border-l-slate-400'
+  const plushIconBg = {
+    sage: 'plush-sage',
+    forest: 'plush-forest',
+    mustard: 'plush-mustard',
+    orange: 'plush-orange',
+    navy: 'plush-navy',
+    slate: 'plush-cream',
+    blue: 'plush-navy',
+    emerald: 'plush-sage',
+    rose: 'plush-orange',
+    amber: 'plush-mustard'
+  };
+
+  const accentBorderColor = {
+    sage: 'border-[#9BAE83]',
+    forest: 'border-[#435744]',
+    mustard: 'border-[#E7B44F]',
+    orange: 'border-[#E58B36]',
+    navy: 'border-[#343B59]',
+    slate: 'border-[#30312D]/40',
+    blue: 'border-[#343B59]',
+    emerald: 'border-[#9BAE83]',
+    rose: 'border-[#E58B36]',
+    amber: 'border-[#E7B44F]'
   };
 
   return (
-    <div className={`bg-white rounded-xl border border-slate-200/80 shadow-xs p-5 transition-all hover:shadow-md border-l-4 ${accentBorder[accentColor] || accentBorder.blue} ${className}`}>
+    <div className={`knitted-card knitted-card-interactive p-6 ${className}`}>
       <div className="flex items-start justify-between gap-3">
-        <div className="space-y-1">
-          <p className="text-xs font-semibold uppercase tracking-wider text-slate-500">
+        <div className="space-y-1.5">
+          <p className="text-[11px] font-black uppercase tracking-wider text-[#30312D]/60">
             {title}
           </p>
           <div className="flex items-baseline gap-1.5">
-            <span className="text-2xl font-bold tracking-tight text-slate-900">
+            <span className="text-3xl font-black tracking-tight text-[#30312D]">
               {value}
             </span>
             {unit && (
-              <span className="text-sm font-medium text-slate-500">
+              <span className="text-sm font-bold text-[#30312D]/60">
                 {unit}
               </span>
             )}
@@ -40,17 +57,17 @@ export default function MetricCard({
         </div>
 
         {Icon && (
-          <div className="p-2.5 rounded-lg bg-slate-50 border border-slate-100 text-slate-600">
-            <Icon className="w-5 h-5 text-blue-600" />
+          <div className={`plush-circle-btn ${plushIconBg[accentColor] || 'plush-sage'} shadow-md`}>
+            <Icon className="w-5 h-5 embroidered-icon" />
           </div>
         )}
       </div>
 
       {(subtitle || badgeText) && (
-        <div className="mt-3 pt-3 border-t border-slate-100 flex items-center justify-between text-xs text-slate-500">
-          <span>{subtitle}</span>
+        <div className="mt-4 pt-3 border-t-2 border-dashed border-[#435744]/15 flex items-center justify-between text-xs text-[#30312D]/75">
+          <span className="font-semibold text-[11px]">{subtitle}</span>
           {badgeText && (
-            <span className="font-medium text-slate-700 bg-slate-100 px-2 py-0.5 rounded">
+            <span className="font-extrabold text-[10px] uppercase tracking-wider text-[#30312D] bg-[#F5EEDB] px-2.5 py-0.5 rounded-full border border-dashed border-[#435744]/30 shadow-2xs">
               {badgeText}
             </span>
           )}
