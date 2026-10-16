@@ -10,10 +10,10 @@ import AboutResearch from './pages/AboutResearch';
 export default function App() {
   return (
     <BrowserRouter>
-      <div className="min-h-screen flex flex-col bg-[#F5F0E6] text-[#30312D]">
+      <div className="min-h-screen flex flex-col bg-[#F5F0E6] text-[#30312D] overflow-x-hidden w-full">
         <Navbar />
         
-        <main className="flex-1">
+        <main className="flex-1 w-full max-w-full">
           <Routes>
             <Route path="/" element={<TextDetector />} />
             <Route path="/comparison" element={<ModelComparison />} />

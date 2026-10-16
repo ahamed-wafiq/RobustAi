@@ -38,26 +38,26 @@ export default function AboutResearch() {
   };
 
   return (
-    <div className="space-y-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+    <div className="space-y-6 sm:space-y-10 max-w-7xl mx-auto px-3 sm:px-6 lg:px-8 py-5 sm:py-8">
       {/* Page Header */}
-      <div className="knitted-card p-6 sm:p-8 bg-gradient-to-br from-[#FFFDF8] via-[#FFFCF5] to-[#F5EEDB] border-3 border-dashed border-[#9BAE83]/60 shadow-lg">
-        <div className="flex flex-wrap items-center justify-between gap-4">
+      <div className="knitted-card p-4 sm:p-7 lg:p-8 bg-gradient-to-br from-[#FFFDF8] via-[#FFFCF5] to-[#F5EEDB] border-2 sm:border-3 border-dashed border-[#9BAE83]/60 shadow-lg">
+        <div className="flex flex-wrap items-center justify-between gap-3 sm:gap-4">
           <div className="space-y-2 max-w-3xl">
-            <div className="flex items-center gap-2.5">
-              <span className="text-[11px] font-black uppercase tracking-widest text-[#435744] bg-[#9BAE83]/30 px-3.5 py-1 rounded-full border-2 border-dashed border-[#9BAE83] shadow-2xs">
+            <div className="flex flex-wrap items-center gap-2 sm:gap-2.5">
+              <span className="text-[10px] sm:text-[11px] font-black uppercase tracking-widest text-[#435744] bg-[#9BAE83]/30 px-3 sm:px-3.5 py-1 rounded-full border-2 border-dashed border-[#9BAE83] shadow-2xs">
                 RESEARCH WHITEPAPER & METHODOLOGY
               </span>
               <Badge variant="sage">Editorial Document</Badge>
             </div>
-            <h1 className="text-3xl sm:text-4xl font-black text-[#30312D] tracking-tight">
+            <h1 className="text-2xl sm:text-4xl font-black text-[#30312D] tracking-tight">
               About the <span className="text-[#435744] underline decoration-wavy decoration-[#9BAE83]">AI-Guard Project</span>
             </h1>
-            <p className="text-sm sm:text-base text-[#30312D]/85 leading-relaxed font-medium">
+            <p className="text-xs sm:text-base text-[#30312D]/85 leading-relaxed font-medium">
               Research motivation, methodological architecture, fairness considerations, and fundamental ethical limitations in AI text detection.
             </p>
           </div>
 
-          <div className="flex items-center gap-2 text-xs font-black bg-[#FFFDF8] border-2 border-dashed border-[#435744]/30 text-[#435744] px-4 py-2 rounded-2xl shadow-xs">
+          <div className="flex items-center gap-2 text-xs font-black bg-[#FFFDF8] border-2 border-dashed border-[#435744]/30 text-[#435744] px-3.5 sm:px-4 py-2 rounded-2xl shadow-xs">
             <Scale className="w-4 h-4 text-[#9BAE83] shrink-0" />
             <span>Ethical AI Evaluation Framework</span>
           </div>
@@ -67,18 +67,18 @@ export default function AboutResearch() {
       <DisclaimerBanner />
 
       {/* Main Grid: Article Content (8 cols) & Sidebar (4 cols) */}
-      <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+      <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 sm:gap-8 items-start">
         
         {/* Main Article Body (8 cols) */}
-        <div className="lg:col-span-8 space-y-8">
+        <div className="lg:col-span-8 space-y-6 sm:space-y-8">
           
           {/* Abstract Box */}
-          <div className="knitted-card p-6 sm:p-8 space-y-3.5 border-3 border-dashed border-[#9BAE83]/60 shadow-md">
+          <div className="knitted-card p-4 sm:p-6 lg:p-8 space-y-3 sm:space-y-3.5 border-2 sm:border-3 border-dashed border-[#9BAE83]/60 shadow-md">
             <div className="flex items-center gap-2.5 text-[#435744]">
-              <div className="w-8 h-8 rounded-full plush-sage flex items-center justify-center shrink-0">
-                <BookOpen className="w-4 h-4 embroidered-icon" />
+              <div className="w-7 h-7 sm:w-8 sm:h-8 rounded-full plush-sage flex items-center justify-center shrink-0">
+                <BookOpen className="w-3.5 h-3.5 sm:w-4 sm:h-4 embroidered-icon" />
               </div>
-              <h2 className="text-base font-black text-[#30312D]">
+              <h2 className="text-sm sm:text-base font-black text-[#30312D]">
                 Project Abstract
               </h2>
             </div>
@@ -89,51 +89,51 @@ export default function AboutResearch() {
           </div>
 
           {/* Research Motivation & Objectives */}
-          <div className="space-y-4">
+          <div className="space-y-3 sm:space-y-4">
             <div className="flex items-center gap-2.5">
-              <Target className="w-5 h-5 text-[#435744]" />
-              <h3 className="text-lg font-black text-[#30312D]">
+              <Target className="w-4 h-4 sm:w-5 sm:h-5 text-[#435744]" />
+              <h3 className="text-base sm:text-lg font-black text-[#30312D]">
                 Core Research Objectives
               </h3>
             </div>
 
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-              <div className="knitted-card p-5 space-y-2 border-3 border-dashed border-[#9BAE83]/50 shadow-sm">
-                <span className="w-9 h-9 rounded-2xl plush-sage text-[#2D3E24] font-black text-xs flex items-center justify-center shadow-xs">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4">
+              <div className="knitted-card p-4 sm:p-5 space-y-2 border-2 sm:border-3 border-dashed border-[#9BAE83]/50 shadow-sm">
+                <span className="w-8 h-8 sm:w-9 sm:h-9 rounded-xl sm:rounded-2xl plush-sage text-[#2D3E24] font-black text-xs flex items-center justify-center shadow-xs">
                   01
                 </span>
-                <h4 className="text-sm font-black text-[#30312D]">Quantifying Evasion Fragility</h4>
-                <p className="text-xs text-[#30312D]/80 leading-relaxed font-medium">
+                <h4 className="text-xs sm:text-sm font-black text-[#30312D]">Quantifying Evasion Fragility</h4>
+                <p className="text-[11px] sm:text-xs text-[#30312D]/80 leading-relaxed font-medium">
                   Systematically benchmarking the failure thresholds of TF-IDF, n-gram, and transformer classifiers when subjected to commercial paraphrasers and adversarial perturbations.
                 </p>
               </div>
 
-              <div className="knitted-card p-5 space-y-2 border-3 border-dashed border-[#435744]/30 shadow-sm">
-                <span className="w-9 h-9 rounded-2xl plush-forest text-[#FFFDF9] font-black text-xs flex items-center justify-center shadow-xs">
+              <div className="knitted-card p-4 sm:p-5 space-y-2 border-2 sm:border-3 border-dashed border-[#435744]/30 shadow-sm">
+                <span className="w-8 h-8 sm:w-9 sm:h-9 rounded-xl sm:rounded-2xl plush-forest text-[#FFFDF9] font-black text-xs flex items-center justify-center shadow-xs">
                   02
                 </span>
-                <h4 className="text-sm font-black text-[#30312D]">Mitigating Non-Native Bias</h4>
-                <p className="text-xs text-[#30312D]/80 leading-relaxed font-medium">
+                <h4 className="text-xs sm:text-sm font-black text-[#30312D]">Mitigating Non-Native Bias</h4>
+                <p className="text-[11px] sm:text-xs text-[#30312D]/80 leading-relaxed font-medium">
                   Developing calibration layers to decouple syntactic simplicity from synthetic generation likelihood, drastically decreasing the false positive rate on ESL student corpora.
                 </p>
               </div>
 
-              <div className="knitted-card p-5 space-y-2 border-3 border-dashed border-[#E7B44F]/50 shadow-sm">
-                <span className="w-9 h-9 rounded-2xl plush-mustard text-[#543A05] font-black text-xs flex items-center justify-center shadow-xs">
+              <div className="knitted-card p-4 sm:p-5 space-y-2 border-2 sm:border-3 border-dashed border-[#E7B44F]/50 shadow-sm">
+                <span className="w-8 h-8 sm:w-9 sm:h-9 rounded-xl sm:rounded-2xl plush-mustard text-[#543A05] font-black text-xs flex items-center justify-center shadow-xs">
                   03
                 </span>
-                <h4 className="text-sm font-black text-[#30312D]">Explainable Feature Attribution</h4>
-                <p className="text-xs text-[#30312D]/80 leading-relaxed font-medium">
+                <h4 className="text-xs sm:text-sm font-black text-[#30312D]">Explainable Feature Attribution</h4>
+                <p className="text-[11px] sm:text-xs text-[#30312D]/80 leading-relaxed font-medium">
                   Providing sentence-level burstiness maps and lexical perplexity breakdowns so evaluators understand <em>why</em> a score was produced rather than relying on opaque probabilities.
                 </p>
               </div>
 
-              <div className="knitted-card p-5 space-y-2 border-3 border-dashed border-[#E58B36]/50 shadow-sm">
-                <span className="w-9 h-9 rounded-2xl plush-orange text-[#6B2E05] font-black text-xs flex items-center justify-center shadow-xs">
+              <div className="knitted-card p-4 sm:p-5 space-y-2 border-2 sm:border-3 border-dashed border-[#E58B36]/50 shadow-sm">
+                <span className="w-8 h-8 sm:w-9 sm:h-9 rounded-xl sm:rounded-2xl plush-orange text-[#6B2E05] font-black text-xs flex items-center justify-center shadow-xs">
                   04
                 </span>
-                <h4 className="text-sm font-black text-[#30312D]">Robust Ensemble Forensics</h4>
-                <p className="text-xs text-[#30312D]/80 leading-relaxed font-medium">
+                <h4 className="text-xs sm:text-sm font-black text-[#30312D]">Robust Ensemble Forensics</h4>
+                <p className="text-[11px] sm:text-xs text-[#30312D]/80 leading-relaxed font-medium">
                   Unifying lightweight statistical priors with contextual attention to provide defense-in-depth against single-vector evasion tactics.
                 </p>
               </div>
@@ -141,56 +141,56 @@ export default function AboutResearch() {
           </div>
 
           {/* System Architecture & Multi-Tier Methodology */}
-          <div className="space-y-4">
+          <div className="space-y-3 sm:space-y-4">
             <div className="flex items-center gap-2.5">
-              <Layers className="w-5 h-5 text-[#435744]" />
-              <h3 className="text-lg font-black text-[#30312D]">
+              <Layers className="w-4 h-4 sm:w-5 sm:h-5 text-[#435744]" />
+              <h3 className="text-base sm:text-lg font-black text-[#30312D]">
                 Multi-Tier Methodology & Architecture
               </h3>
             </div>
 
-            <div className="knitted-card p-6 sm:p-8 space-y-4 border-3 border-dashed border-[#9BAE83]/60 shadow-lg">
+            <div className="knitted-card p-4 sm:p-6 lg:p-8 space-y-3.5 sm:space-y-4 border-2 sm:border-3 border-dashed border-[#9BAE83]/60 shadow-lg">
               <p className="text-xs sm:text-sm text-[#30312D]/85 leading-relaxed font-medium">
                 The AI-Guard pipeline combines multiple complementary inspection stages to address the blind spots of isolated classifiers:
               </p>
 
-              <div className="space-y-3.5 text-xs">
-                <div className="p-4 rounded-2xl quilted-inset space-y-1 shadow-2xs">
-                  <div className="flex items-center justify-between font-black text-[#435744]">
+              <div className="space-y-3 sm:space-y-3.5 text-xs">
+                <div className="p-3.5 sm:p-4 rounded-xl sm:rounded-2xl quilted-inset space-y-1 shadow-2xs">
+                  <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-1 font-black text-[#435744]">
                     <span>Stage 1: Preprocessing & Unicode Normalization (NFKC)</span>
                     <span className="text-[#30312D]/60 font-mono text-[10px]">Input Sanitization</span>
                   </div>
-                  <p className="text-[#30312D]/80 leading-relaxed font-medium">
+                  <p className="text-[#30312D]/80 leading-relaxed text-[11px] sm:text-xs font-medium">
                     Strips homoglyphic character exploits, zero-width spaces (U+200B), and anomalous whitespace before tokenization to ensure attackers cannot fragment BPE vocabularies.
                   </p>
                 </div>
 
-                <div className="p-4 rounded-2xl quilted-inset space-y-1 shadow-2xs">
-                  <div className="flex items-center justify-between font-black text-[#435744]">
+                <div className="p-3.5 sm:p-4 rounded-xl sm:rounded-2xl quilted-inset space-y-1 shadow-2xs">
+                  <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-1 font-black text-[#435744]">
                     <span>Stage 2: Stylometric & Burstiness Profiling</span>
                     <span className="text-[#30312D]/60 font-mono text-[10px]">Statistical Heuristics</span>
                   </div>
-                  <p className="text-[#30312D]/80 leading-relaxed font-medium">
+                  <p className="text-[#30312D]/80 leading-relaxed text-[11px] sm:text-xs font-medium">
                     Extracts type-token ratio (TTR), sentence-length variance, Flesch Reading Ease score, punctuation density, and surprisal entropy across sliding windows.
                   </p>
                 </div>
 
-                <div className="p-4 rounded-2xl quilted-inset space-y-1 shadow-2xs">
-                  <div className="flex items-center justify-between font-black text-[#435744]">
+                <div className="p-3.5 sm:p-4 rounded-xl sm:rounded-2xl quilted-inset space-y-1 shadow-2xs">
+                  <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-1 font-black text-[#435744]">
                     <span>Stage 3: Trained Baseline Model (HC3 Dataset)</span>
                     <span className="text-[#30312D]/60 font-mono text-[10px]">Active Serving Model</span>
                   </div>
-                  <p className="text-[#30312D]/80 leading-relaxed font-medium">
+                  <p className="text-[#30312D]/80 leading-relaxed text-[11px] sm:text-xs font-medium">
                     High-throughput scikit-learn pipeline (TfidfVectorizer on 100k unigram + bigram n-grams paired with L2-regularized Logistic Regression) served via FastAPI.
                   </p>
                 </div>
 
-                <div className="p-4 rounded-2xl quilted-inset space-y-1 shadow-2xs">
-                  <div className="flex items-center justify-between font-black text-[#435744]">
+                <div className="p-3.5 sm:p-4 rounded-xl sm:rounded-2xl quilted-inset space-y-1 shadow-2xs">
+                  <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-1 font-black text-[#435744]">
                     <span>Stage 4: Calibrated Uncertainty Estimation</span>
                     <span className="text-[#30312D]/60 font-mono text-[10px]">Confidence Bounds</span>
                   </div>
-                  <p className="text-[#30312D]/80 leading-relaxed font-medium">
+                  <p className="text-[#30312D]/80 leading-relaxed text-[11px] sm:text-xs font-medium">
                     Flags inputs with high ambiguity rather than forcing an overconfident binary prediction, protecting writers against unwarranted false accusations.
                   </p>
                 </div>
@@ -199,44 +199,44 @@ export default function AboutResearch() {
           </div>
 
           {/* Dataset Disclosure: Hello-SimpleAI/HC3 */}
-          <div className="space-y-4">
+          <div className="space-y-3 sm:space-y-4">
             <div className="flex items-center gap-2.5">
-              <Cpu className="w-5 h-5 text-[#435744]" />
-              <h3 className="text-lg font-black text-[#30312D]">
+              <Cpu className="w-4 h-4 sm:w-5 sm:h-5 text-[#435744]" />
+              <h3 className="text-base sm:text-lg font-black text-[#30312D]">
                 Dataset Disclosure & Attribution (HC3)
               </h3>
             </div>
 
-            <div className="knitted-card p-6 sm:p-7 space-y-3 border-3 border-dashed border-[#9BAE83]/60 shadow-md text-xs sm:text-sm text-[#30312D]/85 leading-relaxed font-medium">
+            <div className="knitted-card p-4 sm:p-6 lg:p-7 space-y-3 border-2 sm:border-3 border-dashed border-[#9BAE83]/60 shadow-md text-xs sm:text-sm text-[#30312D]/85 leading-relaxed font-medium">
               <p>
                 The trained baseline model utilizes the public <strong>Human ChatGPT Comparison Corpus (HC3)</strong> curated by Hello-SimpleAI. The corpus contains paired human answers and ChatGPT completions across:
               </p>
-              <ul className="list-disc pl-5 space-y-1.5 text-xs text-[#30312D]/80">
+              <ul className="list-disc pl-4 sm:pl-5 space-y-1.5 text-[11px] sm:text-xs text-[#30312D]/80">
                 <li>Open-domain question answering (Reddit ELI5, Baike)</li>
                 <li>Computer science and technical explanations</li>
                 <li>Medicine, finance, and legal domain inquiries</li>
               </ul>
-              <p className="text-xs text-[#30312D]/70 pt-1">
+              <p className="text-[11px] sm:text-xs text-[#30312D]/70 pt-1">
                 Data was split using <code>GroupShuffleSplit</code> to guarantee that questions in the evaluation set never leak into training folds.
               </p>
             </div>
           </div>
 
           {/* Limitations and Ethical Considerations */}
-          <div className="space-y-4">
+          <div className="space-y-3 sm:space-y-4">
             <div className="flex items-center gap-2.5">
-              <Scale className="w-5 h-5 text-[#E7B44F]" />
-              <h3 className="text-lg font-black text-[#30312D]">
+              <Scale className="w-4 h-4 sm:w-5 sm:h-5 text-[#E7B44F]" />
+              <h3 className="text-base sm:text-lg font-black text-[#30312D]">
                 Limitations & Ethical Fairness Considerations
               </h3>
             </div>
 
-            <div className="knitted-card p-6 sm:p-8 space-y-4 border-3 border-dashed border-[#E7B44F] bg-[#FFFDF8] text-xs sm:text-sm text-[#543A05] shadow-md">
-              <p className="font-black text-[#483307] text-sm">
+            <div className="knitted-card p-4 sm:p-6 lg:p-8 space-y-3 sm:space-y-4 border-2 sm:border-3 border-dashed border-[#E7B44F] bg-[#FFFDF8] text-xs sm:text-sm text-[#543A05] shadow-md">
+              <p className="font-black text-[#483307] text-xs sm:text-sm">
                 Critical Ethical Constraints in AI Text Forensics:
               </p>
 
-              <ul className="space-y-3 list-disc pl-5 text-xs text-[#6B4B0A] leading-relaxed font-medium">
+              <ul className="space-y-2.5 sm:space-y-3 list-disc pl-4 sm:pl-5 text-[11px] sm:text-xs text-[#6B4B0A] leading-relaxed font-medium">
                 <li>
                   <strong>Non-Native English (ESL) Bias:</strong> Writers using English as an additional language frequently employ formulaic transition phrases and restricted lexical diversity. As a result, commercial and statistical detectors exhibit an elevated false-positive rate on ESL student essays.
                 </li>
@@ -256,59 +256,59 @@ export default function AboutResearch() {
         </div>
 
         {/* Sidebar Info & Visuals (4 cols) */}
-        <div className="lg:col-span-4 space-y-6">
+        <div className="lg:col-span-4 space-y-4 sm:space-y-6 w-full">
           
           {/* Decorative Knitted Research Observatory Illustration */}
-          <div className="knitted-card p-5 space-y-3 border-3 border-dashed border-[#9BAE83] shadow-md relative overflow-hidden text-center">
-            <div className="relative rounded-3xl overflow-hidden border-3 border-dashed border-[#9BAE83]/60 shadow-md">
+          <div className="knitted-card p-4 sm:p-5 space-y-3 border-2 sm:border-3 border-dashed border-[#9BAE83] shadow-md relative overflow-hidden text-center">
+            <div className="relative rounded-2xl sm:rounded-3xl overflow-hidden border-2 sm:border-3 border-dashed border-[#9BAE83]/60 shadow-md">
               <img 
                 src={researchHutImg} 
                 alt="Miniature 3D knitted research study hut with telescope and green woolen hill" 
-                className="w-full h-60 object-cover transform hover:scale-103 transition duration-500"
+                className="w-full h-48 sm:h-60 object-cover transform hover:scale-103 transition duration-500"
               />
-              <div className="absolute bottom-3 left-3 right-3 bg-[#FFFDF8]/95 backdrop-blur-md px-3.5 py-1.5 rounded-full border border-dashed border-[#435744]/30 text-xs font-black text-[#435744] shadow-sm">
+              <div className="absolute bottom-2.5 left-2.5 right-2.5 sm:bottom-3 sm:left-3 sm:right-3 bg-[#FFFDF8]/95 backdrop-blur-md px-3 sm:px-3.5 py-1.5 rounded-full border border-dashed border-[#435744]/30 text-[11px] sm:text-xs font-black text-[#435744] shadow-sm">
                 Miniature Field Research Station
               </div>
             </div>
-            <p className="text-xs text-[#30312D]/80 font-bold">
+            <p className="text-[11px] sm:text-xs text-[#30312D]/80 font-bold">
               Handcrafted artisanal diorama representing calm, transparent linguistic inquiry.
             </p>
           </div>
 
           {/* Research Metadata Card */}
-          <div className="knitted-card p-6 space-y-4 border-3 border-dashed border-[#435744]/25 shadow-md">
+          <div className="knitted-card p-4 sm:p-6 space-y-3 sm:space-y-4 border-2 sm:border-3 border-dashed border-[#435744]/25 shadow-md">
             <h3 className="text-xs font-black uppercase tracking-wider text-[#435744]">
               Project Specifications
             </h3>
 
-            <div className="space-y-3 text-xs">
-              <div className="flex justify-between py-2 border-b border-[#435744]/15">
-                <span className="text-[#30312D]/70 font-bold">Project Name:</span>
-                <span className="font-black text-[#30312D]">AI-Guard Forensics</span>
+            <div className="space-y-2.5 sm:space-y-3 text-xs">
+              <div className="flex justify-between py-1.5 sm:py-2 border-b border-[#435744]/15">
+                <span className="text-[#30312D]/70 font-bold text-[11px] sm:text-xs">Project Name:</span>
+                <span className="font-black text-[#30312D] text-[11px] sm:text-xs">AI-Guard Forensics</span>
               </div>
-              <div className="flex justify-between py-2 border-b border-[#435744]/15">
-                <span className="text-[#30312D]/70 font-bold">Status:</span>
+              <div className="flex justify-between py-1.5 sm:py-2 border-b border-[#435744]/15">
+                <span className="text-[#30312D]/70 font-bold text-[11px] sm:text-xs">Status:</span>
                 <Badge variant="sage" size="sm">Prototype v0.2</Badge>
               </div>
-              <div className="flex justify-between py-2 border-b border-[#435744]/15">
-                <span className="text-[#30312D]/70 font-bold">Primary Domain:</span>
-                <span className="font-black text-[#30312D]">NLP Stylometry & Forensics</span>
+              <div className="flex justify-between py-1.5 sm:py-2 border-b border-[#435744]/15">
+                <span className="text-[#30312D]/70 font-bold text-[11px] sm:text-xs">Primary Domain:</span>
+                <span className="font-black text-[#30312D] text-[11px] sm:text-xs">NLP Stylometry</span>
               </div>
-              <div className="flex justify-between py-2 border-b border-[#435744]/15">
-                <span className="text-[#30312D]/70 font-bold">Baseline Dataset:</span>
-                <span className="font-black text-[#435744]">Hello-SimpleAI/HC3</span>
+              <div className="flex justify-between py-1.5 sm:py-2 border-b border-[#435744]/15">
+                <span className="text-[#30312D]/70 font-bold text-[11px] sm:text-xs">Baseline Dataset:</span>
+                <span className="font-black text-[#435744] text-[11px] sm:text-xs">Hello-SimpleAI/HC3</span>
               </div>
-              <div className="flex justify-between py-2">
-                <span className="text-[#30312D]/70 font-bold">Backend Serving:</span>
-                <span className="font-black text-[#30312D]">FastAPI (:8000)</span>
+              <div className="flex justify-between py-1.5 sm:py-2">
+                <span className="text-[#30312D]/70 font-bold text-[11px] sm:text-xs">Backend Serving:</span>
+                <span className="font-black text-[#30312D] text-[11px] sm:text-xs">FastAPI (:8000)</span>
               </div>
             </div>
           </div>
 
           {/* Citation BibTeX Block with Plush Fur Copy Button */}
-          <div className="knitted-card p-6 space-y-3.5 border-3 border-dashed border-[#9BAE83]/60 shadow-md">
-            <div className="flex items-center justify-between">
-              <h3 className="text-sm font-black text-[#30312D] flex items-center gap-2">
+          <div className="knitted-card p-4 sm:p-6 space-y-3 sm:space-y-3.5 border-2 sm:border-3 border-dashed border-[#9BAE83]/60 shadow-md">
+            <div className="flex items-center justify-between gap-2">
+              <h3 className="text-xs sm:text-sm font-black text-[#30312D] flex items-center gap-2">
                 <FileCode className="w-4 h-4 text-[#435744]" />
                 BibTeX Citation
               </h3>
@@ -316,7 +316,7 @@ export default function AboutResearch() {
               <button
                 type="button"
                 onClick={handleCopyBibtex}
-                className="plush-button plush-navy text-[#FFFDF9] px-4 py-2 rounded-full text-xs font-black flex items-center gap-1.5 shadow-sm transition-all hover:scale-103"
+                className="plush-button plush-navy text-[#FFFDF9] px-3 sm:px-4 py-1.5 sm:py-2 rounded-full text-xs font-black flex items-center gap-1.5 shadow-sm transition-all hover:scale-103"
                 title="Copy BibTeX snippet"
               >
                 {copiedBibtex ? (
@@ -333,18 +333,18 @@ export default function AboutResearch() {
               </button>
             </div>
 
-            <pre className="p-4 bg-[#30312D] text-[#9BAE83] rounded-2xl text-[11px] font-mono leading-relaxed overflow-x-auto border-2 border-[#435744] shadow-inner">
+            <pre className="p-3 sm:p-4 bg-[#30312D] text-[#9BAE83] rounded-xl sm:rounded-2xl text-[10px] sm:text-[11px] font-mono leading-relaxed overflow-x-auto border-2 border-[#435744] shadow-inner">
               {bibtexCode}
             </pre>
           </div>
 
           {/* Research Group Info */}
-          <div className="knitted-card p-6 space-y-2.5 border-2 border-dashed border-[#435744]/25 bg-[#F5EEDB] text-xs shadow-sm">
-            <h4 className="font-black text-[#435744] flex items-center gap-2">
+          <div className="knitted-card p-4 sm:p-6 space-y-2 sm:space-y-2.5 border-2 border-dashed border-[#435744]/25 bg-[#F5EEDB] text-xs shadow-sm">
+            <h4 className="font-black text-[#435744] flex items-center gap-2 text-xs sm:text-sm">
               <Users className="w-4 h-4 text-[#9BAE83]" />
               Research Lab & Affiliations
             </h4>
-            <p className="text-[#30312D]/80 leading-relaxed font-medium">
+            <p className="text-[#30312D]/80 leading-relaxed text-[11px] sm:text-xs font-medium">
               AI-Guard is developed for computational linguistics and adversarial machine learning research, dedicated to ethical, fair, and transparent AI forensics.
             </p>
           </div>

@@ -437,6 +437,30 @@
   animation: knitted-float 6s ease-in-out infinite;
 }
 
+/* Responsive Touch & Mobile Card Optimizations */
+@media (max-width: 640px) {
+  .knitted-card {
+    border-radius: 1.35rem;
+    border-width: 2.5px;
+  }
+  .quilted-inset {
+    border-radius: 1.1rem;
+    border-width: 1.5px;
+  }
+  .plush-button {
+    min-height: 2.35rem;
+  }
+}
+
+/* Hide scrollbar for horizontal chip/pill lists on mobile */
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+.no-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
 @media (prefers-reduced-motion: reduce) {
   .animate-knitted-float,
   .knitted-card,
@@ -447,3 +471,4 @@
     transform: none !important;
   }
 }
+

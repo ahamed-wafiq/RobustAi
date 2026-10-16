@@ -173,15 +173,15 @@ export default function TextDetector() {
   };
 
   return (
-    <div className="space-y-8 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+    <div className="space-y-6 sm:space-y-8 max-w-7xl mx-auto px-3 sm:px-6 lg:px-8 py-5 sm:py-8">
       {/* HERO SECTION with Soft Knitted 3D Landscape */}
-      <div className="knitted-card p-6 sm:p-9 relative overflow-hidden bg-gradient-to-br from-[#FFFDF8] via-[#FFFCF5] to-[#F5EEDB] border-3 border-dashed border-[#9BAE83]/60 shadow-lg">
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
+      <div className="knitted-card p-4 sm:p-7 lg:p-9 relative overflow-hidden bg-gradient-to-br from-[#FFFDF8] via-[#FFFCF5] to-[#F5EEDB] border-2 sm:border-3 border-dashed border-[#9BAE83]/60 shadow-lg">
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 sm:gap-8 items-center">
           
           {/* Hero Left Content */}
-          <div className="lg:col-span-7 space-y-4">
+          <div className="lg:col-span-7 space-y-3.5 sm:space-y-4">
             <div className="flex flex-wrap items-center gap-2">
-              <span className="text-[11px] font-black uppercase tracking-widest text-[#435744] bg-[#9BAE83]/30 px-3.5 py-1 rounded-full border-2 border-dashed border-[#9BAE83] shadow-2xs">
+              <span className="text-[10px] sm:text-[11px] font-black uppercase tracking-widest text-[#435744] bg-[#9BAE83]/30 px-3 sm:px-3.5 py-1 rounded-full border-2 border-dashed border-[#9BAE83] shadow-2xs">
                 ROBUSTAI / AI-GUARD
               </span>
               <span className="text-xs text-[#30312D]/70 font-bold">
@@ -189,17 +189,17 @@ export default function TextDetector() {
               </span>
             </div>
 
-            <h1 className="text-3xl sm:text-4xl lg:text-5xl font-black text-[#30312D] tracking-tight leading-tight">
+            <h1 className="text-2xl sm:text-4xl lg:text-5xl font-black text-[#30312D] tracking-tight leading-snug sm:leading-tight">
               Understand the <span className="text-[#435744] underline decoration-wavy decoration-[#9BAE83]">texture</span> of text.
             </h1>
 
-            <p className="text-sm sm:text-base text-[#30312D]/85 leading-relaxed max-w-xl font-medium">
+            <p className="text-xs sm:text-base text-[#30312D]/85 leading-relaxed max-w-xl font-medium">
               Inspect natural language passages through handcrafted statistical forensics. Evaluate probabilistic AI markers, burstiness patterns, and lexical diversity in an open, accountable research workbench.
             </p>
 
             {/* Backend Connectivity Status Badge */}
-            <div className="pt-2 flex flex-wrap items-center gap-3">
-              <div className={`flex items-center gap-2.5 text-xs font-black px-4 py-2 rounded-full border-2 border-dashed shadow-xs transition-all ${
+            <div className="pt-1 sm:pt-2 flex flex-wrap items-center gap-2 sm:gap-3">
+              <div className={`flex items-center gap-2 sm:gap-2.5 text-[11px] sm:text-xs font-black px-3 sm:px-4 py-1.5 sm:py-2 rounded-full border-2 border-dashed shadow-xs transition-all ${
                 backendStatus === 'connected'
                   ? 'bg-[#9BAE83]/30 text-[#1F2C18] border-[#9BAE83]'
                   : backendStatus === 'checking'
@@ -208,18 +208,18 @@ export default function TextDetector() {
               }`}>
                 {backendStatus === 'connected' ? (
                   <>
-                    <span className="w-2.5 h-2.5 rounded-full bg-[#435744] animate-pulse"></span>
-                    <Wifi className="w-4 h-4 text-[#435744]" />
+                    <span className="w-2 sm:w-2.5 h-2 sm:h-2.5 rounded-full bg-[#435744] animate-pulse"></span>
+                    <Wifi className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-[#435744]" />
                     <span>Live Backend Active (HC3 Baseline)</span>
                   </>
                 ) : backendStatus === 'checking' ? (
                   <>
-                    <RefreshCw className="w-4 h-4 animate-spin text-[#8C6212]" />
+                    <RefreshCw className="w-3.5 h-3.5 sm:w-4 sm:h-4 animate-spin text-[#8C6212]" />
                     <span>Checking Backend (:8000)...</span>
                   </>
                 ) : (
                   <>
-                    <WifiOff className="w-4 h-4 text-[#9E4D09]" />
+                    <WifiOff className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-[#9E4D09]" />
                     <span>Backend Offline (Local Fallback Ready)</span>
                   </>
                 )}
@@ -229,7 +229,7 @@ export default function TextDetector() {
               <button
                 onClick={checkBackendHealth}
                 type="button"
-                className="plush-button plush-mustard text-[#2D220A] px-3.5 py-1.5 rounded-full text-xs font-black shadow-xs flex items-center gap-1.5 transition-all hover:scale-103"
+                className="plush-button plush-mustard text-[#2D220A] px-3 sm:px-3.5 py-1.5 rounded-full text-xs font-black shadow-xs flex items-center gap-1.5 transition-all hover:scale-103"
                 title="Refresh backend status"
                 aria-label="Refresh backend health"
               >
@@ -240,26 +240,26 @@ export default function TextDetector() {
           </div>
 
           {/* Hero Right: Decorative Knitted 3D Miniature Landscape */}
-          <div className="lg:col-span-5 flex justify-center">
+          <div className="lg:col-span-5 flex justify-center w-full">
             <div className="relative group max-w-md w-full">
               {/* Soft Ambient Halo behind the miniature landscape */}
               <div className="absolute -inset-4 bg-gradient-to-r from-[#9BAE83]/40 via-[#E7B44F]/30 to-[#E58B36]/30 rounded-3xl blur-2xl opacity-80 group-hover:opacity-100 transition duration-500"></div>
               
               {/* Knitted Landscape Visual Container */}
-              <div className="relative rounded-3xl overflow-hidden border-4 border-dashed border-[#9BAE83] shadow-2xl bg-[#FFFDF8] animate-knitted-float">
+              <div className="relative rounded-2xl sm:rounded-3xl overflow-hidden border-3 sm:border-4 border-dashed border-[#9BAE83] shadow-2xl bg-[#FFFDF8] animate-knitted-float">
                 <img 
                   src={heroLandscapeImg} 
                   alt="Miniature 3D knitted landscape with rolling green hills, cream houses, and pom-pom trees" 
-                  className="w-full h-60 sm:h-64 object-cover transform hover:scale-103 transition duration-500"
+                  className="w-full h-48 sm:h-60 md:h-64 object-cover transform hover:scale-103 transition duration-500"
                 />
                 
                 {/* Floating caption pill on landscape */}
-                <div className="absolute bottom-3 left-3 right-3 bg-[#FFFDF8]/95 backdrop-blur-md px-4 py-2 rounded-full border-2 border-dashed border-[#435744]/30 flex items-center justify-between text-xs font-black text-[#435744] shadow-md">
-                  <span className="flex items-center gap-2">
-                    <span className="w-2.5 h-2.5 rounded-full bg-[#9BAE83]"></span>
-                    Tactile Language Miniature
+                <div className="absolute bottom-2.5 left-2.5 right-2.5 sm:bottom-3 sm:left-3 sm:right-3 bg-[#FFFDF8]/95 backdrop-blur-md px-3 sm:px-4 py-1.5 sm:py-2 rounded-full border-2 border-dashed border-[#435744]/30 flex items-center justify-between text-[11px] sm:text-xs font-black text-[#435744] shadow-md">
+                  <span className="flex items-center gap-1.5 sm:gap-2">
+                    <span className="w-2 sm:w-2.5 h-2 sm:h-2.5 rounded-full bg-[#9BAE83]"></span>
+                    Tactile Miniature
                   </span>
-                  <span className="text-[#30312D]/70 text-[10px] font-extrabold uppercase tracking-wider">Handcrafted Diorama</span>
+                  <span className="text-[#30312D]/70 text-[9px] sm:text-[10px] font-extrabold uppercase tracking-wider">Handcrafted</span>
                 </div>
               </div>
             </div>
@@ -273,46 +273,46 @@ export default function TextDetector() {
 
       {/* Backend Disconnected / Fallback Info Notification */}
       {backendStatus === 'disconnected' && (
-        <div className="knitted-card p-5 bg-[#FFFDF8] border-3 border-dashed border-[#E58B36] text-[#30312D] text-xs sm:text-sm space-y-2 shadow-xs">
+        <div className="knitted-card p-4 sm:p-5 bg-[#FFFDF8] border-2 sm:border-3 border-dashed border-[#E58B36] text-[#30312D] text-xs sm:text-sm space-y-2 shadow-xs">
           <div className="flex items-center gap-2 font-black text-[#9E4D09]">
-            <AlertCircle className="w-5 h-5 text-[#E58B36] shrink-0" />
-            <span className="text-sm">FastAPI Inference Server Offline (:8000)</span>
+            <AlertCircle className="w-4 h-4 sm:w-5 sm:h-5 text-[#E58B36] shrink-0" />
+            <span className="text-xs sm:text-sm">FastAPI Inference Server Offline (:8000)</span>
           </div>
-          <p className="text-[#30312D]/85 leading-relaxed text-xs font-medium">
+          <p className="text-[#30312D]/85 leading-relaxed text-[11px] sm:text-xs font-medium">
             The text detector is operating with <strong>Client-Side Linguistic Heuristics</strong> as a seamless fallback. For real-time HC3 model inference, start your backend server with:
           </p>
-          <pre className="p-3 bg-[#30312D] text-[#9BAE83] rounded-2xl font-mono text-[11px] overflow-x-auto border-2 border-[#435744]">
+          <pre className="p-2.5 sm:p-3 bg-[#30312D] text-[#9BAE83] rounded-xl sm:rounded-2xl font-mono text-[10px] sm:text-[11px] overflow-x-auto border-2 border-[#435744]">
 uvicorn backend.main:app --reload --port 8000
           </pre>
         </div>
       )}
 
       {/* MAIN TWO-COLUMN WORKBENCH */}
-      <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+      <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 sm:gap-8 items-start">
         
         {/* Left Column: Text Analysis Input Workspace (7 cols) */}
         <div className="lg:col-span-7 space-y-4">
-          <div className="knitted-card p-6 sm:p-7 space-y-5 border-3 border-dashed border-[#9BAE83]/60 shadow-md">
+          <div className="knitted-card p-4 sm:p-6 lg:p-7 space-y-4 sm:space-y-5 border-2 sm:border-3 border-dashed border-[#9BAE83]/60 shadow-md">
             
             {/* Header & Preset Selector */}
-            <div className="flex flex-wrap items-center justify-between gap-3 pb-3 border-b-2 border-dashed border-[#435744]/15">
-              <div className="flex items-center gap-2.5 text-[#435744] font-black text-sm">
-                <div className="w-8 h-8 rounded-full plush-sage flex items-center justify-center shrink-0">
-                  <FileText className="w-4 h-4 embroidered-icon" />
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2.5 sm:gap-3 pb-3 border-b-2 border-dashed border-[#435744]/15">
+              <div className="flex items-center gap-2.5 text-[#435744] font-black text-xs sm:text-sm">
+                <div className="w-7 h-7 sm:w-8 sm:h-8 rounded-full plush-sage flex items-center justify-center shrink-0">
+                  <FileText className="w-3.5 h-3.5 sm:w-4 sm:h-4 embroidered-icon" />
                 </div>
                 <span>Text Analysis Workspace</span>
               </div>
 
               {/* Sample Preset Dropdown */}
-              <div className="flex items-center gap-2">
-                <label htmlFor="preset-select" className="text-xs text-[#30312D]/80 font-black">
+              <div className="flex items-center gap-2 w-full sm:w-auto">
+                <label htmlFor="preset-select" className="text-xs text-[#30312D]/80 font-black shrink-0">
                   Preset:
                 </label>
                 <select
                   id="preset-select"
                   value={selectedPresetId}
                   onChange={(e) => handleSelectSample(e.target.value)}
-                  className="text-xs font-bold bg-[#FFFDF8] text-[#30312D] border-2 border-dashed border-[#9BAE83] rounded-full px-3.5 py-1.5 focus:outline-hidden focus:ring-2 focus:ring-[#9BAE83] shadow-2xs"
+                  className="w-full sm:w-auto text-xs font-bold bg-[#FFFDF8] text-[#30312D] border-2 border-dashed border-[#9BAE83] rounded-full px-3 py-1.5 focus:outline-hidden focus:ring-2 focus:ring-[#9BAE83] shadow-2xs"
                 >
                   <option value="">-- Choose Sample Text --</option>
                   {SAMPLE_TEXTS.map((sample) => (
@@ -325,70 +325,75 @@ uvicorn backend.main:app --reload --port 8000
             </div>
 
             {/* Quick Sample Selector Pills with Distinct Signature Fur Colors */}
-            <div className="flex flex-wrap items-center gap-2.5 text-xs pt-1">
-              <span className="text-[#30312D]/70 text-[11px] font-black mr-1 uppercase tracking-wider">Quick Presets:</span>
-              {SAMPLE_TEXTS.map((sample, idx) => {
-                const isSelected = selectedPresetId === sample.id;
-                const configs = [
-                  { 
-                    variant: 'plush-navy', 
-                    textColor: 'text-[#FFFDF9]', 
-                    iconColor: 'embroidered-icon-light',
-                    icon: BookOpen 
-                  },
-                  { 
-                    variant: 'plush-orange', 
-                    textColor: 'text-[#FFFDF9]', 
-                    iconColor: 'embroidered-icon-light',
-                    icon: Cpu 
-                  },
-                  { 
-                    variant: 'plush-mustard', 
-                    textColor: 'text-[#2D220A]', 
-                    iconColor: 'embroidered-icon',
-                    icon: Zap 
-                  },
-                  { 
-                    variant: 'plush-forest', 
-                    textColor: 'text-[#FFFDF9]', 
-                    iconColor: 'embroidered-icon-light',
-                    icon: Globe 
-                  },
-                  { 
-                    variant: 'plush-cream', 
-                    textColor: 'text-[#2A2C27]', 
-                    iconColor: 'embroidered-icon',
-                    icon: Newspaper 
-                  }
-                ][idx % 5];
-                const Icon = configs.icon;
+            <div className="space-y-1.5 pt-1">
+              <div className="flex items-center justify-between text-[11px] font-black text-[#30312D]/70 uppercase tracking-wider">
+                <span>Quick Presets:</span>
+                <span className="text-[10px] sm:hidden font-medium text-[#435744]">Swipe to view →</span>
+              </div>
+              <div className="flex items-center gap-2 overflow-x-auto no-scrollbar pb-1 sm:pb-0 sm:flex-wrap text-xs -mx-1 px-1">
+                {SAMPLE_TEXTS.map((sample, idx) => {
+                  const isSelected = selectedPresetId === sample.id;
+                  const configs = [
+                    { 
+                      variant: 'plush-navy', 
+                      textColor: 'text-[#FFFDF9]', 
+                      iconColor: 'embroidered-icon-light',
+                      icon: BookOpen 
+                    },
+                    { 
+                      variant: 'plush-orange', 
+                      textColor: 'text-[#FFFDF9]', 
+                      iconColor: 'embroidered-icon-light',
+                      icon: Cpu 
+                    },
+                    { 
+                      variant: 'plush-mustard', 
+                      textColor: 'text-[#2D220A]', 
+                      iconColor: 'embroidered-icon',
+                      icon: Zap 
+                    },
+                    { 
+                      variant: 'plush-forest', 
+                      textColor: 'text-[#FFFDF9]', 
+                      iconColor: 'embroidered-icon-light',
+                      icon: Globe 
+                    },
+                    { 
+                      variant: 'plush-cream', 
+                      textColor: 'text-[#2A2C27]', 
+                      iconColor: 'embroidered-icon',
+                      icon: Newspaper 
+                    }
+                  ][idx % 5];
+                  const Icon = configs.icon;
 
-                return (
-                  <button
-                    key={sample.id}
-                    onClick={() => handleSelectSample(sample.id)}
-                    type="button"
-                    className={`plush-button ${configs.variant} ${configs.textColor} px-4 py-2 rounded-full text-xs font-black transition-all flex items-center gap-2 shadow-sm ${
-                      isSelected
-                        ? 'scale-108 shadow-xl ring-3 ring-white ring-offset-2 ring-offset-[#435744] z-10'
-                        : 'opacity-90 hover:opacity-100 hover:scale-103'
-                    }`}
-                  >
-                    <Icon className={`w-3.5 h-3.5 ${configs.iconColor} shrink-0`} />
-                    <span>{sample.title}</span>
-                  </button>
-                );
-              })}
+                  return (
+                    <button
+                      key={sample.id}
+                      onClick={() => handleSelectSample(sample.id)}
+                      type="button"
+                      className={`plush-button ${configs.variant} ${configs.textColor} px-3 sm:px-4 py-1.5 sm:py-2 rounded-full text-[11px] sm:text-xs font-black transition-all flex items-center gap-1.5 sm:gap-2 shadow-sm shrink-0 whitespace-nowrap ${
+                        isSelected
+                          ? 'scale-105 shadow-xl ring-2 sm:ring-3 ring-white ring-offset-2 ring-offset-[#435744] z-10'
+                          : 'opacity-90 hover:opacity-100 hover:scale-102'
+                      }`}
+                    >
+                      <Icon className={`w-3 h-3 sm:w-3.5 sm:h-3.5 ${configs.iconColor} shrink-0`} />
+                      <span>{sample.title}</span>
+                    </button>
+                  );
+                })}
+              </div>
             </div>
 
             {/* Padded Fabric Frame with Smooth Inner Textarea */}
-            <div className="quilted-inset p-3 shadow-inner">
+            <div className="quilted-inset p-2.5 sm:p-3 shadow-inner">
               <label htmlFor={textareaId} className="sr-only">
                 Text to analyze
               </label>
               <textarea
                 id={textareaId}
-                rows={10}
+                rows={9}
                 value={inputText}
                 onChange={(e) => {
                   setInputText(e.target.value);
@@ -396,32 +401,32 @@ uvicorn backend.main:app --reload --port 8000
                   if (backendError && backendStatus === 'connected') setBackendError(null);
                 }}
                 placeholder="Paste an academic essay, synthetic answer, or writing sample here to analyze with AI-Guard..."
-                className="w-full text-[#30312D] bg-[#FFFDF8] rounded-2xl p-4.5 text-sm leading-relaxed placeholder-[#30312D]/40 border-2 border-dashed border-[#9BAE83]/50 focus:bg-[#FFFFFF] focus:border-[#435744] focus:outline-hidden resize-y min-h-[220px] shadow-sm font-sans"
+                className="w-full text-[#30312D] bg-[#FFFDF8] rounded-xl sm:rounded-2xl p-3.5 sm:p-4.5 text-xs sm:text-sm leading-relaxed placeholder-[#30312D]/40 border-2 border-dashed border-[#9BAE83]/50 focus:bg-[#FFFFFF] focus:border-[#435744] focus:outline-hidden resize-y min-h-[180px] sm:min-h-[220px] shadow-sm font-sans"
               />
             </div>
 
             {/* Counters and Primary Action Buttons */}
-            <div className="pt-2 flex flex-wrap items-center justify-between gap-3 border-t-2 border-dashed border-[#435744]/15">
+            <div className="pt-2 sm:pt-3 flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-3 border-t-2 border-dashed border-[#435744]/15">
               {/* Word, Character, Sentence Counters */}
-              <div className="flex items-center gap-2.5 text-xs font-bold text-[#30312D]/80">
-                <span className="bg-[#9BAE83]/20 px-3 py-1 rounded-full border border-dashed border-[#9BAE83]">
+              <div className="flex flex-wrap items-center gap-1.5 sm:gap-2.5 text-[11px] sm:text-xs font-bold text-[#30312D]/80">
+                <span className="bg-[#9BAE83]/20 px-2.5 sm:px-3 py-1 rounded-full border border-dashed border-[#9BAE83]">
                   <strong className="text-[#435744] font-black">{metrics.words}</strong> words
                 </span>
-                <span className="bg-[#E7B44F]/20 px-3 py-1 rounded-full border border-dashed border-[#E7B44F]">
+                <span className="bg-[#E7B44F]/20 px-2.5 sm:px-3 py-1 rounded-full border border-dashed border-[#E7B44F]">
                   <strong className="text-[#8C6212] font-black">{metrics.characters}</strong> chars
                 </span>
-                <span className="bg-[#343B59]/15 px-3 py-1 rounded-full border border-dashed border-[#343B59]">
+                <span className="bg-[#343B59]/15 px-2.5 sm:px-3 py-1 rounded-full border border-dashed border-[#343B59]">
                   <strong className="text-[#343B59] font-black">{metrics.sentences}</strong> sentences
                 </span>
               </div>
 
               {/* Action Buttons: Fluffy Plush Action Controls */}
-              <div className="flex items-center gap-3">
+              <div className="flex items-center gap-2 sm:gap-3 justify-end w-full sm:w-auto">
                 <button
                   type="button"
                   onClick={handleClear}
                   disabled={!inputText && !results}
-                  className="plush-button plush-cream px-4 py-2.5 rounded-full text-xs font-black flex items-center gap-1.5 shadow-sm disabled:opacity-40 disabled:cursor-not-allowed transition-all"
+                  className="plush-button plush-cream px-3.5 sm:px-4 py-2 sm:py-2.5 rounded-full text-xs font-black flex items-center gap-1.5 shadow-sm disabled:opacity-40 disabled:cursor-not-allowed transition-all"
                   title="Clear input text and results"
                 >
                   <RotateCcw className="w-3.5 h-3.5 embroidered-icon" />
@@ -433,6 +438,7 @@ uvicorn backend.main:app --reload --port 8000
                   onClick={handleAnalyze}
                   disabled={metrics.words === 0}
                   isAnalyzing={isAnalyzing}
+                  className="flex-1 sm:flex-none justify-center"
                 />
               </div>
             </div>
@@ -527,13 +533,13 @@ uvicorn backend.main:app --reload --port 8000
             <div className="space-y-5 animate-fadeIn">
               
               {/* Main Classification Result Card */}
-              <div className="knitted-card p-6 sm:p-7 space-y-5 border-3 border-dashed border-[#9BAE83] shadow-md">
-                <div className="flex items-center justify-between">
-                  <div className="flex items-center gap-2.5">
-                    <div className="w-8 h-8 rounded-full plush-sage flex items-center justify-center shrink-0">
-                      <Gauge className="w-4 h-4 embroidered-icon" />
+              <div className="knitted-card p-4 sm:p-6 lg:p-7 space-y-4 sm:space-y-5 border-2 sm:border-3 border-dashed border-[#9BAE83] shadow-md">
+                <div className="flex flex-wrap items-center justify-between gap-2">
+                  <div className="flex items-center gap-2 sm:gap-2.5">
+                    <div className="w-7 h-7 sm:w-8 sm:h-8 rounded-full plush-sage flex items-center justify-center shrink-0">
+                      <Gauge className="w-3.5 h-3.5 sm:w-4 sm:h-4 embroidered-icon" />
                     </div>
-                    <h3 className="font-black text-[#30312D] text-sm">
+                    <h3 className="font-black text-[#30312D] text-xs sm:text-sm">
                       Model Classification Result
                     </h3>
                   </div>
@@ -550,14 +556,14 @@ uvicorn backend.main:app --reload --port 8000
                 </div>
 
                 {/* Big Score Box with Quilted Padding */}
-                <div className="p-5 sm:p-6 rounded-3xl quilted-inset space-y-3.5 shadow-sm">
-                  <div className="flex items-center justify-between">
+                <div className="p-4 sm:p-6 rounded-2xl sm:rounded-3xl quilted-inset space-y-3 sm:space-y-3.5 shadow-sm">
+                  <div className="flex flex-wrap items-center justify-between gap-2">
                     <div>
-                      <span className="text-[10px] uppercase font-black tracking-widest text-[#30312D]/70">
+                      <span className="text-[9px] sm:text-[10px] uppercase font-black tracking-widest text-[#30312D]/70">
                         Predicted Class
                       </span>
                       <div className="flex items-baseline gap-2 mt-0.5">
-                        <span className={`text-3xl font-black tracking-tight ${
+                        <span className={`text-2xl sm:text-3xl font-black tracking-tight ${
                           results.probAI > 50 ? 'text-[#D67C29]' : 'text-[#3B4E3C]'
                         }`}>
                           {results.prediction}
@@ -575,7 +581,7 @@ uvicorn backend.main:app --reload --port 8000
 
                   {/* Dual Yarn Gauge Bar */}
                   <div className="space-y-1.5 pt-1">
-                    <div className="h-5 w-full bg-[#30312D]/15 rounded-full overflow-hidden flex border-2 border-[#435744]/20 p-0.5 shadow-inner">
+                    <div className="h-4 sm:h-5 w-full bg-[#30312D]/15 rounded-full overflow-hidden flex border-2 border-[#435744]/20 p-0.5 shadow-inner">
                       <div 
                         className="bg-[#E58B36] h-full rounded-full transition-all duration-700 shadow-sm"
                         style={{ width: `${results.probAI}%` }}
@@ -588,13 +594,13 @@ uvicorn backend.main:app --reload --port 8000
                       ></div>
                     </div>
                     
-                    <div className="flex justify-between text-xs font-black">
+                    <div className="flex justify-between text-[11px] sm:text-xs font-black">
                       <span className="text-[#9E4D09] flex items-center gap-1.5">
-                        <span className="w-2.5 h-2.5 rounded-full bg-[#E58B36]"></span>
+                        <span className="w-2 sm:w-2.5 h-2 sm:h-2.5 rounded-full bg-[#E58B36]"></span>
                         AI: {results.probAI}%
                       </span>
                       <span className="text-[#435744] flex items-center gap-1.5">
-                        <span className="w-2.5 h-2.5 rounded-full bg-[#9BAE83]"></span>
+                        <span className="w-2 sm:w-2.5 h-2 sm:h-2.5 rounded-full bg-[#9BAE83]"></span>
                         Human: {results.probHuman}%
                       </span>
                     </div>
@@ -602,7 +608,7 @@ uvicorn backend.main:app --reload --port 8000
                 </div>
 
                 {/* Explanation text */}
-                <div className="text-xs text-[#30312D]/85 leading-relaxed bg-[#FFFDF8] p-4 rounded-2xl border-2 border-dashed border-[#435744]/20 font-medium">
+                <div className="text-[11px] sm:text-xs text-[#30312D]/85 leading-relaxed bg-[#FFFDF8] p-3.5 sm:p-4 rounded-xl sm:rounded-2xl border-2 border-dashed border-[#435744]/20 font-medium">
                   {results.probAI >= 70 ? (
                     <p>
                       <strong className="text-[#435744]">High Synthetic Indicators:</strong> This passage demonstrates uniform clause lengths, low lexical variation, and predictive formulaic transition structures typical of autoregressive LLM output.
@@ -622,71 +628,71 @@ uvicorn backend.main:app --reload --port 8000
               </div>
 
               {/* Inside the Writing (Stylometric Analysis) */}
-              <div className="knitted-card p-6 sm:p-7 space-y-4 border-3 border-dashed border-[#9BAE83]/60 shadow-md">
-                <div className="flex items-center justify-between pb-3 border-b-2 border-dashed border-[#435744]/15">
+              <div className="knitted-card p-4 sm:p-6 lg:p-7 space-y-4 border-2 sm:border-3 border-dashed border-[#9BAE83]/60 shadow-md">
+                <div className="flex flex-wrap items-center justify-between gap-2 pb-3 border-b-2 border-dashed border-[#435744]/15">
                   <div className="flex items-center gap-2.5">
-                    <div className="w-8 h-8 rounded-full plush-forest flex items-center justify-center shrink-0">
-                      <BookOpen className="w-4 h-4 embroidered-icon-light" />
+                    <div className="w-7 h-7 sm:w-8 sm:h-8 rounded-full plush-forest flex items-center justify-center shrink-0">
+                      <BookOpen className="w-3.5 h-3.5 sm:w-4 sm:h-4 embroidered-icon-light" />
                     </div>
-                    <h3 className="font-black text-[#30312D] text-sm">
+                    <h3 className="font-black text-[#30312D] text-xs sm:text-sm">
                       Inside the Writing
                     </h3>
                   </div>
-                  <span className="text-[10px] font-black uppercase tracking-wider text-[#435744] bg-[#9BAE83]/25 px-3 py-1 rounded-full border-2 border-dashed border-[#9BAE83]">
+                  <span className="text-[9px] sm:text-[10px] font-black uppercase tracking-wider text-[#435744] bg-[#9BAE83]/25 px-2.5 sm:px-3 py-1 rounded-full border border-dashed border-[#9BAE83]">
                     Stylometric Fingerprint
                   </span>
                 </div>
 
                 {/* 4 Stylometric Cards */}
-                <div className="grid grid-cols-2 gap-3.5">
+                <div className="grid grid-cols-2 gap-2.5 sm:gap-3.5">
                   {/* Lexical Diversity */}
-                  <div className="p-4 rounded-2xl bg-[#FFFDF8] border-2 border-dashed border-[#435744]/20 space-y-1 shadow-2xs">
-                    <span className="text-[10px] font-black uppercase tracking-wider text-[#30312D]/60 block">
+                  <div className="p-3 sm:p-4 rounded-xl sm:rounded-2xl bg-[#FFFDF8] border-2 border-dashed border-[#435744]/20 space-y-1 shadow-2xs">
+                    <span className="text-[9px] sm:text-[10px] font-black uppercase tracking-wider text-[#30312D]/60 block leading-tight">
                       Lexical Diversity (TTR)
                     </span>
-                    <p className="text-2xl font-black text-[#435744]">
+                    <p className="text-xl sm:text-2xl font-black text-[#435744]">
                       {results.stylometrics.lexicalDiversity}
                     </p>
-                    <p className="text-[10px] text-[#30312D]/70 font-medium leading-tight">
-                      Unique to total words ratio
+                    <p className="text-[9px] sm:text-[10px] text-[#30312D]/70 font-medium leading-tight">
+                      Unique to total ratio
                     </p>
                   </div>
 
                   {/* Avg Sentence Length */}
-                  <div className="p-4 rounded-2xl bg-[#FFFDF8] border-2 border-dashed border-[#435744]/20 space-y-1 shadow-2xs">
-                    <span className="text-[10px] font-black uppercase tracking-wider text-[#30312D]/60 block">
+                  <div className="p-3 sm:p-4 rounded-xl sm:rounded-2xl bg-[#FFFDF8] border-2 border-dashed border-[#435744]/20 space-y-1 shadow-2xs">
+                    <span className="text-[9px] sm:text-[10px] font-black uppercase tracking-wider text-[#30312D]/60 block leading-tight">
                       Avg Sentence Length
                     </span>
-                    <p className="text-2xl font-black text-[#435744]">
+                    <p className="text-xl sm:text-2xl font-black text-[#435744]">
                       {results.metrics.avg_sentence_length || results.stylometrics.avgSentenceLength} <span className="text-xs font-bold text-[#30312D]/60">words</span>
                     </p>
-                    <p className="text-[10px] text-[#30312D]/70 font-medium leading-tight">
-                      Mean words per clause
+                    <p className="text-[9px] sm:text-[10px] text-[#30312D]/70 font-medium leading-tight">
+                      Mean words/clause
                     </p>
                   </div>
 
                   {/* Flesch Reading Ease */}
-                  <div className="p-4 rounded-2xl bg-[#FFFDF8] border-2 border-dashed border-[#435744]/20 space-y-1 shadow-2xs">
-                    <span className="text-[10px] font-black uppercase tracking-wider text-[#30312D]/60 block">
+                  <div className="p-3 sm:p-4 rounded-xl sm:rounded-2xl bg-[#FFFDF8] border-2 border-dashed border-[#435744]/20 space-y-1 shadow-2xs">
+                    <span className="text-[9px] sm:text-[10px] font-black uppercase tracking-wider text-[#30312D]/60 block leading-tight">
                       Flesch Reading Ease
                     </span>
-                    <p className="text-2xl font-black text-[#B58422]">
+                    <p className="text-xl sm:text-2xl font-black text-[#B58422]">
                       {results.stylometrics.fleschReadingEase || 62.4}
                     </p>
-                    <p className="text-[10px] text-[#30312D]/70 font-medium leading-tight">
-                      {results.stylometrics.fleschReadingEase > 60 ? 'Standard reading level' : 'Academic / Complex'}
+                    <p className="text-[9px] sm:text-[10px] text-[#30312D]/70 font-medium leading-tight truncate">
+                      {results.stylometrics.fleschReadingEase > 60 ? 'Standard level' : 'Academic / Complex'}
                     </p>
                   </div>
 
                   {/* Burstiness Variance */}
-                  <div className="p-4 rounded-2xl bg-[#FFFDF8] border-2 border-dashed border-[#435744]/20 space-y-1 shadow-2xs">
-                    <span className="text-[10px] font-black uppercase tracking-wider text-[#30312D]/60 block">
+                  <div className="p-3 sm:p-4 rounded-xl sm:rounded-2xl bg-[#FFFDF8] border-2 border-dashed border-[#435744]/20 space-y-1 shadow-2xs">
+                    <span className="text-[9px] sm:text-[10px] font-black uppercase tracking-wider text-[#30312D]/60 block leading-tight">
                       Burstiness Variance
                     </span>
-                    <p className="text-2xl font-black text-[#343B59]">
+                    <p className="text-xl sm:text-2xl font-black text-[#343B59]">
                       {results.stylometrics.burstiness}
                     </p>
-                    <p className="text-[10px] text-[#30312D]/70 font-medium leading-tight">
+                    <p className="text-[9px] sm:text-[10px] text-[#30312D]/70 font-medium leading-tight">
                       Sentence rhythm dispersion
                     </p>
                   </div>
@@ -697,11 +703,11 @@ uvicorn backend.main:app --reload --port 8000
                   <span className="text-[10px] font-black uppercase tracking-wider text-[#30312D]/70 block">
                     Punctuation Distribution
                   </span>
-                  <div className="grid grid-cols-3 gap-2 text-xs">
+                  <div className="grid grid-cols-2 sm:grid-cols-3 gap-2 text-xs">
                     {(results.stylometrics.punctuation || []).map((punct, pIdx) => (
-                      <div key={pIdx} className="p-2.5 rounded-xl bg-[#FFFDF8] border-2 border-dashed border-[#435744]/20 flex items-center justify-between shadow-2xs">
-                        <span className="text-[#30312D]/80 text-[11px] font-bold">{punct.name}</span>
-                        <span className="font-black font-mono text-[#435744] text-[11px]">{punct.count}</span>
+                      <div key={pIdx} className="p-2 sm:p-2.5 rounded-xl bg-[#FFFDF8] border-2 border-dashed border-[#435744]/20 flex items-center justify-between shadow-2xs">
+                        <span className="text-[#30312D]/80 text-[10px] sm:text-[11px] font-bold">{punct.name}</span>
+                        <span className="font-black font-mono text-[#435744] text-[10px] sm:text-[11px]">{punct.count}</span>
                       </div>
                     ))}
                   </div>
@@ -711,7 +717,7 @@ uvicorn backend.main:app --reload --port 8000
 
               {/* Sentence-Level Inspection Drawer */}
               {results.sentenceAnalysis && results.sentenceAnalysis.length > 0 && (
-                <div className="knitted-card p-6 sm:p-7 space-y-4 border-3 border-dashed border-[#9BAE83]/60 shadow-md">
+                <div className="knitted-card p-4 sm:p-6 lg:p-7 space-y-4 border-2 sm:border-3 border-dashed border-[#9BAE83]/60 shadow-md">
                   <div className="flex items-center justify-between pb-2 border-b-2 border-dashed border-[#435744]/15">
                     <div className="flex items-center gap-2.5">
                       <div className="w-8 h-8 rounded-full plush-cream flex items-center justify-center shrink-0">

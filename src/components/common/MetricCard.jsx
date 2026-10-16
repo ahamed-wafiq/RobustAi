@@ -38,7 +38,7 @@ export default function MetricCard({
   };
 
   return (
-    <div className={`knitted-card knitted-card-interactive p-6 ${className}`}>
+    <div className={`knitted-card knitted-card-interactive p-4 sm:p-6 ${className}`}>
       <div className="flex items-start justify-between gap-3">
         <div className="space-y-1.5">
           <p className="text-[11px] font-black uppercase tracking-wider text-[#30312D]/60">
