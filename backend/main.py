@@ -14,6 +14,33 @@ import numpy as np
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger("ai_guard_backend")
 
+try:
+    from backend.services.humanizer_service import (
+        RewriteStyle,
+        RewriteStrength,
+        get_humanizer_provider,
+        get_humanizer_status,
+        perform_content_integrity_review,
+        ProviderException,
+        ProviderNotConfiguredError,
+        ProviderAuthError,
+        ProviderQuotaError,
+        ProviderTimeoutError
+    )
+except ImportError:
+    from services.humanizer_service import (
+        RewriteStyle,
+        RewriteStrength,
+        get_humanizer_provider,
+        get_humanizer_status,
+        perform_content_integrity_review,
+        ProviderException,
+        ProviderNotConfiguredError,
+        ProviderAuthError,
+        ProviderQuotaError,
+        ProviderTimeoutError
+    )
+
 # Resolve model path
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 DEFAULT_MODEL_PATH = os.path.join(BASE_DIR, "models", "ai_guard_baseline.joblib")
@@ -116,6 +143,36 @@ class PredictResponse(BaseModel):
     disclaimer: str
     model_info: dict
 
+# --- Humanizer Studio Schemas ---
+class HumanizeRequest(BaseModel):
+    text: str = Field(..., description="Original text passage to humanize (10 to 15,000 characters)")
+    style: RewriteStyle = Field(default=RewriteStyle.NATURAL, description="Target rewrite style")
+    strength: RewriteStrength = Field(default=RewriteStrength.BALANCED, description="Rewrite strength")
+
+class IntegrityReviewResponse(BaseModel):
+    status: str
+    verified_citations: List[str]
+    missing_citations: List[str]
+    verified_numbers: List[str]
+    missing_numbers: List[str]
+    total_citations_checked: int
+    total_numbers_checked: int
+    integrity_notes: List[str]
+
+class HumanizeResponse(BaseModel):
+    original_text: str
+    rewritten_text: str
+    style: str
+    strength: str
+    provider_info: dict
+    integrity_review: IntegrityReviewResponse
+    disclaimer: str
+
+class ConfigureProviderRequest(BaseModel):
+    provider: str = Field(default="gemini", description="Provider name: 'gemini' or 'openai'")
+    api_key: str = Field(..., description="API Key for the provider")
+    model_name: Optional[str] = Field(default=None, description="Optional custom model name")
+
 # --- Utility Functions ---
 def clean_and_segment(text: str):
     clean_text = re.sub(r'\s+', ' ', text).strip()
@@ -142,7 +199,9 @@ def get_root():
         "status": "online",
         "docs_url": "/docs",
         "health_url": "/health",
-        "predict_url": "/predict"
+        "predict_url": "/predict",
+        "humanizer_status_url": "/humanizer/status",
+        "humanizer_rewrite_url": "/humanizer/rewrite"
     }
 
 @app.get("/health")
@@ -255,6 +314,88 @@ def predict_text(request: PredictRequest):
             status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
             detail=f"Inference processing error: {str(e)}"
         )
+
+# --- Humanizer Studio Endpoints ---
+@app.get("/humanizer/status")
+def get_humanizer_config_status():
+    """Returns current GenAI provider configuration status without leaking keys."""
+    return get_humanizer_status()
+
+@app.post("/humanizer/rewrite", response_model=HumanizeResponse)
+def rewrite_text(request: HumanizeRequest):
+    raw_text = request.text
+    if not raw_text or not raw_text.strip():
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail="Input text cannot be empty or whitespace only."
+        )
+
+    clean_text = raw_text.strip()
+    if len(clean_text) < 10:
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail="Input text is too short. Minimum 10 characters required for humanization."
+        )
+
+    if len(clean_text) > 15000:
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail=f"Input text exceeds the 15,000 character limit ({len(clean_text)} characters). Please segment your document into smaller sections."
+        )
+
+    try:
+        provider = get_humanizer_provider()
+    except ProviderNotConfiguredError as e:
+        raise HTTPException(
+            status_code=status.HTTP_503_SERVICE_UNAVAILABLE,
+            detail=f"GenAI Provider Not Configured: {e.message}. Please configure GEMINI_API_KEY or OPENAI_API_KEY in your backend environment."
+        )
+
+    try:
+        rewritten_text, provider_meta = provider.rewrite(
+            clean_text,
+            style=request.style,
+            strength=request.strength
+        )
+    except ProviderAuthError as e:
+        raise HTTPException(
+            status_code=status.HTTP_401_UNAUTHORIZED,
+            detail=f"GenAI Authentication Error: {e.message}"
+        )
+    except ProviderQuotaError as e:
+        raise HTTPException(
+            status_code=status.HTTP_429_TOO_MANY_REQUESTS,
+            detail=f"GenAI Provider Quota / Rate Limit: {e.message}"
+        )
+    except ProviderTimeoutError as e:
+        raise HTTPException(
+            status_code=status.HTTP_504_GATEWAY_TIMEOUT,
+            detail=f"GenAI Provider Timeout: {e.message}"
+        )
+    except ProviderException as e:
+        raise HTTPException(
+            status_code=e.status_code,
+            detail=f"GenAI Provider Error: {e.message}"
+        )
+    except Exception as e:
+        logger.exception("Unexpected error during GenAI rewrite")
+        raise HTTPException(
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            detail=f"Unexpected rewrite processing error: {str(e)}"
+        )
+
+    # Perform automated Content Integrity Review
+    integrity_data = perform_content_integrity_review(clean_text, rewritten_text)
+
+    return HumanizeResponse(
+        original_text=clean_text,
+        rewritten_text=rewritten_text,
+        style=request.style.value if hasattr(request.style, "value") else str(request.style),
+        strength=request.strength.value if hasattr(request.strength, "value") else str(request.strength),
+        provider_info=provider_meta,
+        integrity_review=IntegrityReviewResponse(**integrity_data),
+        disclaimer="AI-Guard Humanizer transforms stylistic presentation and flow while aiming to preserve semantic meaning and citations. Statistical detector scores may vary and do not serve as proof of human authorship."
+    )
 
 if __name__ == "__main__":
     import uvicorn

@@ -6,6 +6,7 @@ import TextDetector from './pages/TextDetector';
 import ModelComparison from './pages/ModelComparison';
 import RobustnessTesting from './pages/RobustnessTesting';
 import AboutResearch from './pages/AboutResearch';
+import HumanizerStudio from './pages/HumanizerStudio';
 
 export default function App() {
   return (
@@ -16,6 +17,7 @@ export default function App() {
         <main className="flex-1 w-full max-w-full">
           <Routes>
             <Route path="/" element={<TextDetector />} />
+            <Route path="/humanizer" element={<HumanizerStudio />} />
             <Route path="/comparison" element={<ModelComparison />} />
             <Route path="/robustness" element={<RobustnessTesting />} />
             <Route path="/about" element={<AboutResearch />} />

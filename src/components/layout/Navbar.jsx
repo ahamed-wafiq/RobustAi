@@ -8,7 +8,8 @@ import {
   BookOpen, 
   Menu, 
   X,
-  Sparkles
+  Sparkles,
+  Wand2
 } from 'lucide-react';
 import Badge from '../common/Badge';
 
@@ -25,6 +26,15 @@ export default function Navbar() {
       colorClass: 'plush-forest',
       textClass: 'text-[#FFFDF9]',
       iconClass: 'embroidered-icon-light'
+    },
+    { 
+      name: 'Humanizer Studio', 
+      path: '/humanizer', 
+      icon: Wand2, 
+      description: 'GenAI text refinement',
+      colorClass: 'plush-sage',
+      textClass: 'text-[#1F2C18]',
+      iconClass: 'embroidered-icon'
     },
     { 
       name: 'Model Comparison', 

@@ -46,6 +46,12 @@ export default function Footer() {
                 </Link>
               </li>
               <li>
+                <Link to="/humanizer" className="hover:text-[#435744] hover:underline transition-colors flex items-center gap-2">
+                  <span className="w-2 h-2 rounded-full bg-[#435744]"></span>
+                  Humanizer Studio
+                </Link>
+              </li>
+              <li>
                 <Link to="/comparison" className="hover:text-[#435744] hover:underline transition-colors flex items-center gap-2">
                   <span className="w-2 h-2 rounded-full bg-[#9BAE83]"></span>
                   Model Comparison

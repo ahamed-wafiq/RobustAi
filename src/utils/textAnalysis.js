@@ -243,3 +243,69 @@ export function computeLocalFallbackPrediction(text) {
     isLocalFallback: true
   };
 }
+
+/**
+ * Computes comprehensive writing analytics for Humanizer Studio
+ * Transparently calculates metrics with documented formulas.
+ */
+export function getWritingAnalytics(text = '') {
+  const metrics = countTextMetrics(text);
+  const words = (text.toLowerCase().match(/\b[a-z]{2,}\b/g) || []);
+  const uniqueWords = new Set(words);
+
+  // Type-Token Ratio (TTR): Unique words / Total words
+  const typeTokenRatio = words.length > 0 
+    ? Number((uniqueWords.size / words.length).toFixed(3)) 
+    : 0;
+
+  // Sentence length variation (Standard Deviation)
+  const sentences = text
+    .split(/(?<=[.?!])\s+/)
+    .map(s => s.trim().split(/\s+/).filter(Boolean).length)
+    .filter(len => len > 0);
+
+  let sentenceLengthStdDev = 0;
+  if (sentences.length > 1) {
+    const mean = sentences.reduce((a, b) => a + b, 0) / sentences.length;
+    const variance = sentences.reduce((sum, len) => sum + Math.pow(len - mean, 2), 0) / sentences.length;
+    sentenceLengthStdDev = Number(Math.sqrt(variance).toFixed(1));
+  }
+
+  // Common transitions count
+  const transitionsList = [
+    'furthermore', 'moreover', 'in addition', 'consequently',
+    'therefore', 'however', 'nonetheless', 'subsequently',
+    'in conclusion', 'as a result', 'on the other hand'
+  ];
+  const lowerText = text.toLowerCase();
+  const foundTransitions = {};
+  let totalTransitions = 0;
+
+  transitionsList.forEach(tr => {
+    const matches = lowerText.match(new RegExp(`\\b${tr}\\b`, 'g'));
+    if (matches) {
+      foundTransitions[tr] = matches.length;
+      totalTransitions += matches.length;
+    }
+  });
+
+  const fleschScore = computeFleschReadingEase(text);
+  let fleschLevel = 'Standard';
+  if (fleschScore < 30) fleschLevel = 'Very Difficult (Scholarly)';
+  else if (fleschScore < 50) fleschLevel = 'Difficult (Academic)';
+  else if (fleschScore < 70) fleschLevel = 'Fairly Plain / Standard';
+  else fleschLevel = 'Easy / Accessible';
+
+  return {
+    words: metrics.words,
+    characters: metrics.characters,
+    sentences: metrics.sentences,
+    avgSentenceLength: metrics.avgSentenceLength,
+    typeTokenRatio,
+    fleschScore,
+    fleschLevel,
+    sentenceLengthStdDev,
+    totalTransitions,
+    foundTransitions
+  };
+}
